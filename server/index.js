@@ -1,0 +1,138 @@
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import userRoutes from "./routes/users.js";
+import authRoutes from "./routes/auth.js";
+import chatRoutes from "./routes/chats.js"
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import cors from "cors";
+import  {Server} from "socket.io";
+
+let io = new Server(3001, {
+  cors :  {
+    origin: ["http://localhost:5173"]
+  }
+})
+
+const app = express();
+const port = 3000;
+dotenv.config();
+
+const connect = () => {
+  mongoose
+    .connect('mongodb://127.0.0.1:27017')
+    .then(() => {
+      console.log("Connected to DB");
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+let online = []
+let s = new Set()
+let tempList = [];
+io.on("connection", socket => {
+  console.log(socket.id)
+  socket.on("sent-event", (message) => {
+    socket.broadcast.emit("receive-event", message)
+  })
+  socket.emit('userStatus', { userId: socket.id, status: 'online' });
+  socket.on('user', user => {
+    let found = false
+    for (let i = 0; i < online.length; i++)
+    {
+      if (online[i].socketID === socket.id)
+      {
+        found = true
+        break
+      }
+    }
+    if (!found)
+    {
+      online.push({socketID: socket.id, userId: user._id})
+      for(let i = 0; i < online.length; i++) {
+        s.add(online[i].userId)
+      }
+      tempList = [...s]
+      socket.broadcast.emit("online", tempList)
+      socket.emit("online", tempList)
+      s.clear()
+    }
+  
+  })
+  socket.on("join-room", room => {
+    socket.join(room);
+  })
+  socket.on("send-room",(message, room) => {
+    socket.to(room).emit("receive-room", message)
+  } )
+  socket.on("info", (message, userId) => {
+    console.log("aaaaaaaaaaaaa")
+    console.log(socket.id)
+    socket.broadcast.emit("recieve-info", message, userId)
+  })
+  for(let i = 0; i < online.length; i++) {
+    s.add(online[i].userId)
+  }
+  tempList = [...s]
+  socket.emit("online", tempList)
+  
+  s.clear()
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+    let socketIndex = -1
+    for (let i = 0; i < online.length; i++)
+    {
+      if (online[i].socketID === socket.id)
+      {
+        socketIndex = i
+        break
+      }
+    }
+    if (socketIndex != -1)
+    {
+      online.splice(socketIndex, 1)
+      for(let i = 0; i < online.length; i++) {
+        s.add(online[i].userId)
+      }
+      tempList = [...s]
+      socket.broadcast.emit("online", tempList)
+      socket.emit("online", tempList)
+      s.clear()
+    }
+    
+    // Emit event when user disconnects
+    // io.emit('userStatus', { userId: socket.id, status: 'offline' });
+  });
+  
+})
+
+
+
+//middlewares
+app.use(cors({
+  origin: true, // Allows all origins
+  credentials: true // Allows sending cookies with the request
+}));
+app.use(cookieParser());
+app.use(express.json());
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/chats", chatRoutes)
+
+//error handler
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Something went wrong!";
+  return res.status(status).json({
+    success: false,
+    status,
+    message,
+  });
+});
+
+app.listen(port, () => {
+  connect();
+  console.log("Connected to Server");
+});

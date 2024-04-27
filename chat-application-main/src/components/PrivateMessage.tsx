@@ -1,0 +1,28 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
+
+
+function PrivateMessage({message} : {message: any}) {
+    const [dataOfUser, setDataOfUser] = useState<Record<string, any>>({})
+    useEffect(() => {
+      const fetchData = async () => {
+        const response = await axios.get(`http://localhost:3000/api/users/find/${message.userId}`);
+        setDataOfUser(response.data)
+      }
+      fetchData()
+    }, [])
+    return (
+      <div  className="flex justify-between items-center w-full px-1" >
+        <div className="flex items-center gap-x-2">
+          <img src="/avatar.jpg" className="w-11 h-11"/>
+          <div className="flex flex-col  py-2">
+              <p className={"font-bold"}>{dataOfUser.name}</p>
+              <p >{message.description}</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  
+  export default PrivateMessage
+  
