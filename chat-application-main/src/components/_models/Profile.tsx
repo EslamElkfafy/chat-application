@@ -39,7 +39,7 @@ export default function Profile() {
     const updatedData = {...user, ...inputs};
 
   
-    if (user !== null) {
+    if (user._id !== -1) {
       const response = await axios.put(`http://localhost:3000/api/users/${user._id}`, updatedData)
       setUser(response.data)
     }else {

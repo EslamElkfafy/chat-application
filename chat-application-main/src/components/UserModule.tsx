@@ -13,9 +13,13 @@ import { Profile_Items } from "../lib/utils";
 import Flags from "react-country-flag";
 import PrivateChatModule from "./_models/_profile/PrivateChatModule";
 import ReportModule from "./_models/_profile/ReportModule";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAdminContext } from "../context/AdminContextProvider";
 import GiftModule from "./GiftModule";
+import axios from "axios";
+import { useUserContext } from "../context/UserContextProvider";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import BlockIcon from '@mui/icons-material/Block';
 
 function UserModule({userId} : {userId: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -29,9 +33,49 @@ function UserModule({userId} : {userId: any}) {
   const kick = Profile_Items[5];
   const delete_image = Profile_Items[6];
   const upgrade = Profile_Items[7];
+  const { user } = useUserContext()
+  const [ listOfLikes, setListOfLikes ] = useState([])
+  const [ resultLike, setResultLike ] = useState(false)
+  const [ listOfBlocks, setListOfBlocks ] = useState([])
+  const [ resultBlock, setResultBlock ] = useState(false)
 
+  useEffect(() => {
+      const fetchData = async () => {
+        const response1 = await axios.get(`http://localhost:3000/api/users/like/${userId}`)
+        const listLike = response1.data.listLike;
+        setListOfLikes(listLike)
+        if (listLike.includes(user._id)) {
+          setResultLike(true)
+        } else {
+          setResultLike(false)
+        }
+      }
+        fetchData()
+  },[resultLike])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response1 = await axios.get(`http://localhost:3000/api/users/block/${user._id}`)
+      const listBlock = response1.data.listBlock;
+      setListOfBlocks(listBlock)
+      if (listBlock.includes(userId)) {
+        setResultBlock(true)
+      } else {
+        setResultBlock(false)
+      }
+    }
+      fetchData()
+  }, [])
+  const handleClickLike = async () => {
+    await axios.put(`http://localhost:3000/api/users/updatelike/${userId}`, {checkId: user._id, check: resultLike})
+    setResultLike(!resultLike)
+  }
+  const handleClickBlock = async () => {
+    await axios.put(`http://localhost:3000/api/users/updateblock/${user._id}`, {checkId: userId, check: resultBlock})
+    setResultBlock(!resultBlock)
+  }
   return (
+    
     <>
       <UserContainer onClick={onOpen} userId={userId} />
 
@@ -48,17 +92,17 @@ function UserModule({userId} : {userId: any}) {
             <ReportModule toUserId= {userId}/>
             <div
               className="border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center text-red-700"
-              onClick={() => setLikes(!likes)}
+              onClick={handleClickLike}
             >
-              <like.icon className="size-5" />
-              {likes ? 1 : like.text}
+              {resultLike ? <FavoriteIcon /> : <like.icon className="size-5" />}
+              {listOfLikes.length}
             </div>
             <div
               className="border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center text-red-700"
-              onClick={() => setIgnores(!ignores)}
+              onClick={handleClickBlock}
             >
-              <igonre.icon className="size-5" />
-              {ignores ? exit_ignore : igonre.text}
+              {resultBlock ? <igonre.icon className="size-5" /> : <BlockIcon />}
+              {resultBlock ? exit_ignore : igonre.text}
             </div>
             {admin && (
               <>

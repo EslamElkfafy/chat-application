@@ -6,12 +6,12 @@ import { useAdminContext } from "../context/AdminContextProvider";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../context/UserContextProvider";
 
-function Home() {
+function Home({listOfMessage, setListOfMessage} : {listOfMessage: any, setListOfMessage: any}) {
   const {user} = useUserContext();
   const router = useNavigate()
   const { roomId } = useParams();
   const { setAdmin } = useAdminContext();
-  const [listOfMessage, setListOfMessage] = useState([])
+  
   useEffect(()=>{
     if (!user) router('/')
     if(roomId == "admin-view" ) setAdmin(true);

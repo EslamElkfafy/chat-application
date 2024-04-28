@@ -7,7 +7,7 @@ import { useUserContext } from "../context/UserContextProvider";
 import { useSocketContext } from "../context/SocketContextProvider";
 import axios from "axios";
 
-function Authorization() {
+function Authorization({setListOfMessage} : {setListOfMessage: any}) {
   const [choise, setChoise] = useState("nike-name");
   const router = useNavigate();
   const [nikeInput, setNikeInput] = useState("");
@@ -24,9 +24,21 @@ function Authorization() {
       setMessageFeildsSignUp(true)
     } else {
       try{
-        await axios.post("http://localhost:3000/api/auth/signup", {userName: nameSignUp, password: passwordSignUp});
+        await axios.post("http://localhost:3000/api/auth/signup", {userName: nameSignUp, password: passwordSignUp, name: nameSignUp});
         const response = await axios.post("http://localhost:3000/api/auth/signin", {userName: nameSignUp, password: passwordSignUp});
         setUser({...response.data})
+        const tempUser = {...response.data}
+        const tempMessage : any = {
+          arrivalTime: Date.now(),
+          description : `مستخدم جديد دخل الغرفه`,
+          img: tempUser.img,
+          name: tempUser.name,
+          fontColor: tempUser.fontColor,
+          nameColor: tempUser.nameColor,
+          backgroundColor: tempUser.backgroundColor
+        }
+        setListOfMessage((previous : any) => ([...previous, tempMessage]))
+        socket.emit("sent-event", tempMessage)
         socket.emit("user", {...response.data})
         router("/rommId");
       } catch (e) {
@@ -40,6 +52,19 @@ function Authorization() {
   const handlClickSignIn = async () => {
     const response = await axios.post("http://localhost:3000/api/auth/signin", {userName: nameSignIn, password: passwordSignIn});
     setUser({...response.data})
+    const tempUser = {...response.data}
+    const tempMessage : any = {
+      arrivalTime: Date.now(),
+      description : `مستخدم جديد دخل الغرفه`,
+      img: tempUser.img,
+      name: tempUser.name,
+      fontColor: tempUser.fontColor,
+      nameColor: tempUser.nameColor,
+      backgroundColor: tempUser.backgroundColor
+    }
+    setListOfMessage((previous : any) => ([...previous, tempMessage]))
+    socket.emit("sent-event", tempMessage)
+
     socket.emit("user", {...response.data})
     router("/rommId")
   }

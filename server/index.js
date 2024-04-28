@@ -5,9 +5,12 @@ import userRoutes from "./routes/users.js";
 import authRoutes from "./routes/auth.js";
 import chatRoutes from "./routes/chats.js"
 import cookieParser from "cookie-parser";
-import session from "express-session";
 import cors from "cors";
 import  {Server} from "socket.io";
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import multer from "multer";
 
 let io = new Server(3001, {
   cors :  {
@@ -17,6 +20,16 @@ let io = new Server(3001, {
 
 const app = express();
 const port = 3000;
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') // Destination folder where uploaded files will be saved
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)) // Save file with original name and timestamp
+  }
+});
+const upload = multer({ storage: storage });
 dotenv.config();
 
 const connect = () => {
@@ -39,6 +52,7 @@ io.on("connection", socket => {
   })
   socket.emit('userStatus', { userId: socket.id, status: 'online' });
   socket.on('user', user => {
+    console.log("---------------in------------------")
     let found = false
     for (let i = 0; i < online.length; i++)
     {
@@ -76,6 +90,7 @@ io.on("connection", socket => {
     s.add(online[i].userId)
   }
   tempList = [...s]
+  console.log(tempList)
   socket.emit("online", tempList)
   
   s.clear()
@@ -117,6 +132,7 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chats", chatRoutes)
@@ -131,7 +147,12 @@ app.use((err, req, res, next) => {
     message,
   });
 });
-
+app.post('/upload', upload.single('file'), (req, res) => {
+  // 'image' is the name attribute of the file input field in the form
+  console.log(req.file.path)
+  const path = req.file.path
+  res.status(200).json(path);
+});
 app.listen(port, () => {
   connect();
   console.log("Connected to Server");

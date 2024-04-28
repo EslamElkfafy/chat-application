@@ -36,6 +36,60 @@ export const getPrivate = async (req, res, next) => {
   }
   
 }
+export const getLike = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json({listLike: user.like})
+
+  } catch (error) {
+    next(error)
+  }
+}
+export const updateListLike = async (req, res, next) => {
+  try {
+
+    if (req.body.check) {
+      await User.findByIdAndUpdate(req.params.id, {
+        $pull: {like: req.body.checkId}
+      });
+    } else {
+      await User.findByIdAndUpdate(req.params.id, {
+        $addToSet: {like: req.body.checkId}
+      });
+    }
+    res.status(200).send("The like list is updated")
+
+  } catch (error) {
+    next(error)
+  }
+}
+export const getBlock = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json({listBlock: user.block})
+
+  } catch (error) {
+    next(error)
+  }
+}
+export const updateListBlock = async (req, res, next) => {
+  try {
+
+    if (req.body.check) {
+      await User.findByIdAndUpdate(req.params.id, {
+        $pull: {block: req.body.checkId}
+      });
+    } else {
+      await User.findByIdAndUpdate(req.params.id, {
+        $addToSet: {block: req.body.checkId}
+      });
+    }
+    res.status(200).send("The block list is updated")
+
+  } catch (error) {
+    next(error)
+  }
+}
 export const deleteUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
     try {

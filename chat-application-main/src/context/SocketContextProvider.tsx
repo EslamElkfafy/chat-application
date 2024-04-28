@@ -15,10 +15,11 @@ const SocketContext = createContext<{
 function SocketContextProvider({ children }: { children: React.ReactNode }) {
   const {user} = useUserContext()
   const [send, setSend] = useState(true)
-
   if (user && user._id != -1)
   {
+    console.log("helllllo")
     socketIo.on("userStatus", () => {
+      console.log("helllllo")
       socketIo.emit("user", user)
       
     })

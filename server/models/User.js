@@ -46,6 +46,12 @@ const UserSchema = new mongoose.Schema(
     },
     private : {
       type: [String]
+    },
+    like: {
+      type: [String]
+    },
+    block: {
+      type: [String]
     }
   },
   { timestamps: true }

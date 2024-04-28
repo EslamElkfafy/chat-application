@@ -28,7 +28,7 @@ export default function RoomInfo() {
         className="flex justify-center bg-blue-950 items-center border text-sm md:text-md text-white w-[100px] py-1 rounded-md cursor-pointer "
         onClick={onOpen}
       >
-        <User  className=" size-4 md:size-5"/> 2
+        <User  className=" size-4 md:size-5"/> {onlineList.length}
       </div>
       <Drawer
         isOpen={isOpen}

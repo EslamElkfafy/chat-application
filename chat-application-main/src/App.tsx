@@ -27,6 +27,7 @@ function App() {
   const { user } = useUserContext()
   const [ send, setSend ] = useState(true)
   const router = useNavigate()
+  const [listOfMessage, setListOfMessage] = useState([])
   
   useEffect(() => {
     window.addEventListener("beforeunload", alertUser);
@@ -43,8 +44,8 @@ function App() {
   return (
     <>
     <Routes>
-      <Route path="/" element={<AuthPage />} />
-      <Route path="/:roomId" element={<Home />} />
+      <Route path="/" element={<AuthPage setListOfMessage={setListOfMessage}/>} />
+      <Route path="/:roomId" element={<Home listOfMessage={listOfMessage} setListOfMessage={setListOfMessage}/>} />
       <Route
         path="/admin-view/record"
         element={<AdminLayout children={<Records />} />}
