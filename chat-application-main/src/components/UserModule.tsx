@@ -36,8 +36,8 @@ function UserModule({userId} : {userId: any}) {
   const { user } = useUserContext()
   const [ listOfLikes, setListOfLikes ] = useState([])
   const [ resultLike, setResultLike ] = useState(false)
-  const [ listOfBlocks, setListOfBlocks ] = useState([])
   const [ resultBlock, setResultBlock ] = useState(false)
+  const [userData, setUserData] = useState<Record<string, any>>({})
 
   useEffect(() => {
       const fetchData = async () => {
@@ -55,9 +55,10 @@ function UserModule({userId} : {userId: any}) {
 
   useEffect(() => {
     const fetchData = async () => {
+      const response2 = await axios.get(`http://localhost:3000/api/users/find/${userId}`);
+      setUserData(response2.data)
       const response1 = await axios.get(`http://localhost:3000/api/users/block/${user._id}`)
       const listBlock = response1.data.listBlock;
-      setListOfBlocks(listBlock)
       if (listBlock.includes(userId)) {
         setResultBlock(true)
       } else {
@@ -83,10 +84,10 @@ function UserModule({userId} : {userId: any}) {
         <ModalOverlay />
         <ModalContent width={"350px"}>
           <div className="flex items-center justify-between px-2 py-3 bg-blue-950 text-white">
-            <img src="/avatar.jpg" className="w-6 h-6" />
+            <img src={userData.img} className="w-6 h-6" />
             <ModalCloseButton bg={"red"} color={"white"} />
           </div>
-          <img src="/avatar.jpg" className="h-[200px] bg-cover" />
+          <img src={userData.img} className="h-[200px] bg-cover" />
           <div className="flex flex-wrap  p-1 gap-1 justify-center">
             <PrivateChatModule toUserId={userId}/>
             <ReportModule toUserId= {userId}/>

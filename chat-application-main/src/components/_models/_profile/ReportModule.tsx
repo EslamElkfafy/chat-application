@@ -9,22 +9,38 @@ import { Profile_Items } from "../../../lib/utils";
 import { Send, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { useSocketContext } from "../../../context/SocketContextProvider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUserContext } from "../../../context/UserContextProvider";
+import axios from "axios";
 
 function ReportModule({toUserId} : {toUserId: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [text, setText] = useState("")
   const report = Profile_Items[1];
   const { socket } = useSocketContext()
+  const { user } = useUserContext()
+  const [ checkInfo, setCheckInfo ] = useState(false)
   const handleClick = () => {
-    console.log("ddddddddddddddddddddddddddddddddddddd")
-    socket.emit("info", text, toUserId)
+    socket.emit("info", text, toUserId, user._id)
   }
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`http://localhost:3000/api/users/find/${toUserId}`)
+      setCheckInfo(response.data.infoBlock)
+    }
+    fetchData()
+  }, [])
   return (
     <>
       <div
         className="border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center"
-        onClick={onOpen}
+        onClick={() => {
+          if (checkInfo === true) {
+            toast.warning("هذا المستخدم قام بتعطيل التنبيهات")
+          } else {
+             onOpen()
+          }
+        }}
       >
         <report.icon className="size-5" />
         {report.text}

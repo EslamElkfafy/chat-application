@@ -8,14 +8,24 @@ import {
 import { X } from "lucide-react";
 import { Profile_Items } from "../../../lib/utils";
 import Flags from "react-country-flag";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-function HeaderChatModule({ onClose_Module }: { onClose_Module: () => void }) {
+function HeaderChatModule({ onClose_Module, toUserId }: { onClose_Module: () => void , toUserId: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const chat = Profile_Items[0];
   const report = Profile_Items[1];
   const like = Profile_Items[2];
   const igonre = Profile_Items[3];
+  const [ dataUser, setDataUser ] = useState<Record<string, any>>({})
 
+  useEffect(() => {
+    const fetchData = async () =>{
+      const response = await axios.get(`http://localhost:3000/api/users/find/${toUserId}`)
+      setDataUser(response.data)
+    }
+    fetchData()
+  }, [])
   return (
     <>
       <div
@@ -23,8 +33,8 @@ function HeaderChatModule({ onClose_Module }: { onClose_Module: () => void }) {
         onClick={onOpen}
       >
         <div className="flex items-center gap-x-1">
-          <img src="/avatar.jpg" className="w-6 h-6" />
-          خالد
+          <img src={dataUser.img} className="w-6 h-6" />
+          {dataUser.name}
         </div>
         <div
           className="text-white bg-red-500 p-1 rounded-sm cursor-pointer"

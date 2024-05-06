@@ -24,6 +24,12 @@ const UserSchema = new mongoose.Schema(
     status: {
       type: String,
     },
+    tokens: {
+      type: [String]
+    },
+    deptureTime: {
+      type: Number
+    },
     nameColor: {
       type: String,
       default: "#000000"
@@ -34,7 +40,7 @@ const UserSchema = new mongoose.Schema(
     },
     backgroundColor :{
       type: String,
-      default: "#dbeafe"
+      default: null
     },
     fontSize: {
       type: String,
@@ -52,6 +58,14 @@ const UserSchema = new mongoose.Schema(
     },
     block: {
       type: [String]
+    },
+    chatBlock: {
+      type: Boolean,
+      default: false
+    },
+    infoBlock: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }

@@ -16,9 +16,10 @@ function MessageContainer({listOfMessage, setListOfMessage} : {listOfMessage: an
         socket.on("receive-event", (message : any) => {
           setListOfMessage((previous : any) => ([...previous, message]))
         })
+        setReceive(false)
       }
       
-      setReceive(false)
+
       }, 1000)
     return () => clearInterval(interval)
   }, [listOfMessage, receive])

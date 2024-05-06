@@ -12,7 +12,10 @@ import {
   updateListLike,
   getLike,
   getBlock,
-  updateListBlock
+  updateListBlock,
+  getAllUsers,
+  updateChatBlock,
+  updateInfoBlock
 } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js";
 
@@ -33,8 +36,14 @@ router.get("/like/:id", getLike);
 router.put("/updatelike/:id", updateListLike)
 // get block list
 router.get("/block/:id", getBlock);
-// update like list
+// update block list
 router.put("/updateblock/:id", updateListBlock)
+// get all users
+router.get("/findall", getAllUsers)
+// update ChatBlock 
+router.put("/chatblock/:id", updateChatBlock)
+// update InfoBlock 
+router.put("/infoblock/:id", updateInfoBlock)
 //delete user
 router.delete("/:id", verifyToken, deleteUser);
 

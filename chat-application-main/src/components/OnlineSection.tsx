@@ -1,10 +1,12 @@
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSocketContext } from "../context/SocketContextProvider";
-import UserContainer from "./UserContainer";
+import axios from "axios";
+import UserOnlineModule from "./UserOnlineModule";
+import UserOnlineContainer from "./UserOnlineContainer";
 function OnlineSection() {
   const [onlineList, setOnlineList] = useState<string[]>([]);
-  const {socket} = useSocketContext()
+
   // useEffect(() => {
   //   socket.on("online", (list: any) => {
   //     console.log("happened now in list should be output")
@@ -28,10 +30,26 @@ function OnlineSection() {
 //         socket.off('data');
 //     };
 // }, []);
-socket.on("online", (list : any[]) => {
-  console.log(list)
-  setOnlineList(list)
-})
+// socket.on("online", (list : any[]) => {
+//   console.log(list)
+//   setOnlineList(list)
+// })
+useEffect(() => {
+  const fetchData = async () => {
+    const response = await axios.get("http://localhost:3000/api/users/findall");
+  
+    const listOfOnline = response.data.filter((item : any) => {
+      return (item.status === "connect" || ((Date.now() - item.deptureTime) < (1 * 60 * 1000)))
+    })
+    setOnlineList(listOfOnline)
+    
+  }
+  const interval = setInterval(() => {
+    fetchData()
+  }, 1000)
+  
+  return () => clearInterval(interval)
+}, [])
   return (
     <div className="w-full flex flex-col mt-2">
       <div className="flex justify-between items-center bg-gray-600">
@@ -46,7 +64,7 @@ socket.on("online", (list : any[]) => {
       <div className="overflow-auto flex flex-col h-[400px]">
         {
         onlineList.map((item :  any, index : any) => {
-          return <UserContainer key={index} userId={item}/>;
+          return <UserOnlineContainer key={index} user={item}/>;
         })}
       </div>
     </div>

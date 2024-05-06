@@ -90,6 +90,34 @@ export const updateListBlock = async (req, res, next) => {
     next(error)
   }
 }
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const allUsers = await User.find({});
+    res.status(200).json(allUsers)
+  } catch (error) {
+    next(error)
+  }
+}
+export const updateChatBlock = async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.params.id, {
+      chatBlock: !req.body.check
+    })
+    res.status(200).send("the chatBlock is updated")
+  } catch (error) {
+    next(error)
+  }
+}
+export const updateInfoBlock = async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.params.id, {
+      infoBlock: !req.body.check
+    })
+    res.status(200).send("the infoBlock is updated")
+  } catch (error) {
+    next(error)
+  }
+}
 export const deleteUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
     try {

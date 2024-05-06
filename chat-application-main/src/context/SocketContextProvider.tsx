@@ -2,6 +2,7 @@ import { useContext, createContext, useState } from "react";
 import { io } from "socket.io-client";
 import { useUserContext } from "./UserContextProvider";
 import { toast } from "react-toastify";
+import ShapeAlert from "../components/ShapeAlert";
 
 const socketIo = io("http://localhost:3001");
 
@@ -25,9 +26,12 @@ function SocketContextProvider({ children }: { children: React.ReactNode }) {
     })
     if (send)
       {
-        socketIo.on("recieve-info", (message : any, userId : any) => {
+        socketIo.on("recieve-info", (message : any, userId : any, fromUserId : any) => {
           if ((user._id === userId)) {
-            toast.info(message)
+            toast(<ShapeAlert message={message} fromUserId={fromUserId}/>)
+
+
+
           }
         })
         setSend(false)

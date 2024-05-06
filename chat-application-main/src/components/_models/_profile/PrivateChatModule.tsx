@@ -13,6 +13,7 @@ import { useUserContext } from "../../../context/UserContextProvider";
 import { useSocketContext } from "../../../context/SocketContextProvider";
 import axios from "axios";
 import PrivateMessage from "../../PrivateMessage";
+import { toast } from "react-toastify";
 
 function PrivateChatModule({toUserId} : {toUserId: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,6 +24,8 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
   const { user } = useUserContext()
   const { socket } = useSocketContext()
   const [chatId, setChatId] = useState("")
+  const [ checkChat, setCheckChat ] = useState(false);
+
   useEffect(() => {
     input.current?.scrollIntoView({ behavior: "smooth" });
     const fetchData = async () => {
@@ -35,11 +38,21 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
       }
     
   }, [chatId]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`http://localhost:3000/api/users/find/${toUserId}`);
+      setCheckChat(response.data.chatBlock);
+    }
+    fetchData()
+  }, [])
   socket.on("receive-room", (message : any) => {
     setListOfPrivateMessages([...listOfPrivateMessages, message])
   })
   const handleClick = async () => {
-    onOpen()
+    if (checkChat === true) {
+      toast.warning("هذا المستحدم قام بتعطيل المحادثات")
+    } else {
+      onOpen()
     const response = await axios.post("http://localhost:3000/api/chats/addchat", {
       user1: user._id,
       user2: toUserId
@@ -51,6 +64,8 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
     socket.emit('join-room', chat_id);
     const res = await axios.put(`http://localhost:3000/api/users/updateprivate/${toUserId}`, { userId: user._id});
     console.log(res)
+    }
+    
   }
   return (
     <>
@@ -65,7 +80,7 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent pb={"10px"}>
-          <HeaderChatModule onClose_Module={onClose} />
+          <HeaderChatModule onClose_Module={onClose} toUserId={toUserId}/>
           <div className="flex flex-col h-[300px] overflow-auto">
             {dataListOfPrivateMessages.map((message, index) => (
               <div ref={input}>

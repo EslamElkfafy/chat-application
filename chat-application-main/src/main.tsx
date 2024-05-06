@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
          <AdminContextProvider>
         <SizeContextProvider>
           <ChakraProvider>
-          <ToastContainer />
+          <ToastContainer autoClose={false} closeOnClick={true}/>
             <App />
           </ChakraProvider>
         </SizeContextProvider>

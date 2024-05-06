@@ -28,9 +28,14 @@ function SendMessage({setListOfMessage} : {setListOfMessage : (l : any) => void}
     socket.emit("sent-event", tempMessage)
     
   }
+  const handleClickLogout = () => 
+    {
+      window.localStorage.removeItem("user");
+      window.location.reload();
+    }
   return (
     <div className="flex gap-x-2 w-full items-center justify-between px-1">
-      <div className="w-8 h-8 bg-blue-900 text-white p-1 flex justify-center items-center rounded-md cursor-pointer">
+      <div className="w-8 h-8 bg-blue-900 text-white p-1 flex justify-center items-center rounded-md cursor-pointer" onClick={handleClickLogout}>
         <LogOut size={"20px"} />
       </div>
       <EmojiModule text={message} setText={setMessage} />

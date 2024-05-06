@@ -11,6 +11,8 @@ import { useSocketContext } from "../../context/SocketContextProvider";
 import { useEffect, useRef, useState } from "react";
 
 import UserModule from "../UserModule";
+import axios from "axios";
+import UserOnlineModule from "../UserOnlineModule";
 
 export default function RoomInfo() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -18,9 +20,22 @@ export default function RoomInfo() {
   const [onlineList, setOnlineList] = useState<string[]>([]);
   const { socket } = useSocketContext()
 
-  socket.on("online", (list : any[]) => {
-    setOnlineList(list)
-  })
+  // socket.on("online", (list : any[]) => {
+  //   setOnlineList(list)
+  // })
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("http://localhost:3000/api/users/findall");
+      const listOfOnline = response.data.filter((item : any) => {
+        return item.status === "connect"
+      })
+      setOnlineList(listOfOnline)
+    }
+    const interval = setInterval(() => {
+      fetchData()
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
   return (
     <>
       <div
@@ -46,7 +61,7 @@ export default function RoomInfo() {
             <Input placeholder="البحث..."  width={"100%"} size={"sm"}  borderRadius={"5px"}/>
             {
             onlineList.map((item :  any, index : any) => {
-              return <UserModule key={index} userId={item}/>;
+              return <UserOnlineModule key={index} user_Data={item}/>;
             })}
             <div className="w-full text-center bg-green-500 text-white py-1 ">
             المتواجدين في الدردشه

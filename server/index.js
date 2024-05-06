@@ -11,6 +11,7 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
+import User from "./models/User.js";
 
 let io = new Server(3001, {
   cors :  {
@@ -51,7 +52,7 @@ io.on("connection", socket => {
     socket.broadcast.emit("receive-event", message)
   })
   socket.emit('userStatus', { userId: socket.id, status: 'online' });
-  socket.on('user', user => {
+  socket.on('user', async (user) => {
     console.log("---------------in------------------")
     let found = false
     for (let i = 0; i < online.length; i++)
@@ -65,13 +66,18 @@ io.on("connection", socket => {
     if (!found)
     {
       online.push({socketID: socket.id, userId: user._id})
-      for(let i = 0; i < online.length; i++) {
-        s.add(online[i].userId)
-      }
-      tempList = [...s]
-      socket.broadcast.emit("online", tempList)
-      socket.emit("online", tempList)
-      s.clear()
+      console.log(online)
+      await User.findByIdAndUpdate(user._id, {
+        $addToSet: {tokens: socket.id},
+        status: "connect"
+      })
+      // for(let i = 0; i < online.length; i++) {
+      //   s.add(online[i].userId)
+      // }
+      // tempList = [...s]
+      // socket.broadcast.emit("online", tempList)
+      // socket.emit("online", tempList)
+      // s.clear()
     }
   
   })
@@ -81,20 +87,20 @@ io.on("connection", socket => {
   socket.on("send-room",(message, room) => {
     socket.to(room).emit("receive-room", message)
   } )
-  socket.on("info", (message, userId) => {
+  socket.on("info", (message, userId, fromUserId) => {
     console.log("aaaaaaaaaaaaa")
     console.log(socket.id)
-    socket.broadcast.emit("recieve-info", message, userId)
+    socket.broadcast.emit("recieve-info", message, userId, fromUserId)
   })
-  for(let i = 0; i < online.length; i++) {
-    s.add(online[i].userId)
-  }
-  tempList = [...s]
-  console.log(tempList)
-  socket.emit("online", tempList)
+  // for(let i = 0; i < online.length; i++) {
+  //   s.add(online[i].userId)
+  // }
+  // tempList = [...s]
+  // console.log(tempList)
+  // socket.emit("online", tempList)
   
-  s.clear()
-  socket.on('disconnect', () => {
+  // s.clear()
+  socket.on('disconnect', async () => {
     console.log('User disconnected');
     let socketIndex = -1
     for (let i = 0; i < online.length; i++)
@@ -107,14 +113,24 @@ io.on("connection", socket => {
     }
     if (socketIndex != -1)
     {
+      let userId = online[socketIndex].userId
       online.splice(socketIndex, 1)
-      for(let i = 0; i < online.length; i++) {
-        s.add(online[i].userId)
+      const currentUser = await User.findByIdAndUpdate(userId, {
+        $pull: {tokens: socket.id}
+      })
+      if ((currentUser.tokens.length - 1) === 0) {
+        await User.findByIdAndUpdate(userId, {
+          status: "disconnect",
+          deptureTime: Date.now()
+        })
       }
-      tempList = [...s]
-      socket.broadcast.emit("online", tempList)
-      socket.emit("online", tempList)
-      s.clear()
+      // for(let i = 0; i < online.length; i++) {
+      //   s.add(online[i].userId)
+      // }
+      // tempList = [...s]
+      // socket.broadcast.emit("online", tempList)
+      // socket.emit("online", tempList)
+      // s.clear()
     }
     
     // Emit event when user disconnects

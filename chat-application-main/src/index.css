@@ -2,3 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.Toastify__toast-container {
+    background-color: #0000007a;
+width: 100vw;
+height: 100vh;
+right: 0;
+top: 0;
+}
+
+.Toastify__toast  {
+    min-width: 150px;
+width: fit-content;
+position: absolute;
+top: 50%;
+right: 50%;
+}

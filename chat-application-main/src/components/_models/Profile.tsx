@@ -10,13 +10,14 @@ import {
 } from "@chakra-ui/react";
 import { Settings, UserRoundX, LogOut } from "lucide-react";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import UploadButton from "../_elements/UploadButton";
 import { useSizeContext } from "../../context/SizeContextProvider";
 import { useAdminContext } from "../../context/AdminContextProvider";
 import { useUserContext } from "../../context/UserContextProvider";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import CheckIcon from '@mui/icons-material/Check';
 
 export default function Profile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,6 +33,9 @@ export default function Profile() {
     fontColor: user.fontColor,
     backgroundColor: user.backgroundColor,
   })
+  const [chatCheck, setChatCheck] = useState(false);
+  const [infoCheck, setInfoheck] = useState(false);
+
   const handleChange = (event : any) => {
     setInputs({...inputs, [event.target.name] : event.target.value})
   }
@@ -46,6 +50,22 @@ export default function Profile() {
       setUser(updatedData)
     }
   }
+  const handelChatBlockClick = async () => {
+    await axios.put(`http://localhost:3000/api/users/chatblock/${user._id}`, {check: chatCheck});
+    setChatCheck(!chatCheck)
+  }
+  const handelInfoBlockClick = async () => {
+    await axios.put(`http://localhost:3000/api/users/infoblock/${user._id}`, {check: infoCheck});
+    setInfoheck(!infoCheck)
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`http://localhost:3000/api/users/find/${user._id}`)
+      setChatCheck(response.data.chatBlock)
+      setInfoheck(response.data.infoBlock)
+    }
+    fetchData()
+  }, [chatCheck, infoCheck])
   return (
     <>
       <div
@@ -97,14 +117,24 @@ export default function Profile() {
                 <label className="text-center w-[100px]  bg-blue-700 text-white    ">
                   لون الخلفيه
                 </label>
-                <Input
+                {
+                  inputs.backgroundColor ? <Input
                   type="color"
                   width={"100px"}
                   size={"sm"}
                   value={inputs.backgroundColor}
                   name="backgroundColor"
                   onChange={(e) =>  handleChange(e)}
+                />:
+                <Input
+                  type="color"
+                  width={"100px"}
+                  size={"sm"}
+                  name="backgroundColor"
+                  onChange={(e) =>  handleChange(e)}
                 />
+                }
+                
               </div>
             </div>
             <Button
@@ -181,6 +211,24 @@ export default function Profile() {
               </Select>
 
               <UploadButton />
+              <label
+                className="bg-gray-50  border border-gray-700 rounded-md text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
+                onClick={handelChatBlockClick}
+              >
+                <div className="px-1 flex items-center  w-full" >
+                  {chatCheck && <CheckIcon />}
+                <p className="text-center w-full font-bold text-gray-500"> تعطيل المحاثات الخاصه </p>
+                </div>
+              </label>
+              <label
+                className="bg-gray-50  border border-gray-700 rounded-md text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
+                onClick={handelInfoBlockClick}
+              >
+                <div className="px-1 flex items-center  w-full" >
+                {infoCheck && <CheckIcon />}
+                <p className="text-center w-full font-bold text-gray-500">   تعطيل التنبيهات </p>
+                </div>
+              </label>
               <Button
                 bg={"rgb(239 68 68)"}
                 _hover={{ bg: "rgb(239 68 68)" }}

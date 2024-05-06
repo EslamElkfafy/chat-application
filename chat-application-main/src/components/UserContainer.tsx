@@ -22,10 +22,10 @@ function UserContainer({ onClick, userId }: { onClick?: () => void, userId: any 
       }}
     >
       <div className="flex items-center gap-x-1">
-        <img src="/avatar.jpg" className="w-9 h-9" />
+        <img src={data?.img} className="w-9 h-9" />
         <div className="flex flex-col justify-between py-2">
-          <p>{data?.name}</p>
-          <p>{data?.state}</p>
+          <p style={{color: data?.nameColor, backgroundColor: data?.backgroundColor}}>{data?.name}</p>
+          <p style={{color: data?.fontColor}}>{data?.state}</p>
         </div>
       </div>
       <Flags countryCode="sa" svg />
