@@ -12,6 +12,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
 import User from "./models/User.js";
+import postRoutes from "./routes/posts.js"
 
 let io = new Server(3001, {
   cors :  {
@@ -151,7 +152,8 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/chats", chatRoutes)
+app.use("/api/chats", chatRoutes);
+app.use("/api/posts", postRoutes)
 
 //error handler
 app.use((err, req, res, next) => {
@@ -165,9 +167,9 @@ app.use((err, req, res, next) => {
 });
 app.post('/upload', upload.single('file'), (req, res) => {
   // 'image' is the name attribute of the file input field in the form
-  console.log(req.file.path)
+  console.log(req.file)
   const path = req.file.path
-  res.status(200).json(path);
+  res.status(200).json({path, type: req.file.mimetype});
 });
 app.listen(port, () => {
   connect();

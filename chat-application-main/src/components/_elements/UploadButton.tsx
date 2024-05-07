@@ -18,11 +18,11 @@ function UploadButton() {
 
       if (response.ok) {
         console.log('File uploaded successfully');
-        const path = await response.json()
+        const data = await response.json()
 
         // Access the filename from the response
         
-        const updatedData = {...user, img : `http://localhost:3000/${path}`};
+        const updatedData = {...user, img : `http://localhost:3000/${data.path}`};
 
       
         if (user._id !== -1) {
@@ -49,7 +49,7 @@ function UploadButton() {
       <img src={user.img} className="w-5 h-5"/>
       <p className="text-center w-full font-bold text-gray-500">        تغير الصوره</p>
       </div>
-      <input type="file" id="uploadFile1" className="hidden" onChange={handleFileInputChange}/>
+      <input type="file" id="uploadFile1" className="hidden" accept="image/png" onChange={handleFileInputChange}/>
     </label>
   );
 }

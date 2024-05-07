@@ -10,7 +10,7 @@ import CreateComment from "./CreateComment";
 import CommentItem from "./CommentItem";
 import { useEffect, useRef } from "react";
 
-export default function CommentModule() {
+export default function CommentModule({item} : {item: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const input  = useRef<HTMLInputElement>(null);
   useEffect(()=>{
@@ -22,7 +22,7 @@ export default function CommentModule() {
         className=" text-white gap-x-1 text-sm p-1  bg-blue-700 cursor-pointer flex items-center"
         onClick={onOpen}
       >
-        <MessageCircle className="size-4" />1
+        <MessageCircle className="size-4" />{item.messages.length}
       </div>
 
       <Modal isOpen={isOpen} onClose={onClose} >
@@ -38,10 +38,10 @@ export default function CommentModule() {
             <div className="flex flex-col h-[400px] justify-between ">
                 <div className="flex flex-col h-full overflow-auto">
                 {
-                  [...Array(1)].map(() => <div ref={input}><CommentItem/></div>)
+                  item.messages.map((message : any, index: any) => <div ref={input}><CommentItem key={index} message={message}/></div>)
                 }
                 </div>
-                <CreateComment/>
+                <CreateComment postId= {item._id}/>
             </div>
             
         </ModalContent>

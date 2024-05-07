@@ -57,13 +57,10 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
       user1: user._id,
       user2: toUserId
     })
-    console.log(response)
-    const chat_id = response.data._id
-    console.log(chat_id)
+    const chat_id = response.data._id;
     setChatId(chat_id)
     socket.emit('join-room', chat_id);
-    const res = await axios.put(`http://localhost:3000/api/users/updateprivate/${toUserId}`, { userId: user._id});
-    console.log(res)
+    await axios.put(`http://localhost:3000/api/users/updateprivate/${toUserId}`, { userId: user._id});
     }
     
   }

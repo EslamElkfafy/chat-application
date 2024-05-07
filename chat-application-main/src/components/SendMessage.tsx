@@ -24,7 +24,6 @@ function SendMessage({setListOfMessage} : {setListOfMessage : (l : any) => void}
     }
     setListOfMessage((previous : any) => ([...previous, tempMessage]))
     setMessage(""); 
-    console.log("------world--------")
     socket.emit("sent-event", tempMessage)
     
   }

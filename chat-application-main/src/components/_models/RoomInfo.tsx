@@ -53,16 +53,19 @@ export default function RoomInfo() {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <div className="flex flex-col w-full ">
+          <div className="flex flex-col w-full overflow-auto">
             <div className="w-full flex items-center justify-between px-2 bg-blue-800 text-white relative h-[50px]">
               <p className="font-bold">المتواجدين</p>
               <DrawerCloseButton  backgroundColor={"red"} color={"white"}/>
             </div>
             <Input placeholder="البحث..."  width={"100%"} size={"sm"}  borderRadius={"5px"}/>
+            <div className="flex flex-col w-full overflow-auto">
             {
             onlineList.map((item :  any, index : any) => {
               return <UserOnlineModule key={index} user_Data={item}/>;
             })}
+            </div>
+           
             <div className="w-full text-center bg-green-500 text-white py-1 ">
             المتواجدين في الدردشه
             </div>

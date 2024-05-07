@@ -23,8 +23,6 @@ import BlockIcon from '@mui/icons-material/Block';
 
 function UserModule({userId} : {userId: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [likes, setLikes] = useState(false);
-  const [ignores, setIgnores] = useState(false);
   const { admin } = useAdminContext();
   const like = Profile_Items[2];
   const exit_ignore = "إلغاء تجاهل";

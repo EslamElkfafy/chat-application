@@ -13,7 +13,6 @@ function Home({listOfMessage, setListOfMessage} : {listOfMessage: any, setListOf
   const { setAdmin } = useAdminContext();
   const { socket } = useSocketContext()
   useEffect(()=>{
-    console.log("hello from I am not user")
     if (!user) router('/')
     if(roomId == "admin-view" ) setAdmin(true);
     else setAdmin(false);

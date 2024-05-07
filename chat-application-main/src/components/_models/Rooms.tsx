@@ -38,17 +38,17 @@ export default function Rooms() {
               <DrawerCloseButton backgroundColor={"red"} color={"white"} />
             </div>
             <div className="w-full bg-blue-950 py-1 px-2">
-              <CreateRoomModule/>
+              <CreateRoomModule key={2}/>
             </div>
             <div className="flex flex-col overflow-auto h-[550px]">
-              {
-                [...Array(10)].map(()=>(
+              {/* {
+                [...Array(10)].map((item, index)=>(
                   <>
-                  <RoomContainer/>
-                  <hr/>
+                  <RoomContainer key={index}/>
+                  <hr key={index + 11}/>
                   </>
                 ))
-              }
+              } */}
             </div>
           </div>
 

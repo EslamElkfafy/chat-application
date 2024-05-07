@@ -10,7 +10,7 @@ function Poster() {
     <div className="flex items-center gap-x-1 px-1 mt-2 ">
       <ShareButton/>
       <EmojiModule text={title} setText={setTitle}/>
-      <Input height={"28px"} value={title} onChange={(e) => setTitle(e.currentTarget.value)}/>
+      <Input  height={"28px"} value={title} onChange={(e) => setTitle(e.currentTarget.value)}/>
       <div className="p-1 bg-blue-700  text-white flex text-xs items-center rounded">
         <Send size={"18px"} className="cursor-pointer"/>
         إرسال

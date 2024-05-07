@@ -7,14 +7,26 @@ import {
 } from "@chakra-ui/react";
 import { Images } from "lucide-react";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Post from "../Post";
 import Poster from "../_elements/Poster";
+import axios from "axios";
 
 export default function Blogs() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef<HTMLDivElement | null>(null);
+  const [ listOfPosts, setListOfPosts ] = useState([])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("http://localhost:3000/api/posts/allposts");
+      setListOfPosts(response.data)
+    }
+    const interval = setInterval(() => {
+      fetchData()
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
   return (
     <>
       <div
@@ -39,8 +51,8 @@ export default function Blogs() {
             </div>
 
             <div className="flex flex-col h-[450px]  md:h-[500px] overflow-auto">
-              {[...Array(20)].map(() => (
-                <Post />
+              {listOfPosts.map((item, index) => (
+                <Post key={index} item={item}/>
               ))}
             </div>
             <hr />
