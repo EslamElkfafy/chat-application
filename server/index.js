@@ -13,14 +13,13 @@ import { fileURLToPath } from "url";
 import multer from "multer";
 import User from "./models/User.js";
 import postRoutes from "./routes/posts.js"
+import http from "http"
 
-let io = new Server(3001, {
-  cors :  {
-    origin: ["http://localhost:5173"]
-  }
-})
 
 const app = express();
+const server = http.createServer(app);
+let io = new Server(server)
+
 const port = 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const storage = multer.diskStorage({
@@ -36,7 +35,7 @@ dotenv.config();
 
 const connect = () => {
   mongoose
-    .connect('mongodb://127.0.0.1:27017')
+    .connect('mongodb://0.0.0.0:27017')
     .then(() => {
       console.log("Connected to DB");
     })
@@ -71,7 +70,7 @@ io.on("connection", socket => {
       await User.findByIdAndUpdate(user._id, {
         $addToSet: {tokens: socket.id},
         status: "connect"
-      })
+      }) 
       // for(let i = 0; i < online.length; i++) {
       //   s.add(online[i].userId)
       // }
@@ -171,7 +170,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
   const path = req.file.path
   res.status(200).json({path, type: req.file.mimetype});
 });
-app.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
   connect();
   console.log("Connected to Server");
 });

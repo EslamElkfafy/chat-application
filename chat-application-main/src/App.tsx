@@ -13,6 +13,7 @@ import Block from "./pages/admin/Block";
 import Filter from "./pages/admin/Filter";
 import axios from 'axios';
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "http://" + document.location + ":3000"
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 import { useSocketContext } from "./context/SocketContextProvider";
