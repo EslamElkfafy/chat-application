@@ -4,7 +4,8 @@ services:
     build: chat-application-main
     network_mode: host
     ports:
-      - '5173:9090'
+      - '5173:80'
+      - '5173:443'
   server:
     build: server
     network_mode: host
