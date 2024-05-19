@@ -1,0 +1,25 @@
+version: '3'
+services:
+  client:
+    build: chat-application-main
+    network_mode: host
+    ports:
+      - '5173:9090'
+  server:
+    build: server
+    network_mode: host
+    environment:
+      - JWT=sphdpifhsdpifhsdpuihfpisdhpfisdh
+    ports:
+      - '3000:3000'
+    volumes:
+      - uploaddata:/usr/src/app/uploads
+  db:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - dbdata6:/data/db
+volumes:
+  dbdata6:
+  uploaddata:
