@@ -40,7 +40,8 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
-    "vite": "^5.1.6"
+    "vite": "^5.1.6",
+    "vite-plugin-mkcert": "^1.17.5"
   },
   "proxy": "http://localhost:3000/"
 }

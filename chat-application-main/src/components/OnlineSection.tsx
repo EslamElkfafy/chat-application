@@ -36,7 +36,7 @@ function OnlineSection() {
 // })
 useEffect(() => {
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:3000/api/users/findall");
+    const response = await axios.get("users/findall");
   
     const listOfOnline = response.data.filter((item : any) => {
       return (item.status === "connect" || ((Date.now() - item.deptureTime) < (1 * 60 * 1000)))

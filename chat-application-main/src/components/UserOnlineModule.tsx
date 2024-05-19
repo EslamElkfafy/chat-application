@@ -42,7 +42,7 @@ import UserOnlineContainer from "./UserOnlineContainer";
   
     useEffect(() => {
         const fetchData = async () => {
-          const response1 = await axios.get(`http://localhost:3000/api/users/like/${user_Data._id}`)
+          const response1 = await axios.get(`users/like/${user_Data._id}`)
           const listLike = response1.data.listLike;
           setListOfLikes(listLike)
           if (listLike.includes(user._id)) {
@@ -56,9 +56,9 @@ import UserOnlineContainer from "./UserOnlineContainer";
   
     useEffect(() => {
       const fetchData = async () => {
-        const response2 = await axios.get(`http://localhost:3000/api/users/find/${user_Data._id}`);
+        const response2 = await axios.get(`users/find/${user_Data._id}`);
         setUserData(response2.data)
-        const response1 = await axios.get(`http://localhost:3000/api/users/block/${user._id}`)
+        const response1 = await axios.get(`users/block/${user._id}`)
         const listBlock = response1.data.listBlock;
         if (listBlock.includes(user_Data._id)) {
           setResultBlock(true)
@@ -69,11 +69,11 @@ import UserOnlineContainer from "./UserOnlineContainer";
         fetchData()
     }, [])
     const handleClickLike = async () => {
-      await axios.put(`http://localhost:3000/api/users/updatelike/${user_Data._id}`, {checkId: user._id, check: resultLike})
+      await axios.put(`users/updatelike/${user_Data._id}`, {checkId: user._id, check: resultLike})
       setResultLike(!resultLike)
     }
     const handleClickBlock = async () => {
-      await axios.put(`http://localhost:3000/api/users/updateblock/${user._id}`, {checkId: user_Data._id, check: resultBlock})
+      await axios.put(`users/updateblock/${user._id}`, {checkId: user_Data._id, check: resultBlock})
       setResultBlock(!resultBlock)
     }
     return (

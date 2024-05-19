@@ -24,8 +24,9 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
       setMessageFeildsSignUp(true)
     } else {
       try{
-        await axios.post("http://localhost:3000/api/auth/signup", {userName: nameSignUp, password: passwordSignUp, name: nameSignUp});
-        const response = await axios.post("http://localhost:3000/api/auth/signin", {userName: nameSignUp, password: passwordSignUp});
+
+        await axios.post("auth/signup", {userName: nameSignUp, password: passwordSignUp, name: nameSignUp});
+        const response = await axios.post("auth/signin", {userName: nameSignUp, password: passwordSignUp});
         setUser({...response.data})
         const tempUser = {...response.data}
         const tempMessage : any = {
@@ -50,7 +51,7 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
 
   }
   const handlClickSignIn = async () => {
-    const response = await axios.post("http://localhost:3000/api/auth/signin", {userName: nameSignIn, password: passwordSignIn});
+    const response = await axios.post("auth/signin", {userName: nameSignIn, password: passwordSignIn});
     setUser({...response.data})
     const tempUser = {...response.data}
     const tempMessage : any = {

@@ -21,7 +21,7 @@ function HeaderChatModule({ onClose_Module, toUserId }: { onClose_Module: () => 
 
   useEffect(() => {
     const fetchData = async () =>{
-      const response = await axios.get(`http://localhost:3000/api/users/find/${toUserId}`)
+      const response = await axios.get(`users/find/${toUserId}`)
       setDataUser(response.data)
     }
     fetchData()

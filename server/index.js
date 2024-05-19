@@ -35,7 +35,7 @@ dotenv.config();
 
 const connect = () => {
   mongoose
-    .connect('mongodb://0.0.0.0:27017')
+    .connect('mongodb://localhost:27017')
     .then(() => {
       console.log("Connected to DB");
     })

@@ -7,7 +7,7 @@ function UserContainer({ onClick, userId }: { onClick?: () => void, userId: any 
   useEffect(() => {
     const fetchData = async () => {
       console.log(userId)
-      const response = await axios.get(`http://localhost:3000/api/users/find/${userId}`);
+      const response = await axios.get(`users/find/${userId}`);
       console.log(response.data)
       setData(response.data)
     }

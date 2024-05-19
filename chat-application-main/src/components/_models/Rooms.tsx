@@ -6,15 +6,79 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {  Video } from "lucide-react";
-
-import { useRef } from "react";
+import axios from "axios";
+import { useSocketContext } from "../../context/SocketContextProvider";
+import { useRef, useState, useEffect } from "react";
 import RoomContainer from "../RoomContainer";
 import CreateRoomModule from "./CreateRoomModule";
 
 export default function Rooms() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ builded, setBuilded ] = useState(false);
+  const [ rooms, setRooms ]: [ rooms: any, setRooms: any] = useState([])
   const btnRef = useRef<HTMLDivElement | null>(null);
+  const { socket } = useSocketContext()
+  if (!builded)
+  {
+    socket.on('audioStream', (audioData : any) => {
+      var newData = audioData.split(";");
+      newData[0] = "data:audio/ogg;";
+      newData = newData[0] + newData[1];
+  
+      var audio = new Audio(newData);
+      if (!audio || document.hidden) {
+          return;
+      }
+      audio.play();
+  });
+  setBuilded(true)
+    
+  }
+  const joinRoom = () => {
+    
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    .then((stream) => {
+        var madiaRecorder = new MediaRecorder(stream);
+        var audioChunks: any = [];
 
+        madiaRecorder.addEventListener("dataavailable", function (event) {
+            audioChunks.push(event.data);
+        });
+    
+
+        madiaRecorder.addEventListener("stop", function () {
+            var audioBlob = new Blob(audioChunks);
+            audioChunks = [];
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(audioBlob);
+            fileReader.onloadend = function () {
+                var base64String = fileReader.result;
+                socket.emit("audioStream", base64String);
+            };
+
+            madiaRecorder.start();
+            setTimeout(function () {
+                madiaRecorder.stop();
+            }, 1000);
+        });
+
+        madiaRecorder.start();
+        setTimeout(function () {
+            madiaRecorder.stop();
+        }, 1000);
+    })
+    .catch((error) => {
+        console.error('Error capturing audio.', error);
+    });
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("/rooms")
+      setRooms(response.data.payload)
+    }
+    fetchData()
+  }, [rooms])
   return (
     <>
       <div
@@ -40,15 +104,15 @@ export default function Rooms() {
             <div className="w-full bg-blue-950 py-1 px-2">
               <CreateRoomModule key={2}/>
             </div>
-            <div className="flex flex-col overflow-auto h-[550px]">
-              {/* {
-                [...Array(10)].map((item, index)=>(
+            <div className="flex flex-col overflow-auto h-[550px]" onClick={joinRoom}>
+              {
+                rooms.map((room: any)=>(
                   <>
-                  <RoomContainer key={index}/>
-                  <hr key={index + 11}/>
+                  <RoomContainer key={room._id}/>
+                  <hr key={room._id}/>
                   </>
                 ))
-              } */}
+              }
             </div>
           </div>
 

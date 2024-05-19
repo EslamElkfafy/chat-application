@@ -20,7 +20,7 @@ export default function PrivateChat() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/users/getprivate/${user._id}`);
+      const response = await axios.get(`users/getprivate/${user._id}`);
       setListOfPrivate(response.data.private)
     }
     const interval = setInterval(() => {

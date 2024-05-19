@@ -5,7 +5,7 @@ function CommentItem({message} : {message : any}) {
   const [userData, setUserData] = useState<Record<string, any>>({})
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/users/find/${message.userId}`);
+      const response = await axios.get(`users/find/${message.userId}`);
       setUserData(response.data)
     }
     fetchData()

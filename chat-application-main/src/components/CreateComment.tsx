@@ -10,7 +10,7 @@ function CreateComment({postId} : {postId: any}) {
   const { user } = useUserContext()
   const handleClick = async () => {
     setComment("");
-    await axios.put(`http://localhost:3000/api/posts/addcomment/${postId}`, {userId: user._id, description: comment, arrivalTime: Date.now()});
+    await axios.put(`posts/addcomment/${postId}`, {userId: user._id, description: comment, arrivalTime: Date.now()});
   }
   return (
     <div className="flex items-center gap-x-1 px-1 py-1 bg-gray-50 ">

@@ -7,7 +7,7 @@ function Post({item} : {item :any}) {
   const [userData, setUserData] = useState<Record<string, any>>({})
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/users/find/${item.userId}`);
+      const response = await axios.get(`users/find/${item.userId}`);
       setUserData(response.data)
     }
     fetchData()

@@ -11,7 +11,7 @@ function MessageContainer({listOfMessage, setListOfMessage} : {listOfMessage: an
     const interval = setInterval(() => {
       let alist : any = listOfMessage.filter((item : any)=> {
         return ((Date.now() - item.arrivalTime) < (1 * 60 * 1000))})
-      setListOfMessage(alist)
+      setListOfMessage([...alist])
       if (receive) {
         socket.on("receive-event", (message : any) => {
           setListOfMessage((previous : any) => ([...previous, message]))

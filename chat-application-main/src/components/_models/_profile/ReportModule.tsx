@@ -25,7 +25,7 @@ function ReportModule({toUserId} : {toUserId: any}) {
   }
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/users/find/${toUserId}`)
+      const response = await axios.get(`users/find/${toUserId}`)
       setCheckInfo(response.data.infoBlock)
     }
     fetchData()

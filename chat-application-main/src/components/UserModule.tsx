@@ -39,7 +39,7 @@ function UserModule({userId} : {userId: any}) {
 
   useEffect(() => {
       const fetchData = async () => {
-        const response1 = await axios.get(`http://localhost:3000/api/users/like/${userId}`)
+        const response1 = await axios.get(`users/like/${userId}`)
         const listLike = response1.data.listLike;
         setListOfLikes(listLike)
         if (listLike.includes(user._id)) {
@@ -53,9 +53,9 @@ function UserModule({userId} : {userId: any}) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response2 = await axios.get(`http://localhost:3000/api/users/find/${userId}`);
+      const response2 = await axios.get(`users/find/${userId}`);
       setUserData(response2.data)
-      const response1 = await axios.get(`http://localhost:3000/api/users/block/${user._id}`)
+      const response1 = await axios.get(`users/block/${user._id}`)
       const listBlock = response1.data.listBlock;
       if (listBlock.includes(userId)) {
         setResultBlock(true)
@@ -66,11 +66,11 @@ function UserModule({userId} : {userId: any}) {
       fetchData()
   }, [])
   const handleClickLike = async () => {
-    await axios.put(`http://localhost:3000/api/users/updatelike/${userId}`, {checkId: user._id, check: resultLike})
+    await axios.put(`users/updatelike/${userId}`, {checkId: user._id, check: resultLike})
     setResultLike(!resultLike)
   }
   const handleClickBlock = async () => {
-    await axios.put(`http://localhost:3000/api/users/updateblock/${user._id}`, {checkId: userId, check: resultBlock})
+    await axios.put(`users/updateblock/${user._id}`, {checkId: userId, check: resultBlock})
     setResultBlock(!resultBlock)
   }
   return (

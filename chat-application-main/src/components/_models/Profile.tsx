@@ -44,23 +44,23 @@ export default function Profile() {
 
   
     if (user._id !== -1) {
-      const response = await axios.put(`http://localhost:3000/api/users/${user._id}`, updatedData)
+      const response = await axios.put(`users/${user._id}`, updatedData)
       setUser(response.data)
     }else {
       setUser(updatedData)
     }
   }
   const handelChatBlockClick = async () => {
-    await axios.put(`http://localhost:3000/api/users/chatblock/${user._id}`, {check: chatCheck});
+    await axios.put(`users/chatblock/${user._id}`, {check: chatCheck});
     setChatCheck(!chatCheck)
   }
   const handelInfoBlockClick = async () => {
-    await axios.put(`http://localhost:3000/api/users/infoblock/${user._id}`, {check: infoCheck});
+    await axios.put(`users/infoblock/${user._id}`, {check: infoCheck});
     setInfoheck(!infoCheck)
   }
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/users/find/${user._id}`)
+      const response = await axios.get(`users/find/${user._id}`)
       setChatCheck(response.data.chatBlock)
       setInfoheck(response.data.infoBlock)
     }

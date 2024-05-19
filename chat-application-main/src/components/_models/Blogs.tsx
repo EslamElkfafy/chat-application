@@ -19,7 +19,7 @@ export default function Blogs() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("http://localhost:3000/api/posts/allposts");
+      const response = await axios.get("posts/allposts");
       setListOfPosts(response.data)
     }
     const interval = setInterval(() => {

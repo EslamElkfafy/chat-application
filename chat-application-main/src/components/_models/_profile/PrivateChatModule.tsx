@@ -29,7 +29,7 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
   useEffect(() => {
     input.current?.scrollIntoView({ behavior: "smooth" });
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/chats/messages/${chatId}`)
+      const response = await axios.get(`chats/messages/${chatId}`)
       setDataListOfPrivateMessages(response.data.messages)
     }
     if (chatId !== "")
@@ -40,7 +40,7 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
   }, [chatId]);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/users/find/${toUserId}`);
+      const response = await axios.get(`users/find/${toUserId}`);
       setCheckChat(response.data.chatBlock);
     }
     fetchData()
@@ -53,14 +53,14 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
       toast.warning("هذا المستحدم قام بتعطيل المحادثات")
     } else {
       onOpen()
-    const response = await axios.post("http://localhost:3000/api/chats/addchat", {
+    const response = await axios.post("chats/addchat", {
       user1: user._id,
       user2: toUserId
     })
     const chat_id = response.data._id;
     setChatId(chat_id)
     socket.emit('join-room', chat_id);
-    await axios.put(`http://localhost:3000/api/users/updateprivate/${toUserId}`, { userId: user._id});
+    await axios.put(`users/updateprivate/${toUserId}`, { userId: user._id});
     }
     
   }

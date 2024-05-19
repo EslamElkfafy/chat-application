@@ -18,7 +18,7 @@ function SendPrivateMessage({chatId, setListOfPrivateMessages, listOfPrivateMess
     }
     let new_list = [...listOfPrivateMessages, tempMessage]
     socket.emit("send-room", tempMessage, chatId)
-    await axios.put(`http://localhost:3000/api/chats/messages/${chatId}`, {message: tempMessage})
+    await axios.put(`chats/messages/${chatId}`, {message: tempMessage})
     setListOfPrivateMessages(new_list)
     setMessage(""); 
   }

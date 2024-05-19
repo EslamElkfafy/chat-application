@@ -5,7 +5,7 @@ const ShapeAlert = ({message, fromUserId} : {message : any, fromUserId : any}) =
     const [dataUser, setDataUser] = useState<Record<string, any>>({})
     useEffect (() => {
         const fetchData = async () => {
-            const response = await axios.get(`http://localhost:3000/api/users/find/${fromUserId}`);
+            const response = await axios.get(`users/find/${fromUserId}`);
             setDataUser(response.data)
         }
         fetchData()

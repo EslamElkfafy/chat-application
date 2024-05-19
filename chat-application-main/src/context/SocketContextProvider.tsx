@@ -4,7 +4,7 @@ import { useUserContext } from "./UserContextProvider";
 import { toast } from "react-toastify";
 import ShapeAlert from "../components/ShapeAlert";
 
-const socketIo = io("http://" + document.location + ":3000");
+const socketIo = io("https://" + document.location.hostname + ":3000");
 
 
 const SocketContext = createContext<{
