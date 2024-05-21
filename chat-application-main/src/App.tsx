@@ -13,8 +13,8 @@ import Block from "./pages/admin/Block";
 import Filter from "./pages/admin/Filter";
 import axios from 'axios';
 axios.defaults.withCredentials = true;
-// let hostname = "https://" + document.location.hostname + ":3000/api/"
-let hostname = "http://localhost:3000/api/"
+let hostname = import.meta.env.VITE_API_BASE_URL + "api/"
+// let hostname = "http://localhost:3000/api/"
 console.log(hostname)
 axios.defaults.baseURL = hostname
 import 'react-toastify/dist/ReactToastify.css';

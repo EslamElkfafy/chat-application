@@ -11,7 +11,7 @@ function UploadButton() {
     console.log("-------------")
     console.log(files)
     try {
-      const response = await fetch('http://localhost:3000/upload', {
+      const response = await fetch(import.meta.env.VITE_API_BASE_URL + 'upload', {
         method: 'POST',
         body: formData
       });
@@ -22,11 +22,11 @@ function UploadButton() {
 
         // Access the filename from the response
         
-        const updatedData = {...user, img : `http://localhost:3000/${data.path}`};
+        const updatedData = {...user, img : `${data.path}`};
 
       
         if (user._id !== -1) {
-          const response = await axios.put(`http://localhost:3000/api/users/${user._id}`, updatedData)
+          const response = await axios.put(`users/${user._id}`, updatedData)
           setUser(response.data)
         }else {
           setUser(updatedData)

@@ -4,8 +4,9 @@ import { useUserContext } from "./UserContextProvider";
 import { toast } from "react-toastify";
 import ShapeAlert from "../components/ShapeAlert";
 
-let hostname = "https://" + document.location.hostname + ":3000"
+let hostname = import.meta.env.VITE_BASE_API_URL
 const socketIo = io(hostname, {
+  transports : ['websocket'],
   withCredentials: true,
 });
 

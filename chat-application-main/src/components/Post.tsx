@@ -5,6 +5,7 @@ import AudioPlayer from "./AudioPlayer";
 
 function Post({item} : {item :any}) {
   const [userData, setUserData] = useState<Record<string, any>>({})
+  const [url, setUrl] = useState(import.meta.env.VITE_API_BASE_URL + item.url)
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`users/find/${item.userId}`);
@@ -22,13 +23,13 @@ function Post({item} : {item :any}) {
         </div>
         <div className="flex items-center justify-between px-2  ">
           {item.type === "image/png" ? 
-          <img src={item.url} className="w-[150px] h-[100px]" /> :
+          <img src={url} className="w-[150px] h-[100px]" /> :
           ( item.type === "video/mp4" ? 
             <video width="170" height="200" preload="none" controls>
-            <source src={item.url} type="video/mp4" />
+            <source src={url} type="video/mp4" />
             Your browser does not support the video tag.
           </video> :
-          <AudioPlayer src={item.url}/>
+          <AudioPlayer src={url}/>
           )
         }
           <div className="flex items-end justify-end h-full">

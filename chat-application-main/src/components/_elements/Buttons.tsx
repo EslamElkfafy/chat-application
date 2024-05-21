@@ -10,12 +10,12 @@ function Buttons({item} : {item : any}) {
   const [resultLike, setResultLike] = useState(item.like.includes(user._id));
   const [lengthOfLike, setLengthOfLike] = useState(0)
   const handleLikeClick = async () => {
-    await axios.put(`http://localhost:3000/api/posts/updatelike/${item._id}`, {check : resultLike, checkId: user._id});
+    await axios.put(`posts/updatelike/${item._id}`, {check : resultLike, checkId: user._id});
     setResultLike(!resultLike)
   }
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/posts/getpost/${item._id}`);
+      const response = await axios.get(`posts/getpost/${item._id}`);
       setLengthOfLike(response.data.like.length)
     }
     fetchData()

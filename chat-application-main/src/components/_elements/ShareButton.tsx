@@ -11,7 +11,9 @@ function ShareButton() {
     console.log("-------------")
     console.log(files)
     try {
-      const response = await fetch('http://localhost:3000/upload', {
+      const res_url = import.meta.env.VITE_API_BASE_URL + 'upload'
+      console.log(res_url)
+      const response = await fetch(res_url, {
         method: 'POST',
         body: formData
       });
@@ -23,11 +25,11 @@ function ShareButton() {
         
         const newPost = {
           userId: user._id,
-          url: `http://localhost:3000/${data.path}`,
+          url: `${data.path}`,
           type: data.type,
           arrivalTime: Date.now()
         };
-        await axios.post("http://localhost:3000/api/posts/addpost", newPost)
+        await axios.post("posts/addpost", newPost)
       
         
       } else {
