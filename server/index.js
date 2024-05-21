@@ -18,7 +18,10 @@ import http from "http"
 
 const app = express();
 const server = http.createServer(app);
-let io = new Server(server)
+let io = new Server(server, {
+  origin: true, // Allows all origins
+  credentials: true // Allows sending cookies with the request
+})
 
 const port = 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
