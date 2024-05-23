@@ -74,8 +74,12 @@ export default function Rooms() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("/rooms")
-      setRooms(response.data.payload)
+      try{
+        const response = await axios.get("/rooms")
+        setRooms(response.data.payload)
+      } catch(e) {
+        console.log(e)
+      }
     }
     fetchData()
   }, [rooms])
@@ -98,7 +102,7 @@ export default function Rooms() {
         <DrawerContent>
           <div className="flex flex-col w-full">
             <div className="w-full flex items-center justify-between px-2  bg-blue-800 text-white relative h-[50px]">
-              <p className="font-bold">غرف الدردشه: 9</p>
+              <p className="font-bold">غرف الدردشه: {rooms.length}</p>
               <DrawerCloseButton backgroundColor={"red"} color={"white"} />
             </div>
             <div className="w-full bg-blue-950 py-1 px-2">
@@ -107,10 +111,10 @@ export default function Rooms() {
             <div className="flex flex-col overflow-auto h-[550px]" onClick={joinRoom}>
               {
                 rooms.map((room: any)=>(
-                  <>
-                  <RoomContainer key={room._id}/>
-                  <hr key={room._id}/>
-                  </>
+                  <span key={room._id}>
+                  <RoomContainer room={room}/>
+                  <hr/>
+                  </span>
                 ))
               }
             </div>

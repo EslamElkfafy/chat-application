@@ -13,6 +13,7 @@ import { fileURLToPath } from "url";
 import multer from "multer";
 import User from "./models/User.js";
 import postRoutes from "./routes/posts.js"
+import roomRoutes from "./routes/room.js"
 import http from "http"
 
 
@@ -156,6 +157,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/posts", postRoutes)
+app.use("/api/rooms", roomRoutes)
 
 //error handler
 app.use((err, req, res, next) => {

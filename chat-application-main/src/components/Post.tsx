@@ -5,7 +5,7 @@ import AudioPlayer from "./AudioPlayer";
 
 function Post({item} : {item :any}) {
   const [userData, setUserData] = useState<Record<string, any>>({})
-  const [url, setUrl] = useState(import.meta.env.VITE_API_BASE_URL + item.url)
+  const [url, _] = useState(import.meta.env.VITE_API_BASE_URL + item.url)
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`users/find/${item.userId}`);
