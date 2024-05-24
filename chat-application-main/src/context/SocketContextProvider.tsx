@@ -1,8 +1,9 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { useUserContext } from "./UserContextProvider";
 import { toast } from "react-toastify";
 import ShapeAlert from "../components/ShapeAlert";
+import {useOptionContext} from "./OptionContextProvider"
 
 let hostname = import.meta.env.VITE_API_BASE_URL
 console.log(hostname)
@@ -21,6 +22,9 @@ const SocketContext = createContext<{
 function SocketContextProvider({ children }: { children: React.ReactNode }) {
   const {user} = useUserContext()
   const [send, setSend] = useState(true)
+  const {option} = useOptionContext()
+  const [micBuild, setMicBuild] = useState(true)
+  const [voiceBuild, setVoiceBuild] = useState(true)
   if (user && user._id != -1)
   {
     socketIo.on("userStatus", () => {
@@ -40,8 +44,87 @@ function SocketContextProvider({ children }: { children: React.ReactNode }) {
         setSend(false)
       }
   }
-
+  useEffect(() => {
+    const asyncRecord = async () => {
+      if (micBuild && option.mic && option.room)
+      {
+        let stream: any;
+        try
+        {
+          stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        } catch(e) {
+          console.error('Error capturing audio.', e);
+        }
+        if (stream)
+        {
+          window.stream = stream
+          const mediaRecorder = new MediaRecorder(stream);
+          var audioChunks: any = [];
+  
+          mediaRecorder.addEventListener("dataavailable", function (event: any) {
+              audioChunks.push(event.data);
+          });
+      
+  
+          mediaRecorder.addEventListener("stop", function () {
+              var audioBlob = new Blob(audioChunks);
+              audioChunks = [];
+              var fileReader = new FileReader();
+              fileReader.readAsDataURL(audioBlob);
+              fileReader.onloadend = function () {
+                  var base64String = fileReader.result;
+                  console.log(base64String)
+                  socketIo.emit("audioStream", base64String, option.room);
+              };
+  
+              mediaRecorder.start();
+              setTimeout(function () {
+                  mediaRecorder.stop();
+              }, 1000);
+          });
+  
+          mediaRecorder.start();
+          setTimeout(function () {
+              mediaRecorder.stop();
+          }, 1000);
+          setMicBuild(false)
+        }
+      }
+      else if (!micBuild && !option.mic)
+      {
+        if (window.stream)
+          window.stream.getTracks().forEach((track: any) => {
+            track.stop()
+          });
+        setMicBuild(true)
+      }
+    }
+    asyncRecord()
     
+  },[option.mic, option.room])
+  useEffect(() => {
+    if (voiceBuild && option.voice)
+    {
+      socketIo.on('audioStream', (audioData : any) => {
+        console.log(audioData)
+        var newData = audioData.split(";");
+        newData[0] = "data:audio/ogg;";
+        newData = newData[0] + newData[1];
+    
+        var audio = new Audio(newData);
+        if (!audio || document.hidden) {
+            return;
+        }
+        audio.play();
+      });
+      setVoiceBuild(false)
+    }
+    else if (!voiceBuild && !option.voice)
+    {
+      socketIo.off('audioStream')
+      setVoiceBuild(true)
+    }
+  }, [option.voice])
   return (
     <SocketContext.Provider value={{ socket: socketIo }}>
       {children}

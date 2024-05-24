@@ -88,6 +88,9 @@ io.on("connection", socket => {
   socket.on("join-room", room => {
     socket.join(room);
   })
+  socket.on("leave-room", (room) => {
+    socket.leave(room);
+  })
   socket.on("send-room",(message, room) => {
     socket.to(room).emit("receive-room", message)
   } )
@@ -96,6 +99,12 @@ io.on("connection", socket => {
     console.log(socket.id)
     socket.broadcast.emit("recieve-info", message, userId, fromUserId)
   })
+  // Handle incoming audio stream
+  socket.on('audioStream', (audioData, room) => {
+    console.log(room)
+    if (room) 
+      socket.to(room).emit('audioStream', audioData);
+  });
   // for(let i = 0; i < online.length; i++) {
   //   s.add(online[i].userId)
   // }
