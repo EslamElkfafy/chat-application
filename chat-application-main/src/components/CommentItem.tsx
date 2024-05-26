@@ -13,7 +13,7 @@ function CommentItem({message} : {message : any}) {
   return (
     <div className="flex items-center justify-between border">
       <div className="flex items-center gap-x-1">
-        <img src={userData.img} className="w-9 h-9" />
+        <img src={import.meta.env.VITE_API_BASE_URL + userData.img} className="w-9 h-9" />
         <div className="flex flex-col justify-between">
             <p className="font-semibold">{userData.name}</p>
             <p className="font-semibold">{message.description}</p>

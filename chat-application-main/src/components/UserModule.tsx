@@ -82,10 +82,10 @@ function UserModule({userId} : {userId: any}) {
         <ModalOverlay />
         <ModalContent width={"350px"}>
           <div className="flex items-center justify-between px-2 py-3 bg-blue-950 text-white">
-            <img src={userData.img} className="w-6 h-6" />
+            <img src={import.meta.env.VITE_API_BASE_URL + userData.img} className="w-6 h-6" />
             <ModalCloseButton bg={"red"} color={"white"} />
           </div>
-          <img src={userData.img} className="h-[200px] bg-cover" />
+          <img src={import.meta.env.VITE_API_BASE_URL + userData.img} className="h-[200px] bg-cover" />
           <div className="flex flex-wrap  p-1 gap-1 justify-center">
             <PrivateChatModule toUserId={userId}/>
             <ReportModule toUserId= {userId}/>

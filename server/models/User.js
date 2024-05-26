@@ -48,7 +48,7 @@ const UserSchema = new mongoose.Schema(
     },
     img: {
       type: String,
-      default: "/avatar.jpg"
+      default: "uploads/avatar.jpg"
     },
     private : {
       type: [String]

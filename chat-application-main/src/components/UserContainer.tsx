@@ -22,7 +22,7 @@ function UserContainer({ onClick, userId }: { onClick?: () => void, userId: any 
       }}
     >
       <div className="flex items-center gap-x-1">
-        <img src={data?.img} className="w-9 h-9" />
+        <img src={import.meta.env.VITE_API_BASE_URL + data?.img} className="w-9 h-9" />
         <div className="flex flex-col justify-between py-2">
           <p style={{color: data?.nameColor, backgroundColor: data?.backgroundColor}}>{data?.name}</p>
           <p style={{color: data?.fontColor}}>{data?.state}</p>

@@ -33,7 +33,7 @@ function HeaderChatModule({ onClose_Module, toUserId }: { onClose_Module: () => 
         onClick={onOpen}
       >
         <div className="flex items-center gap-x-1">
-          <img src={dataUser.img} className="w-6 h-6" />
+          <img src={import.meta.env.VITE_API_BASE_URL + dataUser.img} className="w-6 h-6" />
           {dataUser.name}
         </div>
         <div

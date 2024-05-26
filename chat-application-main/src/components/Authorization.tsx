@@ -76,7 +76,7 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
       backgroundColor: "#dbeafe",
       fontColor: "#000000",
       nameColor: "#000000",
-      img: "/avatar.jpg"
+      img: "uploads/avatar.jpg"
     })
 
   }
