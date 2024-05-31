@@ -8,8 +8,8 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
-import { Settings, UserRoundX, LogOut } from "lucide-react";
-
+import { Settings, UserRoundX, LogOut, Megaphone } from "lucide-react";
+import {renderToString} from 'react-dom/server'
 import { useEffect, useRef, useState } from "react";
 import UploadButton from "../_elements/UploadButton";
 import { useSizeContext } from "../../context/SizeContextProvider";
@@ -18,11 +18,13 @@ import { useUserContext } from "../../context/UserContextProvider";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CheckIcon from '@mui/icons-material/Check';
+import { useSocketContext } from "../../context/SocketContextProvider";
 
-export default function Profile() {
+export default function Profile({setListOfMessage}: {setListOfMessage: (previous: any) => {}}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef<HTMLDivElement | null>(null);
-  const { setSize } = useSizeContext();
+  const { size, setSize } = useSizeContext();
+  const {socket} = useSocketContext();
   const { admin } = useAdminContext();
   const { user, setUser } = useUserContext();
   const router = useNavigate();
@@ -35,7 +37,30 @@ export default function Profile() {
   })
   const [chatCheck, setChatCheck] = useState(false);
   const [infoCheck, setInfoheck] = useState(false);
-
+  const changeSize = (value: number) => {
+    const body = document.querySelector("body")
+    body.style.fontSize = `${16 * value}px`
+    setSize(value)
+  }
+  const handleAdv = () => {
+    const message = prompt("ادخل رسالة الاعلان")
+    const htmlDescription = <span className="flex">
+    <Megaphone fill="blue" color="blue"/>
+    <strong style={{"color": "blue"}}>إعلان</strong>
+    {message}
+  </span>
+    const tempMessage : any = {
+      arrivalTime: Date.now(),
+      description : htmlDescription,
+      img: "uploads/adv.jpg",
+      name: user.name,
+      fontColor: "black",
+      nameColor: "black",
+      backgroundColor: false
+    }
+    setListOfMessage((previous : any) => ([...previous, tempMessage]))
+    socket.emit("sent-event", {...tempMessage, description: renderToString(htmlDescription)})
+  }
   const handleChange = (event : any) => {
     setInputs({...inputs, [event.target.name] : event.target.value})
   }
@@ -98,7 +123,7 @@ export default function Profile() {
               <label className="text-center w-[100px]  bg-blue-700 text-white   ">
                 الحاله
               </label>
-              <Input size={"sm"} name="state" width={"100%"} value={inputs.state}onChange={(e) =>  handleChange(e)} readOnly  />
+              <Input size={"sm"} name="state" width={"100%"} value={inputs.state}onChange={(e) =>  handleChange(e)} />
             </div>
             <div className="flex flex-col gap-y-1 mt-2">
               <div className="flex gap-x-1 items-center">
@@ -156,7 +181,8 @@ export default function Profile() {
                 textColor={"white"}
                 size={"sm"}
                 iconColor="white"
-                onChange={(e) => setSize(parseFloat(e.currentTarget.value))}
+                value={size}
+                onChange={(e) => changeSize(parseFloat(e.currentTarget.value))}
               >
                 <option className="text-black" value="1">
                   %100 - حجم الخطوط
@@ -177,39 +203,6 @@ export default function Profile() {
                   %90 - حجم الخطوط
                 </option>
               </Select>
-              <Select
-                size={"sm"}
-                borderRadius={"0px"}
-                bg={"blue"}
-                textColor={"white"}
-                iconColor="white"
-              >
-                <option className="text-black">السيرفر الصوتي: الاساسي</option>
-                <option className="text-black">السيرفر الصوتي: TCP</option>
-                <option className="text-black">السيرفر الصوتي: UDP</option>
-                <option className="text-black">
-                  السيرفر الصوتي: TCP+Relay
-                </option>
-                <option className="text-black">
-                  السيرفر الصوتي: UDP+Relay
-                </option>
-                <option className="text-black">
-                  السيرفر الصوتي: UDP+Relay
-                </option>
-              </Select>
-              <Select
-                size={"sm"}
-                borderRadius={"0px"}
-                bg={"blue"}
-                textColor={"white"}
-                iconColor="white"
-              >
-                <option className="text-black">جودة المايك: الاساسيه</option>
-                <option className="text-black">جودة المايك: ضعيفه</option>
-                <option className="text-black">جودة المايك: متوسطه</option>
-                <option className="text-black ">جودة المايك: عاليه</option>
-              </Select>
-
               <UploadButton />
               <label
                 className="bg-gray-50  border border-gray-700 rounded-md text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
@@ -229,6 +222,19 @@ export default function Profile() {
                 <p className="text-center w-full font-bold text-gray-500">   تعطيل التنبيهات </p>
                 </div>
               </label>
+              <Button
+                bg={"blue"}
+                _hover={{ bg: "rgb(0, 0, 200)"}}
+                size={"sm"}
+                borderRadius={"0px"}
+                leftIcon={<Megaphone className="text-white" />}
+                textAlign={"center"}
+                border={"1px solid gray"}
+                color={"white"}
+                onClick={handleAdv}
+              >
+                الإعلان للأدعية والمسابقات
+              </Button>
               <Button
                 bg={"rgb(239 68 68)"}
                 _hover={{ bg: "rgb(239 68 68)" }}

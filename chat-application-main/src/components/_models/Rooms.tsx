@@ -4,36 +4,18 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useDisclosure,
-  IconButton,
 } from "@chakra-ui/react";
-import {  Video, Mic, MicOff, VolumeX, Volume2 } from "lucide-react";
+import {  Video } from "lucide-react";
 import axios from "axios";
-import { useSocketContext } from "../../context/SocketContextProvider";
 import { useRef, useState, useEffect } from "react";
 import RoomContainer from "../RoomContainer";
 import CreateRoomModule from "./CreateRoomModule";
-import { useOptionContext } from "../../context/OptionContextProvider";
 
 export default function Rooms() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [ builded, setBuilded ] = useState(false);
   const [ rooms, setRooms ]: [ rooms: any, setRooms: any] = useState([])
   const btnRef = useRef<HTMLDivElement | null>(null);
-  const { socket } = useSocketContext()
-  const {option, setOption} = useOptionContext()
-  const joinRoom = (room: string) => {
-    if (window.stream)
-    {
-      window.stream.getTracks().forEach((track: any) => {
-        track.stop()
-      });
-      setOption.setMic(false)
-    }
-    socket.emit("leave-room", option.room)
-    socket.emit("join-room", room)
-    console.log(room)
-    setOption.setRoom(room)
-  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,29 +52,12 @@ export default function Rooms() {
             </div>
             <div className="w-full bg-blue-950 py-1 px-2">
               <CreateRoomModule key={2}/>
-              <span className="ms-20">
-
-                <IconButton
-                  className="me-2"
-                  colorScheme={option.mic? "green": "gray"}
-                  size='sm'
-                  aria-label="mic"
-                  icon={option.mic? <Mic size={20}/> : <MicOff size={20} color="#dd1313" />}
-                  onClick={() => setOption.setMic(!option.mic)}
-                />
-                <IconButton
-                  size='sm'
-                  colorScheme={option.voice? "green": "gray"}
-                  aria-label="voice"
-                  icon={option.voice? <Volume2 size={20}/> : <VolumeX size={20} color="#dd1313" />}
-                  onClick={() => setOption.setVoice(!option.voice)}
-                />
-              </span>
+              
             </div>
             <div className="flex flex-col overflow-auto h-[550px]">
               {
                 rooms.map((room: any)=>(
-                  <span key={room._id} onClick={() => joinRoom(room._id)} className="btn">
+                  <span key={room._id} className="btn cursor-pointer">
                     <RoomContainer room={room}/>
                     <hr/>
                   </span>

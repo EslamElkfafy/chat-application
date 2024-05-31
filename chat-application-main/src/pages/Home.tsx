@@ -32,7 +32,7 @@ function Home({listOfMessage, setListOfMessage} : {listOfMessage: any, setListOf
       <main className="w-full h-screen bg-gray-50">
         <MessageContainer listOfMessage = {listOfMessage} setListOfMessage={setListOfMessage}/>
         <SendMessage setListOfMessage = {setListOfMessage}/>
-        <ControlBar />
+        <ControlBar setListOfMessage = {setListOfMessage}/>
       </main>
     );
 }

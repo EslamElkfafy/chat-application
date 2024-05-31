@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Buttons from "./_elements/Buttons";
 import axios from "axios";
 import AudioPlayer from "./AudioPlayer";
+import VideoPlayer from "./VideoPlayer";
 
 function Post({item} : {item :any}) {
   const [userData, setUserData] = useState<Record<string, any>>({})
@@ -21,15 +22,13 @@ function Post({item} : {item :any}) {
           <p>{userData.name}</p>
           <p>{Math.floor((Date.now() - item.arrivalTime) / (1 * 60 * 1000))}د</p>
         </div>
+          {item.text && <p>{item.text}</p>}
         <div className="flex items-center justify-between px-2  ">
-          {item.type === "image/png" ? 
+          {item.type.startsWith("image") ? 
           <img src={url} className="w-[150px] h-[100px]" /> :
-          ( item.type === "video/mp4" ? 
-            <video width="170" height="200" preload="none" controls>
-            <source src={url} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video> :
-          <AudioPlayer src={url}/>
+          ( item.type.startsWith("video") ? 
+            <VideoPlayer src={url} type={item.type}/> :
+            item.type.startsWith("audio") && <AudioPlayer src={url}/>
           )
         }
           <div className="flex items-end justify-end h-full">

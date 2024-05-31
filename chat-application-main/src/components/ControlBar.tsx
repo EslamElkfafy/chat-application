@@ -5,12 +5,12 @@ import Profile from "./_models/Profile";
 import PrivateChat from "./_models/PrivateChat";
 import Blogs from "./_models/Blogs";
 
-function ControlBar() {
+function ControlBar({setListOfMessage}: {setListOfMessage: (previous: any) => {}}) {
   return (
     <div className="flex bg-blue-900 px-2 py-2  items-center gap-x-2 mt-1">
       <RoomInfo />
       <Rooms />
-      <Profile />
+      <Profile setListOfMessage={setListOfMessage}/>
       <PrivateChat />
       <Blogs/>
     </div>

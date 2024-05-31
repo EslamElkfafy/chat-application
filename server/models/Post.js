@@ -15,6 +15,9 @@ const PostSchema = new mongoose.Schema(
     like: {
         type: [String]
     },
+    text: {
+      type: String
+    },
     messages: [
         {
           userId: {

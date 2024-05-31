@@ -1,0 +1,14 @@
+chat-application-main/logs
+chat-application-main/*.log
+chat-application-main/npm-debug.log*
+chat-application-main/yarn-debug.log*
+chat-application-main/yarn-error.log*
+chat-application-main/pnpm-debug.log*
+chat-application-main/lerna-debug.log*
+chat-application-main/node_modules
+chat-application-main/.env
+chat-application-main/.vscode/*
+
+
+server/uploads/*
+server/node_modules

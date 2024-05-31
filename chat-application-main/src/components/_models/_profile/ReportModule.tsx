@@ -22,6 +22,13 @@ function ReportModule({toUserId} : {toUserId: any}) {
   const [ checkInfo, setCheckInfo ] = useState(false)
   const handleClick = () => {
     socket.emit("info", text, toUserId, user._id)
+    setText("")
+  }
+  const handleKeyDown = (e: any) => {
+    if (e.keyCode === 13)
+    {
+      handleClick()
+    }
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +69,7 @@ function ReportModule({toUserId} : {toUserId: any}) {
             </div>
           </div>
           <div className="flex flex-col  py-2 px-2 gap-y-1  bg-gray-200">
-            <Input bg={"white"} border={"1px solid gray"} borderRadius={"0px"} placeholder="أكتب رسالتك هنا ..." value={text} onChange={(e) => setText(e.currentTarget.value)}/>
+            <Input bg={"white"} border={"1px solid gray"} borderRadius={"0px"} placeholder="أكتب رسالتك هنا ..." value={text} onChange={(e) => setText(e.currentTarget.value)} onKeyDown={handleKeyDown}/>
             <div className="w-full flex justify-end">
               <div className="p-1 bg-blue-950  text-white flex text-xs items-center " onClick={handleClick}>
                 <Send size={"25px"} className="cursor-pointer" />

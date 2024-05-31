@@ -7,10 +7,8 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { User } from "lucide-react";
-import { useSocketContext } from "../../context/SocketContextProvider";
 import { useEffect, useRef, useState } from "react";
 
-import UserModule from "../UserModule";
 import axios from "axios";
 import UserOnlineModule from "../UserOnlineModule";
 
@@ -18,7 +16,6 @@ export default function RoomInfo() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef<HTMLDivElement | null>(null);
   const [onlineList, setOnlineList] = useState<string[]>([]);
-  const { socket } = useSocketContext()
 
   // socket.on("online", (list : any[]) => {
   //   setOnlineList(list)

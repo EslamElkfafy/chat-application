@@ -18,13 +18,10 @@ let hostname = import.meta.env.VITE_API_BASE_URL + "api/"
 console.log(hostname)
 axios.defaults.baseURL = hostname
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from "react-toastify";
 import { useSocketContext } from "./context/SocketContextProvider";
 import { useUserContext } from "./context/UserContextProvider";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-
 
 function App() {
   const { socket } = useSocketContext()

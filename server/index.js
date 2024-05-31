@@ -188,6 +188,11 @@ app.post('/upload', upload.single('file'), (req, res) => {
   const path = req.file.path
   res.status(200).json({path, type: req.file.mimetype});
 });
+app.get("/api/socket/:roomId", (req, res) => {
+  const roomId = req.params.roomId
+  const room = io.sockets.adapter.rooms.get(roomId)
+  return res.status(200).json(room? room.size : 0)
+})
 server.listen(port, '0.0.0.0', () => {
   connect();
   console.log("Connected to Server");

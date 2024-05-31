@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import Message from "./Message"
 import { useSocketContext } from "../context/SocketContextProvider"
+import parse from "html-react-parser"
 
 function MessageContainer({listOfMessage, setListOfMessage} : {listOfMessage: any, setListOfMessage: (l : any) => void}) {
   const {socket} = useSocketContext()
@@ -14,6 +15,7 @@ function MessageContainer({listOfMessage, setListOfMessage} : {listOfMessage: an
       setListOfMessage([...alist])
       if (receive) {
         socket.on("receive-event", (message : any) => {
+          message.description = parse(message.description)
           setListOfMessage((previous : any) => ([...previous, message]))
         })
         setReceive(false)

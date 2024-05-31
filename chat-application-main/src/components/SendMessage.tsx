@@ -27,6 +27,12 @@ function SendMessage({setListOfMessage} : {setListOfMessage : (l : any) => void}
     socket.emit("sent-event", tempMessage)
     
   }
+  const handleKeyDown = (e: any) => {
+    if (e.keyCode === 13)
+    {
+      handleClick()
+    }
+  }
   const handleClickLogout = () => 
     {
       window.localStorage.removeItem("user");
@@ -43,6 +49,7 @@ function SendMessage({setListOfMessage} : {setListOfMessage : (l : any) => void}
         borderRadius={"5px"}
         value={message}
         onChange={(e) => setMessage(e.currentTarget.value)}
+        onKeyDown={handleKeyDown}
       />
       <div onClick={handleClick} className="h-8 px-1 py-2 flex justify-center items-center bg-blue-900 rounded-md text-white  cursor-pointer">
         <Send size={"30px"} />

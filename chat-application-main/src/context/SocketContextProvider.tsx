@@ -35,7 +35,10 @@ function SocketContextProvider({ children }: { children: React.ReactNode }) {
       {
         socketIo.on("recieve-info", (message : any, userId : any, fromUserId : any) => {
           if ((user._id === userId)) {
-            toast(<ShapeAlert message={message} fromUserId={fromUserId}/>)
+            toast.info(<ShapeAlert message={message} fromUserId={fromUserId}/>, 
+            {
+              containerId: 'stacked',
+            })
 
 
 
@@ -73,7 +76,6 @@ function SocketContextProvider({ children }: { children: React.ReactNode }) {
               fileReader.readAsDataURL(audioBlob);
               fileReader.onloadend = function () {
                   var base64String = fileReader.result;
-                  console.log(base64String)
                   socketIo.emit("audioStream", base64String, option.room);
               };
   
@@ -106,7 +108,6 @@ function SocketContextProvider({ children }: { children: React.ReactNode }) {
     if (voiceBuild && option.voice)
     {
       socketIo.on('audioStream', (audioData : any) => {
-        console.log(audioData)
         var newData = audioData.split(";");
         newData[0] = "data:audio/ogg;";
         newData = newData[0] + newData[1];

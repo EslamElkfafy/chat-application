@@ -20,7 +20,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <SizeContextProvider>
                 <ChakraProvider>
                   <ToastContainer autoClose={false} closeOnClick={true}/>
-                    <App />
+                  <ToastContainer 
+                    stacked 
+                    containerId="stacked" 
+                    autoClose={false} 
+                    closeOnClick={true}
+                    position="bottom-left"
+                  />
+                  <App />
                 </ChakraProvider>
               </SizeContextProvider>
             </AdminContextProvider>
