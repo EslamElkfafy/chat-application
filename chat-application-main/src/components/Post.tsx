@@ -15,7 +15,7 @@ function Post({item} : {item :any}) {
     fetchData()
   }, [])
   return (
-    <div className="flex  gap-x-2 border px-1 py-1 h-[150px] ">
+    <div className="flex  gap-x-2 border px-1 py-1 h-auto ">
       <img src={import.meta.env.VITE_API_BASE_URL + userData.img} className="w-10 h-10 border border-gray-800" />
       <div className="flex flex-col w-full">
         <div className="flex px-2 items-center justify-between font-bold">
@@ -25,7 +25,7 @@ function Post({item} : {item :any}) {
           {item.text && <p>{item.text}</p>}
         <div className="flex items-center justify-between px-2  ">
           {item.type.startsWith("image") ? 
-          <img src={url} className="w-[150px] h-[100px]" /> :
+          <img src={url} className="w-[150px]" /> :
           ( item.type.startsWith("video") ? 
             <VideoPlayer src={url} type={item.type}/> :
             item.type.startsWith("audio") && <AudioPlayer src={url}/>

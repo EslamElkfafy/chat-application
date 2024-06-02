@@ -2,7 +2,7 @@ import { Input } from "@chakra-ui/react";
 import {Send } from "lucide-react";
 import ShareButton from "./ShareButton";
 import EmojiModule from "../EmojiModule";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useOptionContext } from "../../context/OptionContextProvider";
 import { useUserContext } from "../../context/UserContextProvider";
 import axios from "axios";
@@ -13,6 +13,7 @@ import VideoPlayer from "../VideoPlayer";
 function Poster() {
   const { user } = useUserContext()
   const [ title , setTitle ] = useState('')
+  const inputRef: any = useRef(null)
   const [file, setFile]: any = useState({
     type: "",
     url: "",
@@ -46,6 +47,13 @@ function Poster() {
           };
           await axios.post("posts/addpost", newPost)
           toast.update(toastId, { ...option.toastOptions, render: "تم رفع الملف بنجاح", type: "success", isLoading: false });
+          inputRef.value = ""
+          setFile({
+            type: "",
+            url: "",
+            file: null
+          })
+          setTitle("")
         } else {
           toast.update(toastId, { ...option.toastOptions, render: "لم يتم رفع الملف", type: "error", isLoading: false });
           console.error('Failed to upload file');
@@ -66,6 +74,7 @@ function Poster() {
               arrivalTime: Date.now(),
               text: title
             })
+            setTitle("")
           }
         } catch(e) {
           console.error(e)
@@ -105,7 +114,7 @@ function Poster() {
   return (
     <>
       <div className="flex items-center gap-x-1 px-1 mt-2 ">
-        <ShareButton handleChange={handleChange}/>
+        <ShareButton handleChange={handleChange} reference={inputRef}/>
         <EmojiModule text={title} setText={setTitle}/>
         <Input  height={"28px"} value={title} onChange={(e) => setTitle(e.currentTarget.value)}/>
         <div 

@@ -1,6 +1,6 @@
 import Room from "../models/Room.js";
 
-export const addRoom = async (req, res, next) => {
+export const addRoom = async (req, res) => {
     try{
         let room = new Room({...req.body})
         await room.save()
@@ -10,7 +10,22 @@ export const addRoom = async (req, res, next) => {
             payload: room
         })
     } catch(e) {
-        next(e)
+        const error = []
+        if (e.errors)
+        {
+            Object.keys(e.errors).forEach(er => {
+                error.push(e.errors[er].message)
+            });
+        }
+        else if (e.code && e.code === 11000)
+        {
+            error.push("هذا الاسم موجود بالفعل")
+        }
+        res.status(500).json({
+            state: "fail",
+            message: "",
+            payload: error
+        })
     }
 }
 export const getRoom = async (req, res, next) => {

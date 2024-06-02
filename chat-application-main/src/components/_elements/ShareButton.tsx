@@ -1,7 +1,7 @@
 import { Share2 } from "lucide-react";
 import { useOptionContext } from "../../context/OptionContextProvider";
 
-function ShareButton({ handleChange }: any) {
+function ShareButton({ handleChange, reference}: any) {
   const {option} = useOptionContext()
 
   return (
@@ -12,6 +12,7 @@ function ShareButton({ handleChange }: any) {
       <Share2
       />
       <input 
+        ref={reference}
         type="file" 
         accept={option.supportedFiles.join(", ")}
         id="uploadFile1" 

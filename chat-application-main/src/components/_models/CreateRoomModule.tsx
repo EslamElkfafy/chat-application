@@ -17,6 +17,8 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Plus, X, MessagesSquare } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useOptionContext } from "../../context/OptionContextProvider";
 function CreateRoomModule() {
   const [ name, setName] = useState("");
   const [ description, setDescription ] = useState("")
@@ -28,6 +30,7 @@ function CreateRoomModule() {
   const [voiceActive, setVoiceActive] = useState(true)
   const [withoutNotification, setWithoutNotification] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const {option} = useOptionContext()
   const onCreateRoom = async () => {
     const room = {
       name,
@@ -42,10 +45,14 @@ function CreateRoomModule() {
     }
     try
     {
-      const res = await axios.post("/rooms", room)
-      console.log(res)
+      await axios.post("/rooms", room)
+      toast.success("تم انشاء الغرفة بنجاح", option.toastOptions)
+      onClose()
     } catch(e) {
-      console.log(e)
+
+      toast.error(<ul>
+        {e.response.data.payload.map((error: string) => <li key={error}>{error}</li>)}
+      </ul>, option.toastOptions)
     }
   }
   const { isOpen, onOpen, onClose } = useDisclosure();
