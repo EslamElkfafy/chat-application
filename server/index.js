@@ -159,7 +159,7 @@ app.use(cors({
   origin: true, // Allows all origins
   credentials: true // Allows sending cookies with the request
 }));
-app.use(cookieParser());
+app.use(cookieParser({limit: "800mb"}));
 app.use(express.json());
 app.use("/", express.static(path.join(__dirname, 'static')))
 app.get("/:rommId", (req, res) => {

@@ -107,6 +107,11 @@ function Poster() {
             file: input.files[0]
           })
         }
+        setFile({
+          type: "",
+          url: "",
+          file: null
+        })
         reader.readAsDataURL(input.files[0]);
       }
     }
