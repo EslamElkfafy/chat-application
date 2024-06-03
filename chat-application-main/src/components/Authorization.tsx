@@ -38,7 +38,8 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
           nameColor: tempUser.nameColor,
           backgroundColor: tempUser.backgroundColor
         }
-        setListOfMessage((previous : any) => ([...previous, tempMessage]))
+        setListOfMessage((previous : any) => (
+          [...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
         socket.emit("sent-event", tempMessage)
         socket.emit("user", {...response.data})
         router("/rommId");
@@ -63,7 +64,7 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
       nameColor: tempUser.nameColor,
       backgroundColor: tempUser.backgroundColor
     }
-    setListOfMessage((previous : any) => ([...previous, tempMessage]))
+    setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
     socket.emit("sent-event", tempMessage)
 
     socket.emit("user", {...response.data})

@@ -14,10 +14,9 @@ function AuthPage({setListOfMessage} : {setListOfMessage :any}) {
     const interval = setInterval(() => {
       let user: any = window.localStorage.getItem("user")
       if (user)
-        {
-          user = JSON.parse(user)
-          setUser(user)
-        console.log(user)
+      {
+        user = JSON.parse(user)
+        setUser(user)
         router("/rommId")
       }
 

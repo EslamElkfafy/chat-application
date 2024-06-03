@@ -58,7 +58,7 @@ export default function Profile({setListOfMessage}: {setListOfMessage: (previous
       nameColor: "black",
       backgroundColor: false
     }
-    setListOfMessage((previous : any) => ([...previous, tempMessage]))
+    setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
     socket.emit("sent-event", {...tempMessage, description: renderToString(htmlDescription)})
   }
   const handleChange = (event : any) => {

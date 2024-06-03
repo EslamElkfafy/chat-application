@@ -12,20 +12,23 @@ function SendMessage({setListOfMessage} : {setListOfMessage : (l : any) => void}
   const { user } = useUserContext();
   const { socket } = useSocketContext();
   
-  const handleClick = () => {
-    const tempMessage : any = {
-      arrivalTime: Date.now(),
-      description : message,
-      img: user.img,
-      name: user.name,
-      fontColor: user.fontColor,
-      nameColor: user.nameColor,
-      backgroundColor: user.backgroundColor
-    }
-    setListOfMessage((previous : any) => ([...previous, tempMessage]))
-    setMessage(""); 
-    socket.emit("sent-event", tempMessage)
-    
+  const handleClick = () => 
+    {
+      if (message)
+      {
+        const tempMessage : any = {
+          arrivalTime: Date.now(),
+          description : message,
+          img: user.img,
+          name: user.name,
+          fontColor: user.fontColor,
+          nameColor: user.nameColor,
+          backgroundColor: user.backgroundColor
+        }
+        setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
+        setMessage(""); 
+        socket.emit("sent-event", tempMessage)
+      }
   }
   const handleKeyDown = (e: any) => {
     if (e.keyCode === 13)
