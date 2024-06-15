@@ -15,6 +15,7 @@ import User from "./models/User.js";
 import postRoutes from "./routes/posts.js"
 import roomRoutes from "./routes/room.js"
 import http from "http"
+import { env } from "process";
 
 
 const app = express();
@@ -193,7 +194,7 @@ app.get("/api/socket/:roomId", (req, res) => {
   const room = io.sockets.adapter.rooms.get(roomId)
   return res.status(200).json(room? room.size : 0)
 })
-server.listen(port, '0.0.0.0', () => {
+server.listen(env.PORT, '0.0.0.0', () => {
   connect();
   console.log("Connected to Server");
 });

@@ -9,6 +9,7 @@ import {
     Button,
   } from "@chakra-ui/react";
   import UserContainer from "./UserContainer";
+  import country from "../lib/country.json"
   import { Profile_Items } from "../lib/utils";
   import Flags from "react-country-flag";
   import PrivateChatModule from "./_models/_profile/PrivateChatModule";
@@ -39,20 +40,7 @@ import UserOnlineContainer from "./UserOnlineContainer";
     const [ resultLike, setResultLike ] = useState(false)
     const [ resultBlock, setResultBlock ] = useState(false)
     const [userData, setUserData] = useState<Record<string, any>>({})
-  
-    useEffect(() => {
-        const fetchData = async () => {
-          const response1 = await axios.get(`users/like/${user_Data._id}`)
-          const listLike = response1.data.listLike;
-          setListOfLikes(listLike)
-          if (listLike.includes(user._id)) {
-            setResultLike(true)
-          } else {
-            setResultLike(false)
-          }
-        }
-          fetchData()
-    },[resultLike])
+
   
     useEffect(() => {
       const fetchData = async () => {
@@ -131,8 +119,8 @@ import UserOnlineContainer from "./UserOnlineContainer";
             <p className="text-center mt-1 text-black font-semibold">عضو جديد</p>
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center gap-x-2 px-2 ">
-                <Flags countryCode="sa" svg />
-                مملكة السعودية
+                <Flags countryCode={user.country} svg />
+                {user && country[user.country].arabic}
               </div>
               <div className="flex items-center gap-x-1 bg-blue-950 p-1 text-white font-normal border-[2px]">
                 <img src="/1600w-qJptouniZ0A.webp" className="w-7 h-7" />

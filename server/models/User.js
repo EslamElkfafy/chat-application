@@ -1,5 +1,32 @@
 import mongoose from "mongoose";
 
+const OptionSchema = new mongoose.Schema(
+  {
+    value: {
+      type: Boolean,
+      default: false
+    },
+    like: {
+      type: Number,
+      default: 0
+    }
+  }
+)
+const buildOption = (like) => ({
+  type: OptionSchema,
+  default: {
+    value: false,
+    like
+  }})
+const OptionsSchema = new mongoose.Schema(
+  {
+    sendPrivate: buildOption(300),
+    sendBlog: buildOption(400),
+    sendAd: buildOption(Infinity),
+    createRoom: buildOption(1000),
+    changePhoto: buildOption(200)
+  }
+)
 const UserSchema = new mongoose.Schema(
   {
     userName: {
@@ -54,7 +81,7 @@ const UserSchema = new mongoose.Schema(
       type: [String]
     },
     like: {
-      type: [String]
+      type: Number
     },
     block: {
       type: [String]
@@ -66,9 +93,20 @@ const UserSchema = new mongoose.Schema(
     infoBlock: {
       type: Boolean,
       default: false
+    },
+    option: OptionsSchema,
+    country: {
+      type: String,
+      default: ""
     }
   },
   { timestamps: true }
 );
-
+UserSchema.pre('save', async function(next) {
+  if (this.isModified('like'))
+  {
+    this.like
+  }
+  next()
+})
 export default mongoose.model("User", UserSchema);

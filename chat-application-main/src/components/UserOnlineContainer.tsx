@@ -18,7 +18,7 @@ function UserOnlineContainer({ onClick, user }: { onClick?: () => void, user: an
           <p style={{color: user.fontColor}}>{user.state}</p>
         </div>
       </div>
-      <Flags countryCode="sa" svg />
+      <Flags countryCode={user.country} svg />
     </div>
   );
 }
