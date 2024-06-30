@@ -5,6 +5,7 @@ import { Button, Input } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContextProvider";
 import { useSocketContext } from "../context/SocketContextProvider";
+import { useOptionContext } from "../context/OptionContextProvider";
 import axios from "axios";
 
 function Authorization({setListOfMessage} : {setListOfMessage: any}) {
@@ -17,8 +18,50 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
   const [passwordSignUp, setPasswordSignUp] = useState("");
   const [messageNameSignUp, setMessageNameSignUp] = useState(false);
   const [messageFeildsSignUp, setMessageFeildsSignUp] = useState(false);
+  const {option, setOption} = useOptionContext()
   const { user, setUser } = useUserContext()
   const { socket } = useSocketContext();
+  const handlClickSignIn = async (userName: string, password: string) => {
+    const location = await (await fetch("http://ip-api.com/json")).json()
+    let room: any = null
+    const rooms = (await axios.get("general/")).data.payload
+    console.log(rooms)
+    for (let i = 0; i < rooms.length; i++) {
+      const rm = rooms[i]
+      const number = (await axios.get("socket/" + rm._id)).data
+      if (number < rm.visitors)
+      {
+        console.log(number)
+        room = rm
+        break
+      }
+    }
+    if (!room)
+    {
+      room = (await axios.post("general")).data.payload
+    }
+    console.log(room)
+    const response = await axios.post("auth/signin", {userName, password, location});
+    setOption.setRoom(room._id)
+    setUser({...response.data})
+    const tempUser = {...response.data}
+    const tempMessage : any = {
+      arrivalTime: Date.now(),
+      img: tempUser.img,
+      name: tempUser.name,
+      fontColor: tempUser.fontColor,
+      nameColor: tempUser.nameColor,
+      backgroundColor: tempUser.backgroundColor,
+      type: 'signin',
+      room: room,
+      userId: tempUser._id
+    }
+    setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
+    socket.emit("sent-event", tempMessage)
+
+    socket.emit("user", {...response.data})
+    router("/rommId")
+  }
   const handlClickSignUp = async () => {
     if (nameSignUp === "" || passwordSignUp === "") {
       setMessageFeildsSignUp(true)
@@ -26,23 +69,7 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
       try{
 
         await axios.post("auth/signup", {userName: nameSignUp, password: passwordSignUp, name: nameSignUp});
-        const response = await axios.post("auth/signin", {userName: nameSignUp, password: passwordSignUp});
-        setUser({...response.data})
-        const tempUser = {...response.data}
-        const tempMessage : any = {
-          arrivalTime: Date.now(),
-          description : `مستخدم جديد دخل الغرفه`,
-          img: tempUser.img,
-          name: tempUser.name,
-          fontColor: tempUser.fontColor,
-          nameColor: tempUser.nameColor,
-          backgroundColor: tempUser.backgroundColor
-        }
-        setListOfMessage((previous : any) => (
-          [...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
-        socket.emit("sent-event", tempMessage)
-        socket.emit("user", {...response.data})
-        router("/rommId");
+        handlClickSignIn(nameSignUp, passwordSignUp)
       } catch (e) {
         console.log(e)
         setMessageNameSignUp(true);
@@ -51,25 +78,7 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
     
 
   }
-  const handlClickSignIn = async () => {
-    const response = await axios.post("auth/signin", {userName: nameSignIn, password: passwordSignIn});
-    setUser({...response.data})
-    const tempUser = {...response.data}
-    const tempMessage : any = {
-      arrivalTime: Date.now(),
-      description : `مستخدم جديد دخل الغرفه`,
-      img: tempUser.img,
-      name: tempUser.name,
-      fontColor: tempUser.fontColor,
-      nameColor: tempUser.nameColor,
-      backgroundColor: tempUser.backgroundColor
-    }
-    setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
-    socket.emit("sent-event", tempMessage)
-
-    socket.emit("user", {...response.data})
-    router("/rommId")
-  }
+ 
   const handleClickNikeName = () => {
     setUser({
       _id: -1,
@@ -171,7 +180,7 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
                 type="password"
                 onChange={(e) => setPasswordSignIn(e.target.value) }
               />{" "}
-              <Button size={"sm"} onClick={handlClickSignIn}>
+              <Button size={"sm"} onClick={() => handlClickSignIn(nameSignIn, passwordSignIn)}>
                 الدخول
               </Button>
             </div>

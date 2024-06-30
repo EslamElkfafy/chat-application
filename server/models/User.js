@@ -98,6 +98,10 @@ const UserSchema = new mongoose.Schema(
     country: {
       type: String,
       default: ""
+    },
+    room: {
+      type: mongoose.Types.ObjectId,
+      ref: "room"
     }
   },
   { timestamps: true }

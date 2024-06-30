@@ -12,7 +12,7 @@ import Status from "./pages/admin/Status";
 import Block from "./pages/admin/Block";
 import Filter from "./pages/admin/Filter";
 import axios from 'axios';
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true
 let hostname = import.meta.env.VITE_API_BASE_URL + "api/"
 // let hostname = "http://localhost:3000/api/"
 console.log(hostname)

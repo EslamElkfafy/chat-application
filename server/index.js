@@ -14,6 +14,7 @@ import multer from "multer";
 import User from "./models/User.js";
 import postRoutes from "./routes/posts.js"
 import roomRoutes from "./routes/room.js"
+import generalRoomRoutes from "./routes/generalRoom.js"
 import http from "http"
 import { env } from "process";
 
@@ -25,7 +26,6 @@ let io = new Server(server, {
   credentials: true // Allows sending cookies with the request
 })
 
-const port = 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -172,6 +172,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/posts", postRoutes)
 app.use("/api/rooms", roomRoutes)
+app.use("/api/general", generalRoomRoutes)
 
 //error handler
 app.use((err, req, res, next) => {

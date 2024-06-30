@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Bounce } from "react-toastify";
+import axios from "axios";
+import {useSocketContext} from './SocketContextProvider'
 
 const OptionContext = createContext<any>({
   option: {},
@@ -22,9 +24,18 @@ const OptionContextProvider = ({ children }: { children: React.ReactNode }) => {
     theme: "light",
     transition: Bounce,
   })
+  const {socket} = useSocketContext()
   useEffect(() => {
     
   }, []);
+  const setRoomCustom = (rm: any) => {
+    if (!rm)
+    {
+      socket.emit("unjoin", rm)
+      return setRoom(null)
+    }
+    return setRoom(rm)
+  }
   return (
     <OptionContext.Provider value={{ 
         option: {
@@ -37,7 +48,7 @@ const OptionContextProvider = ({ children }: { children: React.ReactNode }) => {
         setOption: {
             setMic, 
             setVoice,
-            setRoom
+            setRoom: setRoomCustom
         } 
     }}>
       {children}

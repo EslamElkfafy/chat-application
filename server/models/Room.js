@@ -9,11 +9,22 @@ const PostSchema = new mongoose.Schema(
     description: String,
     helloMessage: String,
     password: String,
-    likes: Number,
-    visitors: Number,
+    enterLikes: {
+      type: Number,
+      default: 0
+    },
+    micLikes: {
+      type: Number,
+      default: 0
+    },
+    visitors: {
+      type: Number,
+      max: [40, 'يجب الا يتعدى عدد الزوار 40 زائر'],
+      default: 40
+    },
     mics: {
       type: Number,
-      max: [99, "عدد الصوتيات يجب الا تتعدي 99 مايك"]
+      default: 6
     },
     voiceActive: {
       type: Boolean,
@@ -21,9 +32,9 @@ const PostSchema = new mongoose.Schema(
     },
     withoutNotification: {
       type: Boolean,
-      default: true
+      default: false
     },
-    enterNotification: Boolean
+    enterNotification: Boolean,
   },
   { timestamps: true }
 );

@@ -1,9 +1,7 @@
-import mongoose from "mongoose";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { createError } from "../error.js";
 import jwt from "jsonwebtoken";
-import axios from "axios";
 
 export const signup = async (req, res, next) => {
   try {
@@ -20,7 +18,8 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
   try {
-    let user = await User.findOne({ userName: req.body.userName });
+    let user = await User.findOne({ userName: req.body.userName }).select("-room");
+    console.log(user)
     if (!user) return next(createError(404, "User not found!"));
 
     const isCorrect = await bcrypt.compare(req.body.password, user.password);
@@ -28,11 +27,10 @@ export const signin = async (req, res, next) => {
     if (!isCorrect) return next(createError(400, "Wrong Credentials!"));
 
     const token = jwt.sign({ id: user._id }, process.env.JWT);
-    const location = (await axios.get("http://ip-api.com/json")).data
-    console.log(location.countryCode)
-    if (location.countryCode !== user.country)
+    if (req.body.location.countryCode !== user.country)
     {
-      user = await User.findByIdAndUpdate(user._id, {country: location.countryCode})
+      user.country = req.body.location.countryCode
+      await user.save()
     }
     const { password, ...others } = user._doc;
     res

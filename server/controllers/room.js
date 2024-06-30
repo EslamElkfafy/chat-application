@@ -1,4 +1,5 @@
 import Room from "../models/Room.js";
+import Sequence from "../models/Sequence.js"
 
 export const addRoom = async (req, res) => {
     try{

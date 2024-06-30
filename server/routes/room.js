@@ -2,7 +2,7 @@ import {
     addRoom, 
     getRoom, 
     getAllRooms, 
-    updateRoom 
+    updateRoom,
 } from "../controllers/room.js";
 import express from "express"
 
@@ -12,5 +12,4 @@ router.get("/", getAllRooms)
 router.get("/:id", getRoom)
 router.post("/", addRoom)
 router.put("/:id", updateRoom)
-
 export default router
