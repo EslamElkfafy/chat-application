@@ -12,3 +12,4 @@ chat-application-main/.vscode/*
 
 server/uploads/*
 server/node_modules
+server/.env
