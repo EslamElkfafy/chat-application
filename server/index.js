@@ -19,7 +19,7 @@ import generalRoomRoutes from "./routes/generalRoom.js"
 import http from "http"
 import { env } from "process";
 import Room from "./models/Room.js";
-
+import { createProxyMiddleware } from 'http-proxy-middleware'
 
 const app = express();
 const server = http.createServer(app);
@@ -135,6 +135,11 @@ app.use(cors({
 }));
 app.use(cookieParser({limit: "800mb"}));
 app.use(express.json());
+app.use("/api/get-my-ip", createProxyMiddleware({
+  target: 'http://ip-api.com/json',
+  changeOrigin: true,
+  secure: false
+}))
 app.use("/", express.static(path.join(__dirname, 'static')))
 app.get("/:rommId", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "index.html"))
