@@ -23,9 +23,10 @@ export const signin = async (req, res, next) => {
     if (!isCorrect) return next(createError(400, "كلمة السر غير صحيحة"));
 
     const token = jwt.sign({ id: user._id }, process.env.JWT);
-    if (req.body.location.countryCode !== user.country)
+    const country = (await (await fetch("http://ip-api.com/json/" + req.body.ip.ip)).json()).countryCode
+    if (country !== user.country)
     {
-      user.country = req.body.location.countryCode
+      user.country = country
     }
     user.status = 'connect'
     await user.save()

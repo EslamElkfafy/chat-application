@@ -21,7 +21,7 @@ function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => 
   const { socket } = useSocketContext();
   const handlClickSignIn = async (userName: string, password: string) => {
     try {
-      const location = (await axios.get('get-my-ip')).data
+      const ip = await (await fetch("https://api.ipify.org/?format=json")).json()
       // const location = {
       //   countryCode: "EG"
       // }
@@ -40,7 +40,7 @@ function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => 
       {
         room = (await axios.post("general")).data.payload
       }
-      const response = await axios.post("auth/signin", {userName, password, location});
+      const response = await axios.post("auth/signin", {userName, password, ip});
       setUser({...response.data})
       setOption.setRoom(room, response.data)
       
