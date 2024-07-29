@@ -9,20 +9,9 @@ const UserContext = createContext<{
 });
 
 function UserContextProvider({ children }: { children: React.ReactNode }) {
-  let current_user : any  = window.localStorage.getItem("user")
-  if (current_user)
-  {
-    current_user = JSON.parse(current_user)
-  } else {
-    current_user = null
-  }
-  const [user, setUser] = useState(current_user);
-  let setUserWithLocal = (user : any)  => {
-    window.localStorage.setItem("user", JSON.stringify(user));
-    setUser(user)
-  }
+  const [user, setUser] = useState(null);
   return (
-    <UserContext.Provider value={{ user, setUser : setUserWithLocal }}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );

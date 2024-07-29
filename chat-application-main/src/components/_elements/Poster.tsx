@@ -54,20 +54,15 @@ function Poster() {
             file: null
           })
           setTitle("")
-        } else {
-          toast.update(toastId, { ...option.toastOptions, render: "لم يتم رفع الملف", type: "error", isLoading: false });
-          console.error('Failed to upload file');
-          // Handle failure
-        }
+        } else throw new Error("failed to upload the file")
       } catch (error) {
           toast.update(toastId, { ...option.toastOptions, render: "لم يتم رفع الملف", type: "error", isLoading: false });
           console.error('Error:', error);
         // Handle error
       } 
-    } else {
+          
+    } else if (title){
         try {
-          if (title)
-          {
             await axios.post("posts/addpost", {
               userId: user._id,
               type: "text only",
@@ -75,12 +70,18 @@ function Poster() {
               text: title
             })
             setTitle("")
-          }
+          
         } catch(e) {
           console.error(e)
         }
     }
 
+  }
+  const handleKeyDown = (e: any) => {
+    if (e.keyCode === 13)
+    {
+      handleSend()
+    }
   }
   const handleChange = async (event: any) => {
     const supportedFiles = ['video/mp4', 'audio/mpeg', 'image/webp', 'image/jpeg', 'image/gif', 'image/png']
@@ -121,7 +122,7 @@ function Poster() {
       <div className="flex items-center gap-x-1 px-1 mt-2 ">
         <ShareButton handleChange={handleChange} reference={inputRef}/>
         <EmojiModule text={title} setText={setTitle}/>
-        <Input  height={"28px"} value={title} onChange={(e) => setTitle(e.currentTarget.value)}/>
+        <Input  height={"28px"} value={title} onChange={(e) => setTitle(e.currentTarget.value)} onKeyDown={handleKeyDown}/>
         <div 
           className="cursor-pointer p-1 bg-blue-700  text-white flex text-xs items-center rounded"
           onClick={handleSend}

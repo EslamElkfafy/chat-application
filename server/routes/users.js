@@ -5,22 +5,23 @@ import {
   getUser,
   subscribe,
   unsubscribe,
-  like,
-  dislike,
   updatePrivate,
   getPrivate,
-  updateListLike,
   getLike,
   getBlock,
   updateListBlock,
   getAllUsers,
   updateChatBlock,
-  updateInfoBlock
+  updateInfoBlock,
+  updateLike,
+  checkLike
 } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js";
 
 const router = express.Router();
 
+router.post("/checklikes", checkLike)
+router.put("/updatelike/:id", updateLike)
 //update user
 router.put("/:id", update);
 
@@ -32,8 +33,6 @@ router.put("/updateprivate/:id", updatePrivate);
 router.get("/getprivate/:id", getPrivate);
 // get like list
 router.get("/like/:id", getLike);
-// update like list
-router.put("/updatelike/:id", updateListLike)
 // get block list
 router.get("/block/:id", getBlock);
 // update block list

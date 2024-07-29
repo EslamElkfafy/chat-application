@@ -26,6 +26,14 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
   const [chatId, setChatId] = useState("")
   const [ checkChat, setCheckChat ] = useState(false);
 
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`users/find/${toUserId}`);
+      setCheckChat(response.data.chatBlock);
+    }
+    fetchData()
+  }, [])
   useEffect(() => {
     input.current?.scrollIntoView({ behavior: "smooth" });
     const fetchData = async () => {
@@ -38,16 +46,12 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
       }
     
   }, [chatId]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(`users/find/${toUserId}`);
-      setCheckChat(response.data.chatBlock);
-    }
-    fetchData()
-  }, [])
   socket.on("receive-room", (message : any) => {
     setListOfPrivateMessages([...listOfPrivateMessages, message])
   })
+  useEffect(() => {
+    input.current && (input.current.scrollTop = input.current?.scrollHeight)
+  }, [listOfPrivateMessages, dataListOfPrivateMessages])
   const handleClick = async () => {
     if (checkChat === true) {
       toast.warning("هذا المستحدم قام بتعطيل المحادثات")
@@ -78,16 +82,12 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
         <ModalOverlay />
         <ModalContent pb={"10px"}>
           <HeaderChatModule onClose_Module={onClose} toUserId={toUserId}/>
-          <div className="flex flex-col h-[300px] overflow-auto">
+          <div className="flex flex-col h-[300px] overflow-auto" ref={input}>
             {dataListOfPrivateMessages.map((message, index) => (
-              <div ref={input}>
                 <PrivateMessage key={index} message= {message} />
-              </div>
             ))}
             {listOfPrivateMessages.map((message, index) => (
-              <div ref={input}>
                 <PrivateMessage key={index} message= {message} />
-              </div>
             ))}
           </div>
           <SendPrivateMessage chatId={chatId} listOfPrivateMessages= {listOfPrivateMessages} setListOfPrivateMessages = {setListOfPrivateMessages}/>

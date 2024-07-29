@@ -20,7 +20,7 @@ import UserModal from "./UserModal";
         setUserData(response2.data)
       }
         fetchData()
-    }, [])
+    }, [user_Data._id])
     return (
       
       <>

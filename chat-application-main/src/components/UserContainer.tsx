@@ -6,13 +6,11 @@ function UserContainer({ onClick, userId }: { onClick?: () => void, userId: any 
   const [data , setData] : any = useState();
   useEffect(() => {
     const fetchData = async () => {
-      console.log(userId)
       const response = await axios.get(`users/find/${userId}`);
-      console.log(response.data)
       setData(response.data)
     }
     fetchData()
-  }, [])
+  }, [userId])
   return (
     
     <div

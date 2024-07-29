@@ -16,6 +16,7 @@ import {
   import { useAdminContext } from "../context/AdminContextProvider";
   import GiftModule from "./GiftModule";
   import axios from "axios";
+  import {toast} from 'react-toastify'
   import { useUserContext } from "../context/UserContextProvider";
   import FavoriteIcon from '@mui/icons-material/Favorite';
   import BlockIcon from '@mui/icons-material/Block';
@@ -29,29 +30,42 @@ export default function UserModal({isOpen, onClose, userId}: {isOpen: boolean, o
     const delete_image = Profile_Items[6];
     const upgrade = Profile_Items[7];
     const { user } = useUserContext()
-    const [ listOfLikes, setListOfLikes ] = useState([])
-    const [ resultLike, setResultLike ] = useState(false)
+    const [ room, setRoom ] = useState<any>(null)
     const [ resultBlock, setResultBlock ] = useState(false)
+    const [likeActive, setLikeActive] = useState(false)
     const [userData, setUserData] = useState<Record<string, any>>({})
 
   
     useEffect(() => {
       const fetchData = async () => {
-        const response2 = await axios.get(`users/find/${userId}`);
-        setUserData(response2.data)
-        const response1 = await axios.get(`users/block/${user._id}`)
-        const listBlock = response1.data.listBlock;
-        if (listBlock.includes(userId)) {
-          setResultBlock(true)
-        } else {
-          setResultBlock(false)
+        try {
+          setLikeActive(false)
+          const response2 = await axios.get(`users/find/${userId}`);
+          setUserData(response2.data)
+          const response1 = await axios.get(`users/block/${user._id}`)
+          const listBlock = response1.data.listBlock;
+          const room = (await axios.get('rooms/' + response2.data.room)).data.payload
+          setRoom(room)
+          if (listBlock.includes(userId)) {
+            setResultBlock(true)
+          } else {
+            setResultBlock(false)
+          }
+        } catch(e: any) {
+          console.log(e.message)
         }
       }
         fetchData()
     }, [isOpen])
     const handleClickLike = async () => {
-      await axios.put(`users/updatelike/${userId}`, {checkId: user._id, check: resultLike})
-      setResultLike(!resultLike)
+      const response = await axios.post(`users/checklikes`, {userFrom: user._id, userTo: userId});
+      if (response.data.result) {
+        axios.put(`users/updatelike/${userId}`)
+      } else {
+        toast.info("يكمن ارسال اعجاب مره واحده في الدقيقه")
+      }
+      setLikeActive(true)
+      // setResultLike(!resultLike)
     }
     const handleClickBlock = async () => {
       await axios.put(`users/updateblock/${user._id}`, {checkId: userId, check: resultBlock})
@@ -75,11 +89,11 @@ export default function UserModal({isOpen, onClose, userId}: {isOpen: boolean, o
               <PrivateChatModule toUserId={userId}/>
               <ReportModule toUserId= {userId}/>
               <div
-                className="border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center text-red-700"
+                className={`border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center text-red-700 ${likeActive && "bg-[#cd5c5c]" }`}
                 onClick={handleClickLike}
               >
-                {resultLike ? <FavoriteIcon /> : <like.icon className="size-5" />}
-                {listOfLikes.length}
+                <FavoriteIcon />
+                {userData.like}
               </div>
               <div
                 className="border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center text-red-700"
@@ -116,10 +130,14 @@ export default function UserModal({isOpen, onClose, userId}: {isOpen: boolean, o
                 <Flags countryCode={userData.country} svg />
                 {userData.country && country[userData.country].arabic}
               </div>
-              <div className="flex items-center gap-x-1 bg-blue-950 p-1 text-white font-normal border-[2px]">
-                <img src="/1600w-qJptouniZ0A.webp" className="w-7 h-7" />
-                غرفة
-              </div>
+              {
+                room && 
+                <div className="flex items-center gap-x-1 bg-blue-950 p-1 text-white font-normal border-[2px]">
+                  <img src={import.meta.env.VITE_API_BASE_URL + room.img} className="w-7 h-7" />
+                  {room.name}
+                </div>
+
+              }
             </div>
             {admin && (
               <>

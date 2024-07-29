@@ -8,7 +8,7 @@ import { useSocketContext } from "../context/SocketContextProvider";
 import { useOptionContext } from "../context/OptionContextProvider";
 import axios from "axios";
 
-function Authorization({setListOfMessage} : {setListOfMessage: any}) {
+function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => void}) {
   const [choise, setChoise] = useState("nike-name");
   const router = useNavigate();
   const [nikeInput, setNikeInput] = useState("");
@@ -16,78 +16,69 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
   const [passwordSignIn, setPasswordSignIn] = useState("");
   const [nameSignUp, setNameSignUp] = useState("");
   const [passwordSignUp, setPasswordSignUp] = useState("");
-  const [messageNameSignUp, setMessageNameSignUp] = useState(false);
-  const [messageFeildsSignUp, setMessageFeildsSignUp] = useState(false);
-  const {option, setOption} = useOptionContext()
-  const { user, setUser } = useUserContext()
+  const { setOption} = useOptionContext()
+  const { setUser } = useUserContext()
   const { socket } = useSocketContext();
   const handlClickSignIn = async (userName: string, password: string) => {
-    const location = await (await fetch("http://ip-api.com/json")).json()
-    let room: any = null
-    const rooms = (await axios.get("general/")).data.payload
-    console.log(rooms)
-    for (let i = 0; i < rooms.length; i++) {
-      const rm = rooms[i]
-      const number = (await axios.get("socket/" + rm._id)).data
-      if (number < rm.visitors)
-      {
-        console.log(number)
-        room = rm
-        break
+    try {
+      const location = await (await fetch("http://ip-api.com/json")).json()
+      // const location = {
+      //   countryCode: "EG"
+      // }
+      let room: any = null
+      const rooms = (await axios.get("general/")).data.payload
+      for (let i = 0; i < rooms.length; i++) {
+        const rm = rooms[i]
+        const number = (await axios.get("socket/" + rm._id)).data
+        if (number < rm.visitors)
+        {
+          room = rm
+          break
+        }
       }
+      if (!room)
+      {
+        room = (await axios.post("general")).data.payload
+      }
+      const response = await axios.post("auth/signin", {userName, password, location});
+      setUser({...response.data})
+      setOption.setRoom(room, response.data)
+      
+      socket.emit("user", {...response.data})
+      router("/rommId")
+    } catch(e: any) {
+      setErrorMessage(e.response.data.message)
+      console.log(e.message);
     }
-    if (!room)
-    {
-      room = (await axios.post("general")).data.payload
-    }
-    console.log(room)
-    const response = await axios.post("auth/signin", {userName, password, location});
-    setOption.setRoom(room._id)
-    setUser({...response.data})
-    const tempUser = {...response.data}
-    const tempMessage : any = {
-      arrivalTime: Date.now(),
-      img: tempUser.img,
-      name: tempUser.name,
-      fontColor: tempUser.fontColor,
-      nameColor: tempUser.nameColor,
-      backgroundColor: tempUser.backgroundColor,
-      type: 'signin',
-      room: room,
-      userId: tempUser._id
-    }
-    setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
-    socket.emit("sent-event", tempMessage)
-
-    socket.emit("user", {...response.data})
-    router("/rommId")
   }
   const handlClickSignUp = async () => {
     if (nameSignUp === "" || passwordSignUp === "") {
-      setMessageFeildsSignUp(true)
+      setErrorMessage("ارجو ادخال بيانات صحيحة")
     } else {
       try{
 
         await axios.post("auth/signup", {userName: nameSignUp, password: passwordSignUp, name: nameSignUp});
         handlClickSignIn(nameSignUp, passwordSignUp)
-      } catch (e) {
-        console.log(e)
-        setMessageNameSignUp(true);
+      } catch (e: any) {
+        setErrorMessage(e.response.data.message || "خطأ في الخادم")
       }
     }
     
 
   }
  
-  const handleClickNikeName = () => {
-    setUser({
-      _id: -1,
-      name: nikeInput,
-      backgroundColor: "#dbeafe",
-      fontColor: "#000000",
-      nameColor: "#000000",
-      img: "uploads/avatar.jpg"
-    })
+  const handleClickNikeName = async () => {
+    if (!nikeInput) {
+      setErrorMessage("ارجو ادخال بيانات صحيحة")
+      console.log("i am here")
+    } else {
+      try {
+        await axios.post('auth/guest', {userName: nikeInput, name: nikeInput})
+        handlClickSignIn(nikeInput, '123')
+      } catch(e: any) {
+        setErrorMessage(e.response.data.message || "خطأ في الخادم")
+      }
+  }
 
   }
   return (
@@ -149,9 +140,6 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
               size={"sm"}
               onClick={() => {
                 handleClickNikeName()
-                nikeInput == "admin-view"
-                  ? router("/admin-view")
-                  : router("/rommId");
               }}
             >
               الدخول
@@ -188,7 +176,7 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
         )}
         {choise == "sign-up" && (
           <div className="flex  flex-col gap-x-2 w-[300px] px-1 gap-y-1">
-            {(messageNameSignUp && <div className="text-red-500">هذا الاسم مستخدم بالفعل</div>) || (messageFeildsSignUp && <div className="text-red-500">قم بملئ الحقول</div>)}
+            {/* {(messageNameSignUp && <div className="text-red-500">هذا الاسم مستخدم بالفعل</div>) || (messageFeildsSignUp && <div className="text-red-500">قم بملئ الحقول</div>)} */}
             <Input
               size={"sm"}
               backgroundColor={"white"}
@@ -213,6 +201,7 @@ function Authorization({setListOfMessage} : {setListOfMessage: any}) {
           </div>
         )}
       </div>
+      
     </div>
   );
 }

@@ -34,7 +34,19 @@ const PostSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    enterNotification: Boolean,
+    enterNotification: {
+      type: Boolean,
+      default: false,
+    },
+    placesOfVoices: 
+    {
+      type: [String],
+      default: ["", "", "", "", ""]
+    },
+    img: {
+      type: String,
+      default: "uploads/1600w-qJptouniZ0A.webp"
+    }
   },
   { timestamps: true }
 );

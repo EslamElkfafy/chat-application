@@ -30,6 +30,19 @@ export const updateMessages = async(req, res, next) => {
         next(error)
     }
 }
+export const getPrivate = async (req, res, next) => {
+    try {
+        const chats = await Chat.find({
+          $or: [
+            {user1: req.params.id},
+            {user2: req.params.id}
+          ]
+        })
+        res.status(200).json(chats.map((chat) => chat._id))
+      } catch (error) {
+        next(error)
+      }
+}
 
 export const getMessages = async (req, res, next) => {
     try {

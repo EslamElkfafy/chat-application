@@ -19,8 +19,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CheckIcon from '@mui/icons-material/Check';
 import { useSocketContext } from "../../context/SocketContextProvider";
+import { useListOfMessageContext } from "../../context/ListOfMessageContext";
 
-export default function Profile({setListOfMessage}: {setListOfMessage: (previous: any) => {}}) {
+export default function Profile() {
+  const {setListOfMessage} = useListOfMessageContext()
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef<HTMLDivElement | null>(null);
   const { size, setSize } = useSizeContext();
@@ -44,22 +46,18 @@ export default function Profile({setListOfMessage}: {setListOfMessage: (previous
   }
   const handleAdv = () => {
     const message = prompt("ادخل رسالة الاعلان")
-    const htmlDescription = <span className="flex">
-    <Megaphone fill="blue" color="blue"/>
-    <strong style={{"color": "blue"}}>إعلان</strong>
-    {message}
-  </span>
     const tempMessage : any = {
       arrivalTime: Date.now(),
-      description : htmlDescription,
+      description : message,
       img: "uploads/adv.jpg",
       name: user.name,
+      type: 'ad',
       fontColor: "black",
       nameColor: "black",
       backgroundColor: false
     }
     setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
-    socket.emit("sent-event", {...tempMessage, description: renderToString(htmlDescription)})
+    socket.emit("sent-event", tempMessage)
   }
   const handleChange = (event : any) => {
     setInputs({...inputs, [event.target.name] : event.target.value})
@@ -91,6 +89,16 @@ export default function Profile({setListOfMessage}: {setListOfMessage: (previous
     }
     fetchData()
   }, [chatCheck, infoCheck])
+
+  const logout = () => {
+    const tempMessage = {
+      img: user.img,
+      name: user.name,
+      type: 'logout'
+    }
+    socket.emit("send-room", tempMessage, user.room)
+    location.reload()
+  }
   return (
     <>
       <div
@@ -257,6 +265,7 @@ export default function Profile({setListOfMessage}: {setListOfMessage: (previous
                 textAlign={"center"}
                 border={"1px solid gray"}
                 color={"white"}
+                onClick={logout}
               >
                 تسجيل خروج
               </Button>

@@ -13,7 +13,7 @@ export const addPost = async (req, res, next) => {
 
 export const getAllPosts = async (req, res, next) => {
     try {
-        const allPosts = await Post.find({})
+        const allPosts = await Post.find({}).sort({arrivalTime: -1})
         res.status(200).json(allPosts)
     } catch (error) {
         next(error)

@@ -12,11 +12,13 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
 import User from "./models/User.js";
+import Chat from "./models/Chat.js";
 import postRoutes from "./routes/posts.js"
 import roomRoutes from "./routes/room.js"
 import generalRoomRoutes from "./routes/generalRoom.js"
 import http from "http"
 import { env } from "process";
+import Room from "./models/Room.js";
 
 
 const app = express();
@@ -35,7 +37,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname)) // Save file with original name and timestamp
   }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, limits: 2000000000 });
 dotenv.config();
 
 const connect = () => {
@@ -48,9 +50,8 @@ const connect = () => {
       throw err;
     });
 };
-let online = []
-let s = new Set()
-let tempList = [];
+let online = {}
+
 io.on("connection", socket => {
   console.log(socket.id)
   socket.on("sent-event", (message) => {
@@ -59,32 +60,13 @@ io.on("connection", socket => {
   socket.emit('userStatus', { userId: socket.id, status: 'online' });
   socket.on('user', async (user) => {
     console.log("---------------in------------------")
-    let found = false
-    for (let i = 0; i < online.length; i++)
+    const temp = online[user._id]
+    online[user._id] = socket.id
+    
+    if (temp)
     {
-      if (online[i].socketID === socket.id)
-      {
-        found = true
-        break
-      }
+      socket.to(temp).disconnectSockets()
     }
-    if (!found)
-    {
-      online.push({socketID: socket.id, userId: user._id})
-      console.log(online)
-      await User.findByIdAndUpdate(user._id, {
-        $addToSet: {tokens: socket.id},
-        status: "connect"
-      }) 
-      // for(let i = 0; i < online.length; i++) {
-      //   s.add(online[i].userId)
-      // }
-      // tempList = [...s]
-      // socket.broadcast.emit("online", tempList)
-      // socket.emit("online", tempList)
-      // s.clear()
-    }
-  
   })
   socket.on("join-room", room => {
     socket.join(room);
@@ -93,8 +75,11 @@ io.on("connection", socket => {
     socket.leave(room);
   })
   socket.on("send-room",(message, room) => {
-    socket.to(room).emit("receive-room", message)
+    socket.to(room).emit("receive-event", message)
   } )
+  socket.on("send-private", (message, room) => {
+    socket.to(room).emit("receive-room", message)
+  })
   socket.on("info", (message, userId, fromUserId) => {
     console.log("aaaaaaaaaaaaa")
     console.log(socket.id)
@@ -102,7 +87,6 @@ io.on("connection", socket => {
   })
   // Handle incoming audio stream
   socket.on('audioStream', (audioData, room) => {
-    console.log(room)
     if (room) 
       socket.to(room).emit('audioStream', audioData);
   });
@@ -116,39 +100,28 @@ io.on("connection", socket => {
   // s.clear()
   socket.on('disconnect', async () => {
     console.log('User disconnected');
-    let socketIndex = -1
-    for (let i = 0; i < online.length; i++)
+    const userId = Object.keys(online).find(key => online[key] === socket.id)
+    if (userId)
     {
-      if (online[i].socketID === socket.id)
-      {
-        socketIndex = i
-        break
-      }
-    }
-    if (socketIndex != -1)
-    {
-      let userId = online[socketIndex].userId
-      online.splice(socketIndex, 1)
-      const currentUser = await User.findByIdAndUpdate(userId, {
-        $pull: {tokens: socket.id}
-      })
-      if ((currentUser.tokens.length - 1) === 0) {
-        await User.findByIdAndUpdate(userId, {
+      try {
+        const user = await User.findByIdAndUpdate(userId, {
           status: "disconnect",
-          deptureTime: Date.now()
+          deptureTime: Date.now(),
+          private: []
         })
+        const room = await Room.findById(user.room)
+        room.placesOfVoices[room.placesOfVoices.indexOf(user._id)] = ''
+        await room.save()
+        await Chat.deleteMany({
+          $or: [
+            {user1: userId},
+            {user2: userId}
+          ]
+        })
+      }catch(e) {
+        console.log(e)
       }
-      // for(let i = 0; i < online.length; i++) {
-      //   s.add(online[i].userId)
-      // }
-      // tempList = [...s]
-      // socket.broadcast.emit("online", tempList)
-      // socket.emit("online", tempList)
-      // s.clear()
     }
-    
-    // Emit event when user disconnects
-    // io.emit('userStatus', { userId: socket.id, status: 'offline' });
   });
   
 })
@@ -186,7 +159,6 @@ app.use((err, req, res, next) => {
 });
 app.post('/upload', upload.single('file'), (req, res) => {
   // 'image' is the name attribute of the file input field in the form
-  console.log(req.file)
   const path = req.file.path
   res.status(200).json({path, type: req.file.mimetype});
 });

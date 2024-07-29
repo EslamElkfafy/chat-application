@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import Room from "./Room.js"
 const OptionSchema = new mongoose.Schema(
   {
     value: {
@@ -81,7 +81,8 @@ const UserSchema = new mongoose.Schema(
       type: [String]
     },
     like: {
-      type: Number
+      type: Number,
+      default: 0
     },
     block: {
       type: [String]
@@ -101,16 +102,24 @@ const UserSchema = new mongoose.Schema(
     },
     room: {
       type: mongoose.Types.ObjectId,
-      ref: "room"
+      ref: "room",
+      default: null
     }
   },
   { timestamps: true }
 );
-UserSchema.pre('save', async function(next) {
-  if (this.isModified('like'))
-  {
-    this.like
+const micConfig = async (user, next) => {
+  try {
+    const room = await Room.findById(user.room)
+    room.placesOfVoices[room.placesOfVoices.indexOf(user._id)] = ''
+    await room.save()
+  } catch(e) {
+    next(e.message)
   }
+}
+UserSchema.pre('findOneAndUpdate', function (next) {
+  if (this.getUpdate().$set.room && this.getQuery()._id)
+    micConfig({...this.getUpdate().$set, ...this.getQuery()}, next)
   next()
 })
 export default mongoose.model("User", UserSchema);

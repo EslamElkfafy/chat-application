@@ -6,7 +6,6 @@ import ShapeAlert from "../components/ShapeAlert";
 import {useOptionContext} from "./OptionContextProvider"
 
 let hostname = import.meta.env.VITE_API_BASE_URL
-console.log(hostname)
 const socketIo = io(hostname, {
   transports: ['websocket'],
   withCredentials: true,
@@ -27,9 +26,11 @@ function SocketContextProvider({ children }: { children: React.ReactNode }) {
   const [voiceBuild, setVoiceBuild] = useState(true)
   if (user && user._id != -1)
   {
+    socketIo.on("disconnect", () => {
+      location.reload()
+    })
     socketIo.on("userStatus", () => {
       socketIo.emit("user", user)
-      
     })
     if (send)
       {

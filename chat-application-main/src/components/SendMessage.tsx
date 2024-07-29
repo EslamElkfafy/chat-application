@@ -4,17 +4,21 @@ import EmojiModule from "./EmojiModule";
 import { useState } from "react";
 import { useUserContext } from "../context/UserContextProvider.tsx";
 import { useSocketContext } from "../context/SocketContextProvider.tsx";
+import { useListOfMessageContext } from "../context/ListOfMessageContext.tsx";
+import { useOptionContext } from "../context/OptionContextProvider.tsx";
 
 
 
-function SendMessage({setListOfMessage} : {setListOfMessage : (l : any) => void}) {
+function SendMessage() {
+  const {setListOfMessage} = useListOfMessageContext()
   const [message, setMessage] = useState("");
+  const {option, setOption} = useOptionContext();
   const { user } = useUserContext();
   const { socket } = useSocketContext();
   
   const handleClick = () => 
     {
-      if (message)
+      if (message && option.room)
       {
         const tempMessage : any = {
           arrivalTime: Date.now(),
@@ -23,12 +27,14 @@ function SendMessage({setListOfMessage} : {setListOfMessage : (l : any) => void}
           name: user.name,
           fontColor: user.fontColor,
           nameColor: user.nameColor,
-          backgroundColor: user.backgroundColor
+          backgroundColor: user.backgroundColor,
+          userId: user._id
         }
         setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage]))
-        setMessage(""); 
-        socket.emit("sent-event", tempMessage)
+        console.log(option.room._id)
+        socket.emit("send-room", tempMessage, option.room._id)
       }
+      setMessage("");
   }
   const handleKeyDown = (e: any) => {
     if (e.keyCode === 13)
@@ -38,8 +44,7 @@ function SendMessage({setListOfMessage} : {setListOfMessage : (l : any) => void}
   }
   const handleClickLogout = () => 
     {
-      window.localStorage.removeItem("user");
-      window.location.reload();
+      setOption.setRoom(null, user)
     }
   return (
     <div className="flex gap-x-2 w-full items-center justify-between px-1">

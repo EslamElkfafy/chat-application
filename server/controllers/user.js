@@ -1,7 +1,36 @@
 import mongoose from "mongoose";
 import { createError } from "../error.js";
 import User from "../models/User.js";
+import Guest from "../models/Guest.js";
+import Admin from "../models/Admin.js";
+import userRepository from "../repository/userRepository.js";
 
+let dictLogLikes = {}
+
+export const addGuest = async (req, res, next) => {
+  try {
+    const guest = await Guest.findOne({userName: req.body.userName})
+    if (guest) {
+      res.status(200).json(guest);
+    } else {
+      res.status(200).json(await userRepository.signup({...req.body, password: '123'}, Guest))
+    }
+  } catch(e) {
+    next(createError(500, "هذا المستخدم موجود بالفعل"))
+  }
+}
+export const addAdmin = async (req, res, next) => {
+  try {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+    const newUser = new Admin({ ...req.body, password: hash });
+
+    await newUser.save();
+    res.status(200).send("User has been created!");
+  } catch (err) {
+    next(createError(400, "هذا المستخدم موجود"));
+  }
+}
 export const update = async (req, res, next) => {
     try {
       const updatedUser = await User.findByIdAndUpdate(
@@ -45,24 +74,7 @@ export const getLike = async (req, res, next) => {
     next(error)
   }
 }
-export const updateListLike = async (req, res, next) => {
-  try {
 
-    if (req.body.check) {
-      await User.findByIdAndUpdate(req.params.id, {
-        $pull: {like: req.body.checkId}
-      });
-    } else {
-      await User.findByIdAndUpdate(req.params.id, {
-        $addToSet: {like: req.body.checkId}
-      });
-    }
-    res.status(200).send("The like list is updated")
-
-  } catch (error) {
-    next(error)
-  }
-}
 export const getBlock = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -92,7 +104,12 @@ export const updateListBlock = async (req, res, next) => {
 }
 export const getAllUsers = async (req, res, next) => {
   try {
-    const allUsers = await User.find({});
+    const query = {}
+    if (req.query.room)
+    {
+      query.room = req.query.room
+    }
+    const allUsers = await User.find(query);
     res.status(200).json(allUsers)
   } catch (error) {
     next(error)
@@ -208,3 +225,42 @@ export const dislike = async (req, res, next) => {
     next(error);
   }
 };
+
+export const checkLike = async (req, res, next) => {
+  const userFrom = req.body.userFrom;
+  const userTo = req.body.userTo;
+  let check = true;
+  try {
+    if (Object.keys(dictLogLikes).includes(userFrom)){
+      if (!dictLogLikes[userFrom].includes(userTo)) {
+        dictLogLikes[userFrom].push(userTo)
+        setTimeout(async ()=> {
+          dictLogLikes[userFrom].splice(dictLogLikes[userFrom].indexOf(userTo), 1);
+        }, 10000)
+      } else {
+        check = false;
+      }
+    }else {
+      dictLogLikes[userFrom] = [userTo];
+      setTimeout(async ()=> {
+        dictLogLikes[userFrom].splice(dictLogLikes[userFrom].indexOf(userTo), 1);
+      }, 60000)
+    }
+    res.status(200).json({
+      result: check
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const updateLike = async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.params.id, {
+      $inc: {like: 1}
+    })
+    res.status(200).send("likes is increased")
+  } catch (error) {
+    next(error)
+  }
+}

@@ -11,11 +11,15 @@ import { useEffect, useRef, useState } from "react";
 
 import axios from "axios";
 import UserOnlineModule from "../UserOnlineModule";
+import { useOptionContext } from "../../context/OptionContextProvider";
 
 export default function RoomInfo() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {option} = useOptionContext()
   const btnRef = useRef<HTMLDivElement | null>(null);
   const [onlineList, setOnlineList] = useState<string[]>([]);
+  const [inRoomUsers, setInRoomUsers] = useState<[]>()
+  const [text, setText] = useState("")
 
   // socket.on("online", (list : any[]) => {
   //   setOnlineList(list)
@@ -23,16 +27,23 @@ export default function RoomInfo() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get("users/findall");
-      const listOfOnline = response.data.filter((item : any) => {
-        return item.status === "connect"
-      })
+      const inusers = (await axios.get("users/findall?room=" + option.room._id)).data
+      const listOfOnline = response.data
+      // .filter((item : any) => {
+      //   return item.status === "connect"
+      // })
       setOnlineList(listOfOnline)
+      setInRoomUsers(inusers)
     }
     const interval = setInterval(() => {
       fetchData()
     }, 1000)
     return () => clearInterval(interval)
-  }, [])
+  }, [option.room])
+  
+  const handleChange = async (event : any) => {
+    setText(event.target.value);
+  }
   return (
     <>
       <div
@@ -55,16 +66,24 @@ export default function RoomInfo() {
               <p className="font-bold">المتواجدين</p>
               <DrawerCloseButton  backgroundColor={"red"} color={"white"}/>
             </div>
-            <Input placeholder="البحث..."  width={"100%"} size={"sm"}  borderRadius={"5px"}/>
-            <div className="flex flex-col w-full overflow-auto">
+            <Input placeholder="البحث..."  width={"100%"} size={"sm"}  borderRadius={"5px"} onChange={handleChange}/>
             {
-            onlineList.map((item :  any, index : any) => {
-              return <UserOnlineModule key={index} user_Data={item}/>;
-            })}
-            </div>
-           
+              !text && 
+              <div className="flex flex-col w-full overflow-auto">
+              {
+              inRoomUsers?.map((item :  any, index : any) => {
+                return <UserOnlineModule key={index} user_Data={item}/>;
+              })}
+              </div>
+            }
             <div className="w-full text-center bg-green-500 text-white py-1 ">
             المتواجدين في الدردشه
+            </div>
+            <div className="flex flex-col w-full overflow-auto">
+            {
+            onlineList.filter((item) => item.name.includes(text)).map((item :  any, index : any) => {
+              return <UserOnlineModule key={index} user_Data={item}/>;
+            })}
             </div>
           </div>
         </DrawerContent>

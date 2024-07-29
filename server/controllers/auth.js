@@ -2,36 +2,33 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { createError } from "../error.js";
 import jwt from "jsonwebtoken";
+import userRepository from '../repository/userRepository.js'
 
 export const signup = async (req, res, next) => {
   try {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
-    const newUser = new User({ ...req.body, password: hash });
-
-    await newUser.save();
-    res.status(200).send("User has been created!");
+    const user = await userRepository.signup(req.body)
+    res.status(200).json(user);
   } catch (err) {
-    next(err);
+    next(createError(400, "هذا المستخدم موجود"));
   }
 };
 
 export const signin = async (req, res, next) => {
   try {
-    let user = await User.findOne({ userName: req.body.userName }).select("-room");
-    console.log(user)
-    if (!user) return next(createError(404, "User not found!"));
+    let user = await User.findOne({ userName: req.body.userName });
+    if (!user) return next(createError(404, "هذا المستخدم غير موجود"));
 
     const isCorrect = await bcrypt.compare(req.body.password, user.password);
 
-    if (!isCorrect) return next(createError(400, "Wrong Credentials!"));
+    if (!isCorrect) return next(createError(400, "كلمة السر غير صحيحة"));
 
     const token = jwt.sign({ id: user._id }, process.env.JWT);
     if (req.body.location.countryCode !== user.country)
     {
       user.country = req.body.location.countryCode
-      await user.save()
     }
+    user.status = 'connect'
+    await user.save()
     const { password, ...others } = user._doc;
     res
       .cookie("token", token, {

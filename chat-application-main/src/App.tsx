@@ -18,35 +18,15 @@ let hostname = import.meta.env.VITE_API_BASE_URL + "api/"
 console.log(hostname)
 axios.defaults.baseURL = hostname
 import 'react-toastify/dist/ReactToastify.css';
-import { useSocketContext } from "./context/SocketContextProvider";
-import { useUserContext } from "./context/UserContextProvider";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function App() {
-  const { socket } = useSocketContext()
-  const { user } = useUserContext()
-  const [ send, setSend ] = useState(true)
-  const router = useNavigate()
-  const [listOfMessage, setListOfMessage] = useState([])
-  
-  useEffect(() => {
-    window.addEventListener("beforeunload", alertUser);
-    return () => {
-      window.removeEventListener("beforeunload", alertUser);
-    };
-  }, []);
-  const alertUser = (e : any) => {
-    e.preventDefault();
-    e.returnValue = "";
-    window.localStorage.removeItem("user");
-  };
-  // const { admin } = useAdminContext();
+
   return (
     <>
     <Routes>
-      <Route path="/" element={<AuthPage setListOfMessage={setListOfMessage}/>} />
-      <Route path="/:roomId" element={<Home listOfMessage={listOfMessage} setListOfMessage={setListOfMessage}/>} />
+      <Route path="/" element={<AuthPage />} />
+      <Route path="/:roomId" element={<Home />} />
       <Route
         path="/admin-view/record"
         element={<AdminLayout children={<Records />} />}

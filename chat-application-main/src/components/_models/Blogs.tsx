@@ -19,14 +19,6 @@ export default function Blogs() {
   const [ listOfPosts, setListOfPosts ] = useState([])
 
   useEffect(() => {
-    if (scrollRef.current)
-    {
-      scrollRef.current.scroll({
-        top: 400000000000000,
-      })
-    }
-  }, [scrollRef.current])
-  useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get("posts/allposts");
       setListOfPosts(response.data)

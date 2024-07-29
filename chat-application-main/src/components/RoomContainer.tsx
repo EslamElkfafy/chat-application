@@ -1,25 +1,17 @@
-import { 
-  Modal, 
-  ModalOverlay,
-  ModalContent,
-  useDisclosure,
-} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import HeaderRoomModule from "./_models/_profile/HeaderRoomModule";
-import { useSocketContext } from "../context/SocketContextProvider";
-import SendRoomMessage from "./SendRoomMessage";
-import {  Mic, Lock } from "lucide-react";
+import {  Mic, Lock, User } from "lucide-react";
 import axios from "axios";
 import { useOptionContext } from "../context/OptionContextProvider";
-import PrivateMessage from "./PrivateMessage";
 import { toast } from "react-toastify";
+import { useUserContext } from "../context/UserContextProvider";
+import { useSocketContext } from "../context/SocketContextProvider";
+import { useListOfMessageContext } from "../context/ListOfMessageContext";
 
 function RoomContainer({room} : {room: any}) {
-  const {isOpen, onClose, onOpen} = useDisclosure()
-  const [listOfPrivateMessages, setListOfPrivateMessages] = useState<any[]>([])
-  const { socket } = useSocketContext()
   const [inRoom, setInRoom] = useState(99)
   const {option, setOption} = useOptionContext()
+  const {user} = useUserContext()
+  const {socket} = useSocketContext()
   const joinRoom = (roomId: string) => {
     if (window.stream)
     {
@@ -28,11 +20,10 @@ function RoomContainer({room} : {room: any}) {
       });
       setOption.setMic(false)
     }
-    socket.emit("join-room", roomId)
-    setOption.setRoom(roomId)
+    setOption.setRoom(room, user)
   }
   const handleOpen = (roomId: string) => {
-    if (inRoom < room.mics)
+    if (inRoom < room.visitors)
     {
       if (room.password)
       {
@@ -44,19 +35,13 @@ function RoomContainer({room} : {room: any}) {
         }
       }
       joinRoom(roomId)
-      onOpen()
+      // ابعت رساله انه دخل الغرفة
+      
     } else {
       toast.error("هذه الغرفة مكتملة", option.toastOptions)
     }
   }
-  const handleClose = () => {
-    socket.emit("leave-room", option.room)
-    setOption.setRoom("")
-    setOption.setMic(false)
-    setOption.setVoice(false)
-    socket.off("receive-room")
-    onClose()
-  }
+
   useEffect(() => {
     const getRoomNum = async () => {
       try {
@@ -69,16 +54,11 @@ function RoomContainer({room} : {room: any}) {
     const interval = setInterval(getRoomNum, 1000)
     return () => clearInterval(interval)
   }, [])
-  useEffect(() => {
-    socket.on("receive-room", (message : any) => {
-      setListOfPrivateMessages([...listOfPrivateMessages, message])
-    })
-  }, [listOfPrivateMessages])
   return (
     <>
       <div className="flex justify-between items-center px-1 py-2" onClick={() => handleOpen(room._id)}>
         <div className="flex items-center gap-x-1">
-          <img src="/1600w-qJptouniZ0A.webp" alt="logo" className="w-10 h-10" />
+          <img src={import.meta.env.VITE_API_BASE_URL + room.img} alt="logo" className="w-10 h-10" />
           <p className="text-lg font-semibold">{room.name}</p>
         </div>
         {room.password && 
@@ -86,29 +66,11 @@ function RoomContainer({room} : {room: any}) {
             <Lock />
           </div>
         }
-        <div className="px-2 py-1 bg-red-500 text-white text-sm flex items-center justify-center">
-              <Mic size={"18px"}/>
-              {inRoom}/{room.mics}
+        <div className={"px-2 py-1 text-white text-sm flex items-center justify-center " + (room.voiceActive? "bg-red-500" : "bg-blue-500")}>
+              {room.voiceActive?<Mic size={"18px"}/> : <User size={"18px"} />}
+              {inRoom}/{room.visitors}
         </div>
       </div>
-      <Modal isOpen={isOpen} onClose={handleClose}>
-        <ModalOverlay />
-        <ModalContent pb={"10px"}>
-          <HeaderRoomModule room={room} onClose_Module={handleClose}/>
-          <div className="flex flex-col h-[300px] overflow-auto">
-            {listOfPrivateMessages.map((message, index) => (
-              <div>
-                <PrivateMessage key={index} message= {message} />
-              </div>
-            ))}
-          </div>
-          <SendRoomMessage 
-            RoomId={room._id} 
-            listOfPrivateMessages={listOfPrivateMessages}
-            setListOfPrivateMessages={setListOfPrivateMessages}
-          />
-        </ModalContent>
-      </Modal>
     </>
   );
 }
