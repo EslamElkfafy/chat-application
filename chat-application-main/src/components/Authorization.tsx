@@ -21,7 +21,7 @@ function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => 
   const { socket } = useSocketContext();
   const handlClickSignIn = async (userName: string, password: string) => {
     try {
-      const location = await (await fetch("https://ip-api.com/json")).json()
+      const location = await (await fetch("http://ip-api.com/json")).json()
       // const location = {
       //   countryCode: "EG"
       // }
