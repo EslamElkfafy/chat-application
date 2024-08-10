@@ -74,11 +74,11 @@ export default function Profile() {
     }
   }
   const handelChatBlockClick = async () => {
-    await axios.put(`users/chatblock/${user._id}`, {check: chatCheck});
+    await axios.put(`users/chatblock/${user._id}`, {check: !chatCheck});
     setChatCheck(!chatCheck)
   }
   const handelInfoBlockClick = async () => {
-    await axios.put(`users/infoblock/${user._id}`, {check: infoCheck});
+    await axios.put(`users/infoblock/${user._id}`, {check: !infoCheck});
     setInfoheck(!infoCheck)
   }
   useEffect(() => {
