@@ -1,10 +1,11 @@
+import { Outlet } from "react-router-dom"
 import AdminSideBar from "../components/AdminSideBar"
 
-function AdminLayout({children} : {children: React.ReactNode}) {
+function AdminLayout() {
   return (
     <div className="flex">
       <AdminSideBar/>
-      {children}
+      <Outlet />
     </div>
   )
 }

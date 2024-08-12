@@ -19,7 +19,7 @@ function Status() {
           <Thead>
             <Tr className="bg-blue-500 ">
               <Th color={"white"} border={"1px solid gray"}>
-                الحالة{" "}
+                الحالة
               </Th>
               <Th color={"white"} border={"1px solid gray"}>
                 العضو
@@ -29,6 +29,9 @@ function Status() {
               </Th>
               <Th color={"white"} border={"1px solid gray"}>
                 الغرفة
+              </Th>
+              <Th color={"white"} border={"1px solid gray"}>
+                الوقت
               </Th>
             </Tr>
           </Thead>
@@ -41,6 +44,9 @@ function Status() {
               </Td>
               <Td border={"1px solid gray"}>
                 romm:Name
+              </Td>
+              <Td border={"1px solid gray"}>
+                00:00:02:25
               </Td>
             </Tr>
           </Tbody>

@@ -8,6 +8,8 @@ function OnlineSection({errorMessage}: {errorMessage: string}) {
 useEffect(() => {
   const fetchData = async () => {
     const listOfOnline = (await axios.get("users/findall")).data;
+    console.log("--------------------------------")
+    console.log(listOfOnline);
     setOnlineList(listOfOnline)
     
   }
@@ -32,7 +34,7 @@ useEffect(() => {
       </div>
       <div className="overflow-auto flex flex-col h-[400px]">
         {
-          onlineList.map((item :  any, index : any) => {
+          onlineList?.map((item :  any, index : any) => {
             return <UserOnlineContainer key={index} user={item}/>;
           })
         }

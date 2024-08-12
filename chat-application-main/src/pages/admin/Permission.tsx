@@ -25,6 +25,12 @@ function Permission() {
         </div>
         <div className="flex flex-col">
           <label className="bg-blue-600 p-1 text-white rounded-sm w-fit px-1">
+            اسم المجموعه
+          </label>
+          <Input size={"sm"} type="text" />
+        </div>
+        <div className="flex flex-col">
+          <label className="bg-blue-600 p-1 text-white rounded-sm w-fit px-1">
             إيقون
           </label>
           <Select size={"sm"}>
@@ -62,9 +68,18 @@ function Permission() {
             <p className="font-semibold">الباند</p>
           </Checkbox>
         </div>
+        <div className="flex items-center gap-x-1">
+          <label className="bg-blue-600 p-1 text-white rounded-sm">الاعلانات</label>
+          <Input type="number" size={"sm"} />
+        </div>
         <div className="flex items-center mt-2 ">
           <Checkbox>
             <p className="font-semibold">فتح الخاص</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">نقل من الغرفه</p>
           </Checkbox>
         </div>
         <div className="flex items-center mt-2 ">
@@ -77,18 +92,101 @@ function Permission() {
             <p className="font-semibold">إنشاء الغرفة</p>
           </Checkbox>
         </div>
+        <div className="flex items-center gap-x-1">
+          <label className="bg-blue-600 p-1 text-white rounded-sm w-64">اقصي حد للغرف الثابته</label>
+          <Input type="number" size={"sm"} />
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">إدارة العضويات</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">اسكات العضو</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">تعديل لايكات عضو</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">الفلتر</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">الاشتركات</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">الاختصارات</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">رسائل الدردشه</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">فلتر المراقبه</p>
+          </Checkbox>
+        </div>
         <div className="flex items-center mt-2 ">
           <Checkbox>
             <p className="font-semibold">تعديل الصلاحيات</p>
           </Checkbox>
         </div>
-
+        <div className="flex items-center gap-x-1">
+          <label className="bg-blue-600 p-1 text-white rounded-sm">الهدايا</label>
+          <Input type="number" size={"sm"} />
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">كشف النكات</p>
+          </Checkbox>
+        </div>
         <div className="flex items-center mt-2 ">
           <Checkbox>
             <p className="font-semibold">لوحة التحكم</p>
           </Checkbox>
         </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">الغرف الممتلئه و المغلقه</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">حذف صوره العضو</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">حذف الرسائل العامه</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">مخفي</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">تشغيل الموسيقي</p>
+          </Checkbox>
+        </div>
+        <div className="flex items-center mt-2 ">
+          <Checkbox>
+            <p className="font-semibold">اداره الموقع</p>
+          </Checkbox>
+        </div>
       </div>
+      
       <Button
         color={"white"}
         bg={"rgb(37 99 235)"}

@@ -45,14 +45,7 @@ function OptionsUser() {
               </label>
 
               <Input size={"sm"} width={"150px"} />
-              <Button
-                bg={"rgb(34 197 94)"}
-                color={"white"}
-                _hover={{}}
-                size={"sm"}
-              >
-                حفظ
-              </Button>
+              
             </div>
             <div className="flex items-center gap-x-2">
               <label className="bg-blue-600 p-1 text-white rounded-sm">
@@ -60,14 +53,7 @@ function OptionsUser() {
               </label>
 
               <Input size={"sm"} width={"150px"} type="number" />
-              <Button
-                bg={"rgb(34 197 94)"}
-                color={"white"}
-                _hover={{}}
-                size={"sm"}
-              >
-                حفظ
-              </Button>
+              
             </div>
             <div className="flex items-center gap-x-2 ">
               <label className="bg-blue-600 p-1 text-white rounded-sm">
@@ -75,14 +61,22 @@ function OptionsUser() {
               </label>
 
               <Input size={"sm"} width={"150px"} type="password" />
-              <Button
+              
+            </div>
+            <div className="flex justify-between items-center">
+            <Button
                 bg={"rgb(34 197 94)"}
                 color={"white"}
                 _hover={{}}
-                size={"sm"}
+                size={"lg"}
               >
                 حفظ
               </Button>
+              <div>
+                <div className="flex items-center gap-1 justify-end"><p>توثيق عضويه</p> <input type="checkbox" /></div>
+                <div className="flex items-center gap-1 justify-end"><p>دخول مميز</p><input type="checkbox" /></div>
+
+              </div>
             </div>
             <Button
               bg={"rgb(239 68 68)"}

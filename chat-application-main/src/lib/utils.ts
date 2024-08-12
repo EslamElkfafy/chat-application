@@ -202,7 +202,7 @@ export const ADMIN_SIDEBAR = [
     link: "/admin-view/users",
   },
   {
-    text: "الحضر",
+    text: "الحظر",
     link: "/admin-view/block",
   },
   {
@@ -218,8 +218,16 @@ export const ADMIN_SIDEBAR = [
     link: "/admin-view/rooms",
   },
   {
-    text: "لوحة الموقع",
+    text: "الاختصارات",
+    link: "/admin-view/abbreviations",
+  },
+  {
+    text: "اداره الموقع",
     link: "/admin-view/control",
+  },
+  {
+    text : "الرسائل",
+    link : "/admin-view/messages"
   },
   {
     text : "الخروج",

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import Home from "./pages/Home";
 // import { useAdminContext } from "./context/AdminContextProvider";
@@ -19,48 +19,33 @@ console.log(hostname)
 axios.defaults.baseURL = hostname
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from "react";
+import Message from "./components/Message";
+import Messages from "./pages/admin/Messages";
+import Abbreviations from "./pages/admin/Abbreviations";
 
 function App() {
 
   return (
-    <>
     <Routes>
-      <Route path="/" element={<AuthPage />} />
-      <Route path="/:roomId" element={<Home />} />
-      <Route
-        path="/admin-view/record"
-        element={<AdminLayout children={<Records />} />}
-      />
-      <Route
-        path="/admin-view/permissions"
-        element={<AdminLayout children={<Permission />} />}
-      />
-      <Route
-        path="/admin-view/users"
-        element={<AdminLayout children={<Users />} />}
-      />
-      <Route
-        path="/admin-view/rooms"
-        element={<AdminLayout children={<Romms />} />}
-      />
-      <Route
-        path="/admin-view/control"
-        element={<AdminLayout children={<Control />} />}
-      />
-      <Route
-        path="/admin-view/status"
-        element={<AdminLayout children={<Status />} />}
-      />
-      <Route
-        path="/admin-view/block"
-        element={<AdminLayout children={<Block/>}/>} 
-      />
-      <Route
-        path="/admin-view/filter"
-        element={<AdminLayout children={<Filter/>}/>}
-      />
+      <Route path="/"  >
+        <Route index element={<AuthPage />} />
+        <Route path="admin-view" element= {<AdminLayout />} >
+          <Route index  element = {<Navigate to="/admin-view/record" replace/>} />
+          <Route path="record" element= {<Records />} />
+          <Route path="permissions" element= {<Permission />} />
+          <Route path="users" element= {<Users />} />
+          <Route path="rooms" element= {<Romms />} />
+          <Route path="control" element= {<Control />} />
+          <Route path="status" element= {<Status />} />
+          <Route path="block" element= {<Block />} />
+          <Route path="filter" element= {<Filter />} />
+          <Route path="messages" element= {<Messages />} />
+          <Route path="abbreviations" element= {<Abbreviations />} />
+
+        </Route>
+        <Route path=":roomId" element={<Home />} />
+      </Route>
     </Routes>
-    </>
     
   );
 }

@@ -133,7 +133,7 @@ app.use(cors({
   origin: true, // Allows all origins
   credentials: true // Allows sending cookies with the request
 }));
-app.use(cookieParser({limit: "800mb"}));
+app.use(cookieParser());
 app.use(express.json());
 app.use("/api/get-my-ip", createProxyMiddleware({
   target: 'http://ip-api.com/json',

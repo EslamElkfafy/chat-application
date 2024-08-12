@@ -30,6 +30,15 @@ function Users() {
                 أي بي
               </Th>
               <Th color={"white"} border={"1px solid gray"}>
+                الجهاز
+              </Th>
+              <Th color={"white"} border={"1px solid gray"}>
+                صلاحيات
+              </Th>
+              <Th color={"white"} border={"1px solid gray"}>
+                اخر تواجد
+              </Th>
+              <Th color={"white"} border={"1px solid gray"}>
                 ضبط
               </Th>
             </Tr>
@@ -39,6 +48,9 @@ function Users() {
               <Td border={"1px solid gray"}>elhaj</Td>
               <Td border={"1px solid gray"}>la chgar</Td>
               <Td border={"1px solid gray"}>192.168.1.1</Td>
+              <Td border={"1px solid gray"}>windows.11.chrome</Td>
+              <Td border={"1px solid gray"}>STF.admin</Td>
+              <Td border={"1px solid gray"}>00:00:02:25</Td>
               <Td border={"1px solid gray"}>
                <OptionsUser/>
               </Td>
