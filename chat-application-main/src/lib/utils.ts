@@ -222,6 +222,10 @@ export const ADMIN_SIDEBAR = [
     link: "/admin-view/abbreviations",
   },
   {
+    text: "الاشتراكات",
+    link: "/admin-view/subscriptions",
+  },
+  {
     text: "اداره الموقع",
     link: "/admin-view/control",
   },

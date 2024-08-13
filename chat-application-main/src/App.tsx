@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import Message from "./components/Message";
 import Messages from "./pages/admin/Messages";
 import Abbreviations from "./pages/admin/Abbreviations";
+import Subscriptions from "./pages/admin/Subscriptions";
 
 function App() {
 
@@ -41,6 +42,8 @@ function App() {
           <Route path="filter" element= {<Filter />} />
           <Route path="messages" element= {<Messages />} />
           <Route path="abbreviations" element= {<Abbreviations />} />
+          <Route path="subscriptions" element= {<Subscriptions />} />
+
 
         </Route>
         <Route path=":roomId" element={<Home />} />

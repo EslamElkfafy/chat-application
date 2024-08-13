@@ -9,7 +9,7 @@ function Permission() {
       <div className="flex items-center gap-x-2  ">
         <Select size={"sm"}>
           {[...Array(5)].map((_, i) => (
-            <option>صلاحيات {i + 1}</option>
+            <option>أدمن {i + 1}</option>
           ))}
         </Select>
         <Button bg={"rgb(220 38 38)"} color={"white"} _hover={{}} size={"sm"}>
