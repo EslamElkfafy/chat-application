@@ -7,6 +7,7 @@ import { useUserContext } from "../context/UserContextProvider";
 import { useSocketContext } from "../context/SocketContextProvider";
 import { useOptionContext } from "../context/OptionContextProvider";
 import axios from "axios";
+import { getDeviceInfo } from "../lib/deviceInfo";
 
 function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => void}) {
   const [choise, setChoise] = useState("nike-name");
@@ -41,10 +42,14 @@ function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => 
         room = (await axios.post("general")).data.payload
       }
       const response = await axios.post("auth/signin", {userName, password, ip});
+      console.log(response.data);
+      const {name, country, role} = response.data;
       setUser({...response.data})
       setOption.setRoom(room, response.data)
       
       socket.emit("user", {...response.data})
+      const {os, browser, deviceType} = getDeviceInfo()
+      axios.post("records/addrecord", {userName,name, ...ip, country, role, device: `${os}.${deviceType}.${browser}`});
       router("/rommId")
     } catch(e: any) {
       setErrorMessage(e.response.data.message)

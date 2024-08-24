@@ -8,8 +8,20 @@ import {
   TableContainer,
   Input,
 } from "@chakra-ui/react";
+import { getDeviceInfo } from "../../lib/deviceInfo";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function Records() {
+  const [data, setData] = useState<any>([]);
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get('records/getall');
+      setData(response.data);
+    })();
+  }, []);
+
+  console.log(getDeviceInfo());
   return (
     <div className="flex flex-col gap-y-3 p-2">
       <Input size={"sm"} placeholder="البحث..." />
@@ -38,15 +50,20 @@ function Records() {
             </Tr>
           </Thead>
           <Tbody>
+            {
+              data.map((item : any) => (
+                <Tr key={item.userName}>
+                  <Td>{item.role}</Td>
+                  <Td>{item.userName}</Td>
+                  <Td>{item.name}</Td>
+                  <Td>{item.ip}</Td>
+                  <Td>{item.country}</Td>
+                  <Td>{item.device}</Td>
+                </Tr>
+              ))
+            }
             <Tr className="bg-green-50">
-            <Td border={"1px solid gray"}>عضو</Td>
-              <Td border={"1px solid gray"}>elhaj</Td>
-              <Td border={"1px solid gray"}>la chgar</Td>
-              <Td border={"1px solid gray"}>192.168.1.1</Td>
-              <Td border={"1px solid gray"}>
-                المغرب
-              </Td>
-              <Td border={"1px solid gray"}>windows.11.chrome</Td>
+            
             </Tr>
           </Tbody>
         </Table>

@@ -104,6 +104,10 @@ const UserSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "room",
       default: null
+    },
+    role: {
+      type: String, 
+      default: 'member',
     }
   },
   { timestamps: true }

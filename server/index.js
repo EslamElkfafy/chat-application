@@ -14,7 +14,8 @@ import multer from "multer";
 import User from "./models/User.js";
 import Chat from "./models/Chat.js";
 import postRoutes from "./routes/posts.js"
-import roomRoutes from "./routes/room.js"
+import roomRoutes from "./routes/room.js";
+import recordRoutes from "./routes/records.js";
 import generalRoomRoutes from "./routes/generalRoom.js"
 import http from "http"
 import { env } from "process";
@@ -149,7 +150,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/posts", postRoutes)
-app.use("/api/rooms", roomRoutes)
+app.use("/api/rooms", roomRoutes);
+app.use("/api/records", recordRoutes);
 app.use("/api/general", generalRoomRoutes)
 
 //error handler
