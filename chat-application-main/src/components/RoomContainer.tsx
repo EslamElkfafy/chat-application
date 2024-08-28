@@ -4,15 +4,12 @@ import axios from "axios";
 import { useOptionContext } from "../context/OptionContextProvider";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContextProvider";
-import { useSocketContext } from "../context/SocketContextProvider";
-import { useListOfMessageContext } from "../context/ListOfMessageContext";
 
 function RoomContainer({room} : {room: any}) {
-  const [inRoom, setInRoom] = useState(99)
+  const [inRoom, setInRoom] = useState(localStorage.getItem(room._id) || room.visitors)
   const {option, setOption} = useOptionContext()
   const {user} = useUserContext()
-  const {socket} = useSocketContext()
-  const joinRoom = (roomId: string) => {
+  const joinRoom = () => {
     if (window.stream)
     {
       window.stream.getTracks().forEach((track: any) => {
@@ -46,6 +43,7 @@ function RoomContainer({room} : {room: any}) {
     const getRoomNum = async () => {
       try {
         const res = await axios.get("/socket/" + room._id)
+        localStorage.setItem(room._id, res.data)
         setInRoom(res.data)
       } catch(e) {
         console.error(e)
