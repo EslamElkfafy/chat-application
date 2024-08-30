@@ -108,6 +108,14 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String, 
       default: 'member',
+    },
+    ip: {
+      type: String,
+      default: "0.0.0.0"
+    },
+    device: {
+      type: String,
+      default: ""
     }
   },
   { timestamps: true }
