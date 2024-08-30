@@ -4,10 +4,8 @@ import Rooms from "./_models/Rooms";
 import Profile from "./_models/Profile";
 import PrivateChat from "./_models/PrivateChat";
 import Blogs from "./_models/Blogs";
-import { useListOfMessageContext } from "../context/ListOfMessageContext";
 
 function ControlBar() {
-  const {setListOfMessage} = useListOfMessageContext()
   return (
     <div className="flex bg-blue-900 px-2 py-2  items-center gap-x-2 mt-1">
       <RoomInfo />

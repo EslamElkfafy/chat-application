@@ -17,6 +17,7 @@ import postRoutes from "./routes/posts.js"
 import roomRoutes from "./routes/room.js";
 import recordRoutes from "./routes/records.js";
 import generalRoomRoutes from "./routes/generalRoom.js"
+import adminRoutes from './routes/admin.js'
 import http from "http"
 import { env } from "process";
 import Room from "./models/Room.js";
@@ -52,7 +53,6 @@ const connect = () => {
     });
 };
 let online = {}
-
 io.on("connection", socket => {
   console.log(socket.id)
   socket.on("sent-event", (message) => {
@@ -68,6 +68,7 @@ io.on("connection", socket => {
     {
       socket.to(temp).disconnectSockets()
     }
+
   })
   socket.on("join-room", room => {
     socket.join(room);
@@ -146,6 +147,7 @@ app.get("/:rommId", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "index.html"))
 })
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/api/admins", adminRoutes)
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chats", chatRoutes);
@@ -176,5 +178,5 @@ app.get("/api/socket/:roomId", (req, res) => {
 })
 server.listen(env.PORT, '0.0.0.0', () => {
   connect();
-  console.log("Connected to Server");
+  console.log("Connected to Server " + env.PORT);
 });

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { createError } from "../error.js";
+import bcrypt from "bcryptjs"
 import User from "../models/User.js";
 import Guest from "../models/Guest.js";
 import Admin from "../models/Admin.js";

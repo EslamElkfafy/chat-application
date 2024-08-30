@@ -269,13 +269,12 @@ export default function Profile() {
               >
                 تسجيل خروج
               </Button>
-              {admin && (
+              {user && user.role === 'admin' && (
                 <Button
                   size={"sm"}
                   borderRadius={"0px"}
                   border={"1px solid gray"}
                   onClick={() => {
-                    if (!admin) return;
                     router("/admin-view/record");
                   }}
                 >
