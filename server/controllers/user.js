@@ -108,7 +108,7 @@ export const getAllUsers = async (req, res, next) => {
     const query = {}
     if (req.query.room)
     {
-      query.room = req.query.room
+      query.room = req.query.room;
     }
     const allUsers = await User.find(query);
     res.status(200).json(allUsers)
