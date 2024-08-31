@@ -61,7 +61,7 @@ setInterval(async () => {
   jsonData
     .filter((message) => message.type === "daily")
     .forEach((message) => {
-      if (Date.now() - message.date >= 10000) {
+      if (Date.now() - message.date >= 1000 * 60 * 60) {
         io.emit("receive-event", message)
         updateJsonFile((jsonData) => jsonData.map(item => item.id === message.id ? {...item, date: Date.now()} : item));
       }});
