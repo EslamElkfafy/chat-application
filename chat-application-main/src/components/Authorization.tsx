@@ -41,13 +41,16 @@ function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => 
       {
         room = (await axios.post("general")).data.payload
       }
+      const {os, browser, deviceType} = getDeviceInfo()
+
+      const device = `${os}.${deviceType}.${browser}`
       const user = {
         userName,
         password,
         ip: ip.ip,
-        
+        device,
       }
-      const response = await axios.post("auth/signin", {userName, password, ip});
+      const response = await axios.post("auth/signin", user);
       console.log(response.data);
       const {name, country, role} = response.data;
       setUser({...response.data})

@@ -19,6 +19,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useOptionContext } from "../../context/OptionContextProvider";
+import { useUserContext } from "../../context/UserContextProvider";
+import { useSocketContext } from "../../context/SocketContextProvider";
 function CreateRoomModule() {
   const [ name, setName] = useState("");
   const [ description, setDescription ] = useState("")
@@ -30,6 +32,8 @@ function CreateRoomModule() {
   const [voiceActive, setVoiceActive] = useState(true)
   const [withoutNotification, setWithoutNotification] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const {user} = useUserContext()
+  const {socket} = useSocketContext()
   const {option} = useOptionContext()
   const onCreateRoom = async () => {
     const room = {
@@ -42,13 +46,15 @@ function CreateRoomModule() {
       mics,
       voiceActive,
       withoutNotification,
+      userId: user._id
     }
     try
     {
       await axios.post("/rooms", room)
       toast.success("تم انشاء الغرفة بنجاح", option.toastOptions)
+      socket.emit("roomsDeleteChecker")
       onClose()
-    } catch(e) {
+    } catch(e: any) {
 
       toast.error(<ul>
         {e.response.data.payload.map((error: string) => <li key={error}>{error}</li>)}
@@ -140,14 +146,14 @@ function CreateRoomModule() {
                   onChange={(e) => {setVisitors(Number(e.target.value))}}
                 />
               </InputGroup>
-              <InputGroup size={"sm"}>
+              {/* <InputGroup size={"sm"}>
                 <InputRightAddon>عدد الصوتيات</InputRightAddon>
                 <Input
                   type="number"
                   value={mics}
                   onChange={(e) => {setMics(Number(e.target.value))}}
                 />
-              </InputGroup>
+              </InputGroup> */}
             </Stack>
             <div className="flex mt-5 flex-col gap-y-2 ">
               <Checkbox

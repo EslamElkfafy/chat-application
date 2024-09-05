@@ -10,11 +10,13 @@ import axios from "axios";
 import { useRef, useState, useEffect } from "react";
 import RoomContainer from "../RoomContainer";
 import CreateRoomModule from "./CreateRoomModule";
+import { useSocketContext } from "../../context/SocketContextProvider";
 
 export default function Rooms() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [ builded, setBuilded ] = useState(false);
   const [ rooms, setRooms ]: [ rooms: any, setRooms: any] = useState([])
+  const [deleteChecker, setDeleteChecker] = useState<boolean>(false)
+  const {socket} = useSocketContext()
   const btnRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -27,7 +29,14 @@ export default function Rooms() {
       }
     }
     fetchData()
-  }, [rooms])
+  }, [deleteChecker])
+  useEffect(() => {
+    const handleSocket = () => {
+      setDeleteChecker((prev) => !prev)
+    }
+    socket.on("roomsDeleteChecker", handleSocket)
+    return () => socket.off("roomsDeleteChecker", handleSocket)
+  },[])
   return (
     <>
       <div

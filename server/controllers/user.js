@@ -34,15 +34,15 @@ export const addAdmin = async (req, res, next) => {
 }
 export const update = async (req, res, next) => {
     try {
-      const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: req.body,
-        },
-        { new: true }
-      );
-      res.status(200).json(updatedUser);
+      const user = await User.findById(req.params.id)
+      if (!user) throw new Error("invalid user id")
+      for (const key in req.body) {
+        user[key] = req.body[key]
+      }
+      await user.save()
+      res.status(200).json(user);
     } catch (err) {
+      res.status(400)
       next(err);
     }
 };
@@ -137,15 +137,11 @@ export const updateInfoBlock = async (req, res, next) => {
   }
 }
 export const deleteUser = async (req, res, next) => {
-  if (req.params.id === req.user.id) {
-    try {
-      await User.findByIdAndDelete(req.params.id);
-      res.status(200).json("User has been deleted.");
-    } catch (err) {
-      next(err);
-    }
-  } else {
-    return next(createError(403, "You can delete only your account!"));
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json("User has been deleted.");
+  } catch (err) {
+    next(err);
   }
 };
 

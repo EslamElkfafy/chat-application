@@ -6,14 +6,27 @@ import {
   Th,
   Td,
   TableContainer,
-  Input,
 } from "@chakra-ui/react";
+import StatusType from "../../lib/Status";
+import { useEffect, useState } from "react";
+import StatusRepository from "../../repositories/statusRepository";
 
 
 function Status() {
+  const [statusRecords, setStatusRecords] = useState<StatusType[] | null>(null)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setStatusRecords(await StatusRepository.getAll())
+      } catch(e) {
+        console.error(e)
+      }
+    }
+    fetchData()
+  }, [])
   return (
     <div className="flex flex-col gap-y-3 p-2">
-      <Input size={"sm"} placeholder="البحث..." />
       <TableContainer>
         <Table variant="simple">
           <Thead>
@@ -36,19 +49,27 @@ function Status() {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr className="bg-green-50">
-              <Td border={"1px solid gray"}>send like</Td>
-              <Td border={"1px solid gray"}>la chgar</Td>
-              <Td border={"1px solid gray"}>
-                elhaj
-              </Td>
-              <Td border={"1px solid gray"}>
-                romm:Name
-              </Td>
-              <Td border={"1px solid gray"}>
-                00:00:02:25
-              </Td>
-            </Tr>
+
+            {
+              statusRecords && statusRecords.map((status: StatusType) => {
+                return (
+                  <Tr className="bg-green-50" key={status._id}>
+                    <Td border={"1px solid gray"}>{status.name}</Td>
+                    <Td border={"1px solid gray"}>{status.user1Name}</Td>
+                    <Td border={"1px solid gray"}>
+                      {status.user2Name}
+                    </Td>
+                    <Td border={"1px solid gray"}>
+                      {status.roomName}
+                    </Td>
+                    <Td border={"1px solid gray"}>
+                      00:00:02:25
+                    </Td>
+                  </Tr>
+                  )
+
+              })
+            }
           </Tbody>
         </Table>
       </TableContainer>

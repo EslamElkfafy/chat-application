@@ -16,9 +16,10 @@ import Chat from "./models/Chat.js";
 import postRoutes from "./routes/posts.js";
 import roomRoutes from "./routes/room.js";
 import recordRoutes from "./routes/records.js";
-import generalRoomRoutes from "./routes/generalRoom.js";
-import adminRoutes from "./routes/admin.js";
-import http from "http";
+import generalRoomRoutes from "./routes/generalRoom.js"
+import adminRoutes from './routes/admin.js'
+import statusRoutes from './routes/status.js'
+import http from "http"
 import { env } from "process";
 import Room from "./models/Room.js";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -125,6 +126,13 @@ io.on("connection", (socket) => {
   socket.on("audioStream", (audioData, room) => {
     if (room) socket.to(room).emit("audioStream", audioData);
   });
+
+  socket.on("roomsDeleteChecker", () => {
+    io.emit("roomsDeleteChecker")
+  })
+  socket.on("usersDeleteChecker", () => {
+    io.emit("usersDeleteChecker")
+  })
   // for(let i = 0; i < online.length; i++) {
   //   s.add(online[i].userId)
   // }
@@ -185,8 +193,8 @@ app.use("/api/chats", chatRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/records", recordRoutes);
-app.use("/api/general", generalRoomRoutes);
-
+app.use("/api/general", generalRoomRoutes)
+app.use("/api/status", statusRoutes)
 //error handler
 app.use((err, req, res, next) => {
   const status = err.status || 500;

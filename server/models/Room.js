@@ -4,11 +4,21 @@ const PostSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      unique: true
+      unique: true,
+      required: true
     },
-    description: String,
-    helloMessage: String,
-    password: String,
+    description: {
+      type: String,
+      default: ""
+    },
+    helloMessage: {
+      type: String,
+      default: ""
+    },
+    password: {
+      type: String,
+      default: ""
+    },
     enterLikes: {
       type: Number,
       default: 0
@@ -46,7 +56,11 @@ const PostSchema = new mongoose.Schema(
     img: {
       type: String,
       default: "uploads/1600w-qJptouniZ0A.webp"
-    }
+    },
+    userId: {
+      type: mongoose.Types.ObjectId,
+      required: true
+    },
   },
   { timestamps: true }
 );

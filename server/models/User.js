@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Room from "./Room.js"
+import bcrypt from "bcryptjs"
 const OptionSchema = new mongoose.Schema(
   {
     value: {
@@ -133,6 +134,14 @@ const micConfig = async (user, next) => {
     next(e.message)
   }
 }
+UserSchema.pre('save', function(next) {
+  if (this.isModified('password')) {
+    console.log("hello from user schema")
+    const salt = bcrypt.genSaltSync(10);
+    this.password = bcrypt.hashSync(this.password, salt);
+  }
+  next()
+})
 UserSchema.pre('findOneAndUpdate', function (next) {
   if (this.getUpdate().$set.room && this.getQuery()._id)
     micConfig({...this.getUpdate().$set, ...this.getQuery()}, next)
