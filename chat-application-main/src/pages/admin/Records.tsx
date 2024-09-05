@@ -8,23 +8,22 @@ import {
   TableContainer,
   Input,
 } from "@chakra-ui/react";
-import { getDeviceInfo } from "../../lib/deviceInfo";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 function Records() {
   const [data, setData] = useState<any>([]);
+  const [inputSearch, setInputSearch] = useState<any>("");
   useEffect(() => {
     (async () => {
-      const response = await axios.get('records/getall');
-      setData(response.data);
+      const response = await axios.get("records/getall");
+      setData(response.data.reverse());
     })();
   }, []);
 
-  console.log(getDeviceInfo());
   return (
     <div className="flex flex-col gap-y-3 p-2">
-      <Input size={"sm"} placeholder="البحث..." />
+      <Input size={"sm"} placeholder="البحث..." value={inputSearch} onChange={e => setInputSearch(e.target.value)} />
       <TableContainer>
         <Table variant="simple">
           <Thead>
@@ -51,8 +50,8 @@ function Records() {
           </Thead>
           <Tbody>
             {
-              data.map((item : any) => (
-                <Tr key={item.userName}>
+              data.filter((item: any) => item.name.includes(inputSearch)).map((item : any, index: any) => (
+                <Tr key={index}>
                   <Td>{item.role}</Td>
                   <Td>{item.userName}</Td>
                   <Td>{item.name}</Td>

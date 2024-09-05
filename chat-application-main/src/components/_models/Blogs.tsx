@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import Post from "../Post";
 import Poster from "../_elements/Poster";
 import axios from "axios";
+import { formatText } from "../../lib/formatText";
 
 export default function Blogs() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -19,14 +20,22 @@ export default function Blogs() {
   const [ listOfPosts, setListOfPosts ] = useState([])
 
   useEffect(() => {
+    const controller = new AbortController(); // Create an AbortController instance
+    const { signal } = controller; // Get the signal from the controller
     const fetchData = async () => {
-      const response = await axios.get("posts/allposts");
+      const response = await axios.get("posts/allposts", {signal});
+      await Promise.all(response.data.map(async (post: any) => {
+        post.text = await formatText(post.text)
+      }))
       setListOfPosts(response.data)
     }
+
     const interval = setInterval(() => {
       fetchData()
     }, 1000)
-    return () => clearInterval(interval)
+    return () => {
+      controller.abort();
+      clearInterval(interval)}
   }, [])
   return (
     <>
@@ -57,9 +66,8 @@ export default function Blogs() {
               className="flex flex-col h-[450px]  md:h-[500px] overflow-auto"
               ref={scrollRef} 
             >
-              {listOfPosts.map((item, index) => (
-                <Post key={index} item={item}/>
-              ))}
+              {listOfPosts.map((item, index) => <Post key={index} item={item}/>)
+            }
             </div>
             <hr />
             <Poster />

@@ -116,6 +116,10 @@ const UserSchema = new mongoose.Schema(
     device: {
       type: String,
       default: ""
+    },
+    banned: {
+      type: { bannedUntil: Number },
+      default: null
     }
   },
   { timestamps: true }

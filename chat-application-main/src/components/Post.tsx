@@ -14,6 +14,7 @@ function Post({item} : {item :any}) {
     }
     fetchData()
   }, [])
+  
   return (
       userData && 
       <div className="flex  gap-x-2 border px-1 py-1 h-auto ">

@@ -30,6 +30,7 @@ function SocketContextProvider({ children }: { children: React.ReactNode }) {
       location.reload()
     })
     socketIo.on("userStatus", () => {
+      
       socketIo.emit("user", user)
     })
     if (send)

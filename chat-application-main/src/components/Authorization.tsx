@@ -54,6 +54,7 @@ function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => 
       setOption.setRoom(room, response.data)
       
       socket.emit("user", {...response.data})
+      socket.emit("sent-welcome");
       const {os, browser, deviceType} = getDeviceInfo()
       axios.post("records/addrecord", {userName,name, ...ip, country, role, device: `${os}.${deviceType}.${browser}`});
       router("/rommId")

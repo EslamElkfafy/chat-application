@@ -62,9 +62,24 @@ setInterval(async () => {
     .filter((message) => message.type === "daily")
     .forEach((message) => {
       if (Date.now() - message.date >= 1000 * 60 * 60) {
-        io.emit("receive-event", message)
-        updateJsonFile((jsonData) => jsonData.map(item => item.id === message.id ? {...item, date: Date.now()} : item));
-      }});
+        io.emit("receive-event", message);
+        updateJsonFile(
+          path.resolve("./welcomedailymessages.json"),
+          (jsonData) =>
+            jsonData.map((item) =>
+              item.id === message.id ? { ...item, date: Date.now() } : item
+            )
+        );
+      }
+    });
+  const bannedUsers = await User.find({ "banned.bannedUntil": { $ne: null } });
+  await Promise.all(
+    bannedUsers.map(async (user) => {
+      if (Date.now() >= user.banned.bannedUntil) {
+        return User.findByIdAndUpdate(user._id, { $set: { banned: null } });
+      }
+    })
+  );
 }, 1000);
 io.on("connection", (socket) => {
   console.log(socket.id);
@@ -95,7 +110,7 @@ io.on("connection", (socket) => {
   socket.on("leave-room", (room) => {
     socket.leave(room);
   });
-  socket.on("send-room", (message, room) => {
+  socket.on("send-room", async (message, room) => {
     socket.to(room).emit("receive-event", message);
   });
   socket.on("send-private", (message, room) => {
@@ -182,15 +197,15 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
 const readJsonFile = async (filePath) => {
   // Read the JSON file
   const data = await fs.readFile(filePath, "utf-8");
   // Parse the JSON data
   return JSON.parse(data);
 };
-async function updateJsonFile(updateFunction) {
+async function updateJsonFile(filePath, updateFunction) {
   try {
-    const filePath = path.resolve("./welcomedailymessages.json");
     const jsonData = await readJsonFile(filePath);
     // Modify the data
     // For example, let's add a new key-value pair
@@ -216,28 +231,126 @@ app.get("/api/socket/:roomId", (req, res) => {
   return res.status(200).json(room ? room.size : 0);
 });
 app.post("/api/welcomedailymessages/addmessage", async (req, res) => {
-  const responseMessage = await updateJsonFile((jsonData) => {
-    jsonData.push(req.body.message);
-    return jsonData;
-  });
+  const responseMessage = await updateJsonFile(
+    path.resolve("./welcomedailymessages.json"),
+    (jsonData) => {
+      jsonData.push(req.body.message);
+      return jsonData;
+    }
+  );
   res.status(200).json({ message: responseMessage });
 });
 app.get("/api/welcomedailymessages/getmessages", async (req, res) => {
-  const jsonDataById = await updateJsonFile((jsonData) =>
-    jsonData.map((item, index) => ({
-      id: index + 1,
-      ...item,
-    }))
+  const jsonDataById = await updateJsonFile(
+    path.resolve("./welcomedailymessages.json"),
+    (jsonData) =>
+      jsonData.map((item, index) => ({
+        id: index + 1,
+        ...item,
+      }))
   );
   res.status(200).json(jsonDataById);
 });
 app.delete("/api/welcomedailymessages/deletemessage/:id", async (req, res) => {
   // TODO: Implement the logic to delete a message from the JSON file
   const id = req.params.id;
-  await updateJsonFile((jsonData) =>
-    jsonData.filter((item) => item.id !== +id)
+  await updateJsonFile(
+    path.resolve("./welcomedailymessages.json"),
+    (jsonData) => jsonData.filter((item) => item.id !== +id)
   );
   res.status(200).json({ message: "Message deleted successfully" });
+});
+// Read File Json
+app.get("/api/readjsonfile/:fileName", async (req, res) => {
+  const filePath = path.resolve(`./${req.params.fileName}.json`);
+  const jsonData = await readJsonFile(filePath);
+  res.status(200).json(jsonData);
+});
+// abberviations
+app.post("/api/abbreviations/add", async (req, res) => {
+  // TODO: Implement the logic to add a new abbreviation to the JSON file
+  const { abbreviation, description } = req.body;
+  const responseMessage = await updateJsonFile(
+    path.resolve("./abbreviations.json"),
+    (jsonData) => {
+      jsonData[abbreviation] = description;
+      return jsonData;
+    }
+  );
+  res.status(200).json({ payload: responseMessage });
+});
+app.delete("/api/abbreviations/:key", async (req, res) => {
+  const key = req.params.key;
+  await updateJsonFile(path.resolve("./abbreviations.json"), (jsonData) => {
+    delete jsonData[key];
+    return jsonData;
+  });
+  res.status(200).json({ message: "Abbreviation deleted successfully" });
+});
+app.get("/api/abbreviations/get", async (req, res) => {
+  const dataAbbreviations = await readJsonFile(
+    path.resolve("./abbreviations.json")
+  );
+  res.status(200).json(dataAbbreviations);
+});
+// Filter
+app.get("/api/filters/get", async (req, res) => {
+  const dataFilters = await readJsonFile(path.resolve("./filter.json"));
+  res.status(200).json(dataFilters);
+});
+app.post("/api/filters/add", async (req, res) => {
+  const word = req.body.word;
+  const responseMessage = await updateJsonFile(
+    path.resolve("./filter.json"),
+    (jsonData) => {
+      jsonData.push(word);
+      let uniqueSet = new Set(jsonData);
+      let uniqueArray = Array.from(uniqueSet);
+      return uniqueArray;
+    }
+  );
+  res.status(200).json({ payload: responseMessage });
+});
+app.delete('/api/filters/:word', function(req, res) {
+  const word = req.params.word;
+  updateJsonFile(path.resolve("./filter.json"), (jsonData) => {
+    jsonData = jsonData.filter((item) => item!== word);
+    return jsonData;
+  });
+  res.status(200).json({ message: "Filter deleted successfully" });
+});
+// Emojis
+app.post("/api/emojis/add", async (req, res) => {
+  const { urlEmoji } = req.body;
+  const responseMessage = await updateJsonFile(
+    path.resolve("./emojis.json"),
+    (jsonData) => {
+      const listOfKeys = Object.keys(jsonData);
+      if (listOfKeys.length > 0) {
+        const newKey = "ف" + (+listOfKeys[listOfKeys.length - 1].slice(1) + 1);
+        jsonData[newKey] = urlEmoji;
+      } else {
+        jsonData["ف1"] = urlEmoji;
+      }
+
+      return jsonData;
+    }
+  );
+  res.status(200).json({ payload: responseMessage });
+})
+app.get('/api/emojis/get', async (req, res) => {
+  const dataEmojis = await readJsonFile(
+    path.resolve("./emojis.json")
+  );
+  res.status(200).json(dataEmojis);
+});
+app.delete("/api/emojis/:key", async (req, res) => {
+  const key = req.params.key;
+  await updateJsonFile(path.resolve("./emojis.json"), (jsonData) => {
+    delete jsonData[key];
+    return jsonData;
+  });
+  res.status(200).json({ message: "Abbreviation deleted successfully" });
 });
 server.listen(env.PORT, "0.0.0.0", () => {
   connect();

@@ -4,17 +4,25 @@ import {
   ModalContent,
   useDisclosure,
 } from "@chakra-ui/react";
-import { EMOJIS} from "../lib/utils";
+import { EMOJIS } from "../lib/utils";
 import { Smile } from "lucide-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 type TProps = {
   setText: (text: string) => void;
   text: string;
 };
 
-function EmojiModule({ setText, text}: TProps) {
+function EmojiModule({ setText, text }: TProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const [emojis, setEmojis] = useState<any[]>([]);
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get("readjsonfile/emojis");
+      setEmojis(Object.entries(response.data));
+    })();
+  }, []);
   return (
     <>
       <Smile
@@ -25,25 +33,21 @@ function EmojiModule({ setText, text}: TProps) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent width={"300px"}>
-          <div className="w-full h-[300px] flex flex-wrap gap-x-1 py-2  overflow-auto">
-            {EMOJIS.map((ele, index) => (
+          <div className="w-full h-[300px] flex flex-wrap gap-x-1 p-2 content-start overflow-auto">
+            {emojis.map(([abbreviation, urlEmoji]) => (
               <div
                 className="cursor-pointer"
-                key={index}
-                id={ele}
-                onClick={(e) => setText(text + e.currentTarget.id)}
+                key={abbreviation}
+                onClick={() => {
+                  setText(text + " " + abbreviation + " ");
+                  onClose();
+                }}
               >
-                {ele}
-              </div>
-            ))}
-            {EMOJIS.map((ele, index) => (
-              <div
-                className="cursor-pointer"
-                key={ index}
-                id={ele}
-                onClick={(e) => setText(text + e.currentTarget.id)}
-              >
-                {ele}
+                <img
+                  src={import.meta.env.VITE_API_BASE_URL + urlEmoji}
+                  alt=""
+                  className="h-5 inline-block"
+                />
               </div>
             ))}
           </div>

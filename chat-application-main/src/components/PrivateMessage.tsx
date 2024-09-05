@@ -2,10 +2,12 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import VideoPlayer from "./VideoPlayer"
 import AudioPlayer from "./AudioPlayer"
+import { formatText } from "../lib/formatText"
 
 
 function PrivateMessage({message} : {message: any}) {
     const [dataOfUser, setDataOfUser] = useState<Record<string, any>>({})
+    const [render, setRender] = useState(false)
     const url = import.meta.env.VITE_API_BASE_URL + message.url
     useEffect(() => {
       const fetchData = async () => {
@@ -14,6 +16,24 @@ function PrivateMessage({message} : {message: any}) {
       }
       fetchData()
     }, [])
+    useEffect(() => {
+      const formatDescription = async () => {
+        console.log("Starting text formatting");
+        if (message.description) {
+          try {
+
+            const formattedText = await formatText(message.description);
+            console.log("ofjeowjfioejwofje")
+            message.description = formattedText; // Assuming the API returns the formatted text directly
+            setRender(prev => !prev); // Update the state to indicate that the text formatting is done
+          } catch (error) {
+            console.error("Error formatting text:", error);
+          }
+        }
+      };
+    
+      formatDescription();
+    }, []);
     return (
       <>
       

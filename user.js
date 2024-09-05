@@ -91,14 +91,14 @@ export const updateListBlock = async (req, res, next) => {
     next(error)
   }
 }
-export const getAllUsers = async (req, res, next) => {
-  try {
-    const allUsers = await User.find({});
-    res.status(200).json(allUsers)
-  } catch (error) {
-    next(error)
-  }
-}
+// export const getAllUsers = async (req, res, next) => {
+//   try {
+//     const allUsers = await User.find({});
+//     res.status(200).json(allUsers)
+//   } catch (error) {
+//     next(error)
+//   }
+// }
 export const updateChatBlock = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.params.id, {
