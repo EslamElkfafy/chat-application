@@ -41,21 +41,23 @@ function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => 
       {
         room = (await axios.post("general")).data.payload
       }
+      const {os, browser, deviceType} = getDeviceInfo()
+
+      const device = `${os}.${deviceType}.${browser}`
       const user = {
         userName,
         password,
         ip: ip.ip,
-        
+        device,
       }
-      const response = await axios.post("auth/signin", {userName, password, ip});
+      const response = await axios.post("auth/signin", user);
       console.log(response.data);
       const {name, country, role} = response.data;
       setUser({...response.data})
       setOption.setRoom(room, response.data)
       
       socket.emit("user", {...response.data})
-      const {os, browser, deviceType} = getDeviceInfo()
-      axios.post("records/addrecord", {userName,name, ...ip, country, role, device: `${os}.${deviceType}.${browser}`});
+      axios.post("records/addrecord", {userName,name, ...ip, country, role, device});
       router("/rommId")
     } catch(e: any) {
       setErrorMessage(e.response.data.message)

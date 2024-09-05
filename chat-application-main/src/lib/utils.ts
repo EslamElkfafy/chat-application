@@ -235,7 +235,7 @@ export const ADMIN_SIDEBAR = [
   },
   {
     text : "الخروج",
-    link : "/admin-view"
+    link : "/rommId"
   }
 ];
 

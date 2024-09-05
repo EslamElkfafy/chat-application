@@ -20,9 +20,11 @@ import {
   import { useUserContext } from "../context/UserContextProvider";
   import FavoriteIcon from '@mui/icons-material/Favorite';
   import BlockIcon from '@mui/icons-material/Block';
+import Status from "../lib/Status";
+import StatusRepository from "../repositories/statusRepository";
+import { useOptionContext } from "../context/OptionContextProvider";
 export default function UserModal({isOpen, onClose, userId}: {isOpen: boolean, onClose: () => void, userId: string}) {
     const { admin } = useAdminContext();
-    const like = Profile_Items[2];
     const exit_ignore = "إلغاء تجاهل";
     const igonre = Profile_Items[3];
     const block = Profile_Items[4];
@@ -30,6 +32,7 @@ export default function UserModal({isOpen, onClose, userId}: {isOpen: boolean, o
     const delete_image = Profile_Items[6];
     const upgrade = Profile_Items[7];
     const { user } = useUserContext()
+    const {option} = useOptionContext()
     const [ room, setRoom ] = useState<any>(null)
     const [ resultBlock, setResultBlock ] = useState(false)
     const [likeActive, setLikeActive] = useState(false)
@@ -58,14 +61,26 @@ export default function UserModal({isOpen, onClose, userId}: {isOpen: boolean, o
         fetchData()
     }, [isOpen])
     const handleClickLike = async () => {
-      const response = await axios.post(`users/checklikes`, {userFrom: user._id, userTo: userId});
-      if (response.data.result) {
-        axios.put(`users/updatelike/${userId}`)
-      } else {
-        toast.info("يكمن ارسال اعجاب مره واحده في الدقيقه")
+      try {
+        const response = await axios.post(`users/checklikes`, {userFrom: user._id, userTo: userId});
+        if (response.data.result) {
+          await axios.put(`users/updatelike/${userId}`)
+          const statusRecord : Status = {
+            name: "ارسال اعجاب",
+            user1Id: user._id,
+            user2Id: userId,
+            roomId: option.room._id
+          }
+          await StatusRepository.add(statusRecord)
+        } else {
+          toast.info("يمكن ارسال اعجاب مره واحده في الدقيقه")
+        }
+        setLikeActive(true)
+        // setResultLike(!resultLike)
+
+      } catch(e) {
+        console.error(e)
       }
-      setLikeActive(true)
-      // setResultLike(!resultLike)
     }
     const handleClickBlock = async () => {
       await axios.put(`users/updateblock/${user._id}`, {checkId: userId, check: resultBlock})

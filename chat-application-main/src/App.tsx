@@ -49,7 +49,7 @@ function App() {
           </Route>
         }
         <Route path=":roomId" element={<Home />} />
-        <Route path="*" exact={true} element={<Navigate to="/" replace/>}/>
+        <Route path="*" element={<Navigate to="/" replace/>}/>
       </Route>
     </Routes>
     

@@ -44,7 +44,7 @@ router.put("/chatblock/:id", updateChatBlock)
 // update InfoBlock 
 router.put("/infoblock/:id", updateInfoBlock)
 //delete user
-router.delete("/:id", verifyToken, deleteUser);
+router.delete("/:id", deleteUser);
 
 //get a user
 router.get("/find/:id", getUser);
