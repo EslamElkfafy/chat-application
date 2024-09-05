@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useUserContext } from '../context/UserContextProvider';
 import { useOptionContext } from '../context/OptionContextProvider';
 import axios from 'axios';
+import { useSocketContext } from '../context/SocketContextProvider';
 
 const ContainImg = styled.div`
     max-width: 60px;
@@ -19,32 +20,36 @@ const Img = styled.img`
 export const ContainImgOfMic = ({index, item, setListOfVoices,listOfVoices} : {index: any, item: any, setListOfVoices: any, listOfVoices: any}) => {
     const { user } = useUserContext()
     const { option, setOption } = useOptionContext()
+    const {socket} = useSocketContext()
     const [data, setdata ] = useState<Record<string, any>>({})
-    const handelClick = (index: any) => {
+    const handelClick = async (index: any) => {
         let tempList = [...listOfVoices]
-        if (listOfVoices.includes(user._id)){
-            if (index === listOfVoices.indexOf(user._id)) {
-                tempList[index] = ""
-                setOption.setMic(false)
+        if (!tempList[index] || index === listOfVoices.indexOf(user._id))
+        {
+            if (listOfVoices.includes(user._id)){
+                if (index === listOfVoices.indexOf(user._id)) {
+                    tempList[index] = ""
+                    setOption.setMic(false)
+                } else {
+                    tempList[listOfVoices.indexOf(user._id)] = ""
+                    tempList[index] = user._id
+                }
             }else {
-                tempList[listOfVoices.indexOf(user._id)] = ""
                 tempList[index] = user._id
+                setOption.setMic(true)
             }
-        }else {
-            tempList[index] = user._id
-            setOption.setMic(true)
+            await axios.put(`rooms/${option.room._id}`, {placesOfVoices: tempList})
+            setListOfVoices(tempList)
+            socket.emit("changeListOfVoices", option.room._id)
         }
-        setListOfVoices(tempList)
-        axios.put(`rooms/${option.room._id}`, {placesOfVoices: tempList})
     }
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get(`users/find/${item}`)
-            console.log
             setdata(response.data)
         }
         if (item !== ""){
-             fetchData()
+            fetchData()
         }
            
     }, [listOfVoices])

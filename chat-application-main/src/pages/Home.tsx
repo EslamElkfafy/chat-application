@@ -18,6 +18,7 @@ function Home() {
   const { socket } = useSocketContext()
   const [voice, setVoice] = useState(false)
   const [listOfVoices, setListOfVoices] = useState<String[]>([])
+  const [listOfVoicesChecker, setListOfVoicesChecker] = useState<boolean>(false)
   useEffect(()=>{
     if (!user) router('/')
     if(roomId == "admin-view" ) setAdmin(true);
@@ -35,7 +36,18 @@ function Home() {
     }
     if (option.room)
       fetchData()
-  }, [option.room])
+  }, [option.room, listOfVoicesChecker])
+  useEffect(() => {
+    if (option.room)
+    {
+      const handleSocket = (roomId: string) => {
+        if (roomId === option.room._id)
+          setListOfVoicesChecker((prev) => !prev)
+      }
+      socket.on("changeListOfVoices", handleSocket)
+      return () => socket.off("changeListOfVoices", handleSocket)
+    }
+  },[option.room])
   if (user)
     return (
       <main className="w-full h-screen bg-gray-50">

@@ -18,7 +18,7 @@ export default function RoomInfo() {
   const {option} = useOptionContext()
   const btnRef = useRef<HTMLDivElement | null>(null);
   const [onlineList, setOnlineList] = useState<string[]>([]);
-  const [inRoomUsers, setInRoomUsers] = useState<[]>()
+  const [inRoomUsers, setInRoomUsers] = useState<[]>([])
   const [text, setText] = useState("")
 
   // socket.on("online", (list : any[]) => {

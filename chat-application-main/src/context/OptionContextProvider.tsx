@@ -4,6 +4,7 @@ import {useSocketContext} from './SocketContextProvider'
 import { useListOfMessageContext } from "./ListOfMessageContext";
 import axios from "axios";
 import { useUserContext } from "./UserContextProvider";
+import RoomRepository from "../repositories/roomRepository";
 
 
 const OptionContext = createContext<any>({
@@ -81,8 +82,20 @@ const OptionContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
         setListOfMessage((previous : []) => ([...(previous.length === 21? previous.slice(1) : previous), tempMessage, helloMessage]))
       }
-      axios.put("users/" + user._id, {room: rm? rm._id : null}).then((res) => {
+      axios.put("users/" + user._id, {room: rm? rm._id : null}).then(async (res) => {
         setUser((prev: any) => ({...prev, room: rm? rm._id : null}))
+        if (room)
+        {
+          const tempList = (await RoomRepository.getById(room._id)).placesOfVoices
+          const index = tempList.findIndex((id) => id === user._id)
+          if (index >= 0)
+          {
+            tempList[index] = ""
+            setMic(false)
+            await axios.put(`rooms/${room._id}`, {placesOfVoices: tempList})
+            socket.emit("changeListOfVoices", room._id)
+          }
+        }
       })
       return setRoom(rm)
     }

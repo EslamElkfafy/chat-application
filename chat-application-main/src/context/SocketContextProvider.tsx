@@ -78,7 +78,7 @@ function SocketContextProvider({ children }: { children: React.ReactNode }) {
               fileReader.readAsDataURL(audioBlob);
               fileReader.onloadend = function () {
                   var base64String = fileReader.result;
-                  socketIo.emit("audioStream", base64String, option.room);
+                  socketIo.emit("audioStream", base64String, option.room._id);
               };
   
               mediaRecorder.start();

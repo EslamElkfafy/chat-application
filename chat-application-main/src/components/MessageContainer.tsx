@@ -15,12 +15,11 @@ function MessageContainer({voice} : {voice: Boolean}) {
       messageRef.current.scrollTop = messageRef.current.scrollHeight
   }, [listOfMessage])
   useEffect(() => {
-    if (receive) {
-      socket.on("receive-event", (message : any) => {
-        setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), message]))
-      })
-      setReceive(false)
+    const receiveEvent = (message : any) => {
+      setListOfMessage((previous : any) => ([...(previous.length === 21? previous.slice(1) : previous), message]))
     }
+    socket.on("receive-event", receiveEvent)
+    return () => socket.off("receive-event", receiveEvent)    
   }, [])
   return (
     <div className={`flex flex-col ${voice? 'h-[calc(100vh-162px)]': 'h-[calc(100vh-82px)]'} overflow-auto`} ref={messageRef}>

@@ -136,6 +136,9 @@ io.on("connection", (socket) => {
   socket.on("usersDeleteChecker", () => {
     io.emit("usersDeleteChecker")
   })
+  socket.on("changeListOfVoices", (roomId) => {
+    io.emit("changeListOfVoices", roomId)
+  })
   // for(let i = 0; i < online.length; i++) {
   //   s.add(online[i].userId)
   // }
