@@ -22,9 +22,7 @@ export const addGuest = async (req, res, next) => {
 }
 export const addAdmin = async (req, res, next) => {
   try {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
-    const newUser = new Admin({ ...req.body, password: hash });
+    const newUser = new Admin({ ...req.body});
 
     await newUser.save();
     res.status(200).send("User has been created!");
