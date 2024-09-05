@@ -190,7 +190,7 @@ export const EMOJIS = [
 
 export const ADMIN_SIDEBAR = [
   {
-    text: "تسجل",
+    text: "السجل",
     link: "/admin-view/record",
   },
   {
@@ -205,10 +205,10 @@ export const ADMIN_SIDEBAR = [
     text: "الحظر",
     link: "/admin-view/block",
   },
-  {
-    text: "الصلاحيات",
-    link: "/admin-view/permissions",
-  },
+  // {
+  //   text: "الصلاحيات",
+  //   link: "/admin-view/permissions",
+  // },
   {
     text: "فلتر",
     link: "/admin-view/filter",
@@ -221,10 +221,10 @@ export const ADMIN_SIDEBAR = [
     text: "الاختصارات",
     link: "/admin-view/abbreviations",
   },
-  {
-    text: "الاشتراكات",
-    link: "/admin-view/subscriptions",
-  },
+  // {
+  //   text: "الاشتراكات",
+  //   link: "/admin-view/subscriptions",
+  // },
   {
     text: "اداره الموقع",
     link: "/admin-view/control",
