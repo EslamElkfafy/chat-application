@@ -286,7 +286,7 @@ function WelcomaDailyMessage({ item }: { item: any }) {
     >
       <div className="flex items-center gap-x-2">
         <img
-          src={import.meta.env.VITE_API_BASE_URL + "uploads/avatar.jpg"}
+          src={import.meta.env.VITE_API_BASE_URL + "uploads/1600w-qJptouniZ0A.webp"}
           className="w-11 h-11"
         />
         <div className="flex flex-col  py-2">

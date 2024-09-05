@@ -29,6 +29,7 @@ function Filter() {
 
     try {
       await axios.delete(`filters/${word}`);
+      inputWord.current!.value = "";
       setRender((prev) => !prev);
     } catch (error) {
       console.error("Failed to delete the word:", error);
@@ -36,8 +37,8 @@ function Filter() {
   };
   const handleBanned = async () => {
     if (!inputWord.current?.value) return;
-    console.log("ف1".slice(1))
     await axios.post("filters/add", { word: inputWord.current?.value });
+    inputWord.current.value = "";
     setRender((prev) => !prev);
   };
   return (

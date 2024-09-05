@@ -19,6 +19,7 @@ const Abbreviations = () => {
   const descriptionRef = useRef<HTMLInputElement>(null);
   const [render, setRender] = useState(false);
   const [abbreviations, setAbbreviations] = useState({});
+  const [message, setMessage] = useState('');
   useEffect(() => {
     (async () => {
       const response = await axios.get("abbreviations/get");
@@ -26,10 +27,19 @@ const Abbreviations = () => {
     })();
   }, [render]);
   const handleClick = async () => {
+    if (!abbreviationRef.current?.value || !descriptionRef.current?.value) {
+      setTimeout(() => {
+        setMessage('');
+      }, 5000)
+      setMessage("الحقول الضامنة مطلوبة")
+      return;
+    }
     await axios.post("abbreviations/add", {
-      abbreviation: abbreviationRef.current?.value,
-      description: descriptionRef.current?.value,
+      abbreviation: abbreviationRef.current.value,
+      description: descriptionRef.current.value,
     });
+    abbreviationRef.current.value = "";
+    descriptionRef.current.value = "";
     setRender((prev) => !prev);
   };
   const handleDelete = async (key : string) => {
@@ -53,7 +63,7 @@ const Abbreviations = () => {
       >
         <div className="flex items-center ">اضافه</div>
       </Button>
-
+      {message}
       <TableContainer>
         <Table variant="simple">
           <Thead>
@@ -72,7 +82,7 @@ const Abbreviations = () => {
           <Tbody>
             {Object.entries(abbreviations).map(([key, value]: [any, any]) => {
               return (
-                <Tr className="bg-green-50">
+                <Tr key={key} className="bg-green-50">
                   <Td border={"1px solid gray"}>{key}</Td>
                   <Td border={"1px solid gray"}>
                     {value}

@@ -9,6 +9,7 @@ function Control() {
   const uploudRef = useRef<HTMLInputElement>(null);
   const [render, setRender] = useState(false);
   const [emojis, setEmojis] = useState<any[]>([]);
+  const [message, setMessage] = useState("");
   useEffect(() => {
     (async () => {
       try {
@@ -22,8 +23,16 @@ function Control() {
   }, [render])
   const handleUpload = async () => {
     if (!uploudRef.current?.files) return;
+    setTimeout(() => {
+      setMessage("");
+    }, 5000)
+    const file = uploudRef.current.files[0];
+    if (file.type !== "image/gif") {
+      setMessage("يجب ان تكون نوع الصوره gif");
+      return;
+    }
     const formData = new FormData();
-    formData.append('file', uploudRef.current?.files[0]);
+    formData.append('file', file);
     try {
       const response = await fetch(import.meta.env.VITE_API_BASE_URL + 'upload', {
         method: 'POST',
@@ -33,15 +42,17 @@ function Control() {
       if (response.ok) {
         console.log('File uploaded successfully');
         const data = await response.json()
-
         // Access the filename from the response
         await axios.post("emojis/add", {urlEmoji: data.path})
+        setRender(prev =>!prev);
       } else {
         console.error('Failed to upload file');
+        setMessage("فشل الرفع")
         // Handle failure
       }
     } catch (error) {
       console.error('Error:', error);
+      setMessage("حاول مره اخري")
       // Handle error
     }
   }
@@ -79,9 +90,10 @@ function Control() {
               </p>
               <PlusButton ref={uploudRef} onChange={handleUpload}/>
             </label>
+            {message}
             <div className="flex flex-wrap gap-2 items-center w-[400px]">
               {emojis.map(([abbreviation, urlEmoji]) => (
-                <div className="flex items-center border p-1 rounded-md">
+                <div key={abbreviation} className="flex items-center border p-1 rounded-md">
                   <img src={import.meta.env.VITE_API_BASE_URL + urlEmoji } alt="" className="h-5"/>
                   <X className="bg-red-600 p-1 rounded-md text-white cursor-pointer ml-2" onClick={() => handleDelete(abbreviation)}  />
                 </div>

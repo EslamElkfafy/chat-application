@@ -31,8 +31,8 @@ function App() {
       <Route path="/"  >
         <Route index element={<AuthPage />} />
         {
-          user && 
-          user.role === 'admin' && 
+          // user && 
+          // user.role === 'admin' && 
           <Route path="admin-view" element= {<AdminLayout />} >
             <Route index  element = {<Navigate to="/admin-view/record" replace/>} />
             <Route path="record" element= {<Records />} />

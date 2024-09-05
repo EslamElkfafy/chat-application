@@ -19,16 +19,24 @@ const Messages = () => {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [render, setRender] = useState<boolean>(false);
+  const [message, setMessage] = useState("")
   const handleClick = async (type: any) => {
+    if (!titleRef.current?.value || !descriptionRef.current?.value) {
+      setTimeout(() => {
+        setMessage("");
+      }, 5000)
+      setMessage("الحقول الضامنة مطلوبة");
+      return;
+    } 
     const message = {
-      title: titleRef.current?.value,
-      description: descriptionRef.current?.value,
+      title: titleRef.current.value,
+      description: descriptionRef.current.value,
       type: type,
       ...(type === "daily" ? { date: Date.now() } : {}),
     };
     await axios.post("welcomedailymessages/addmessage", { message });
-    titleRef.current!.value = "";
-    descriptionRef.current!.value = "";
+    titleRef.current.value = "";
+    descriptionRef.current.value = "";
     setRender(prev => !prev);
   };
   useEffect(() => {
@@ -59,6 +67,7 @@ const Messages = () => {
       >
         <div className="flex items-center ">اضافه الي الرسائل اليوميه</div>
       </Button>
+      {message}
       <TableContainer>
         <Table variant="simple">
           <Thead>
