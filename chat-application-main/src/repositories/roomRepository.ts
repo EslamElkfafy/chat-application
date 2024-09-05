@@ -11,7 +11,7 @@ export default class RoomRepository {
         return response.data.payload
     }
     static async getById(id: string) : Promise<Room> {
-        const response = await axios.get("rooms/" + id)
+        const response = await axios.get("rooms/" + id);
         response.data.payload.userName = (await UserRepository.getById(response.data.payload.userId)).userName
         return response.data.payload
     }
