@@ -13,3 +13,7 @@ chat-application-main/.vscode/*
 server/uploads/*
 server/node_modules
 server/.env
+server/abbreviations.json
+server/emojis.json
+server/filter.json
+server/welcomedailymessages.json
