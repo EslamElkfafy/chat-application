@@ -8,8 +8,6 @@ chat-application-main/lerna-debug.log*
 chat-application-main/node_modules
 chat-application-main/.env
 chat-application-main/.vscode/*
-
-
 server/uploads/*
 server/node_modules
 server/.env
