@@ -24,6 +24,9 @@ import { env } from "process";
 import Room from "./models/Room.js";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import { promises as fs } from "fs";
+import initFiles from "./initFiles.js"
+
+initFiles()
 
 const app = express();
 const server = http.createServer(app);
