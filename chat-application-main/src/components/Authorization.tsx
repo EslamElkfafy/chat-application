@@ -58,8 +58,7 @@ function Authorization({setErrorMessage} : {setErrorMessage: (input: string) => 
       
       socket.emit("user", {...response.data})
       socket.emit("sent-welcome");
-      const {os, browser, deviceType} = getDeviceInfo()
-      axios.post("records/addrecord", {userName,name, ...ip, country, role, device: `${os}.${deviceType}.${browser}`});
+      axios.post("records/addrecord", {userName,name, ...ip, country, role, device});
       router("/rommId")
     } catch(e: any) {
       setErrorMessage(e.response.data.message)
