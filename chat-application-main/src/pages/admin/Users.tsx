@@ -15,6 +15,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../../lib/User"
 import { useSocketContext } from "../../context/SocketContextProvider";
+import { timeFormmater } from "../../lib/formatTime";
 
 function Users() {
   const [users, setUsers] : [User[], Dispatch<SetStateAction<User[]>>]= useState<User[]>([])
@@ -22,32 +23,7 @@ function Users() {
   const [usersDeleteChecker, setUserDeleteChecker] = useState<boolean>(false)
   const {socket} = useSocketContext()
 
-  const timeFormmater : (firstDate: Date, secondDate: Date) => string = (firstDate, secondDate) => {
-    let diff = firstDate.getTime() - secondDate.getTime()
-    let days = 0, hours = 0, minutes = 0, seconds = 0
-    if (diff > (1000 * 60 * 60 * 24))
-    {
-      days = Math.floor(diff / (1000 * 60 * 60 * 24))
-      diff = diff - days * (1000 * 60 * 60 * 24)
-    }
-    if (diff > (1000 * 60 * 60))
-    {
-      hours = Math.floor(diff / (1000 * 60 * 60))
-      diff = diff - hours * (1000 * 60 * 60)
-    }
-    if (diff > (1000 * 60))
-    {
-      minutes = Math.floor(diff / (1000 * 60))
-      diff = diff - minutes * (1000 * 60)
-    }
-    if (diff > (1000))
-    {
-      seconds = Math.floor(diff / 1000)
-      diff = diff - seconds * (1000)
-    }
-    return `${days}D ${hours}H ${minutes}M ${seconds}S`
-  }
-
+  
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get("users/findall")
@@ -63,6 +39,7 @@ function Users() {
     socket.on("usersDeleteChecker", handleSocket)
     return () => socket.off("usersDeleteChecker", handleSocket)
   },[])
+  console.log(users)
   return (
     <div className="flex flex-col gap-y-3 p-2">
       <Input size={"sm"} placeholder="البحث..." value={searchString} onChange={(e) => setSearchString(e.target.value)}/>

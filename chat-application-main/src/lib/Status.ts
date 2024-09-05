@@ -7,7 +7,7 @@ type Status = {
     user2Name?: string
     roomId: string
     roomName?: string
-    createdAt?: Date,
+    createdAt?: string,
 }
 
 export default Status

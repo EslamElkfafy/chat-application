@@ -10,6 +10,7 @@ import {
 import StatusType from "../../lib/Status";
 import { useEffect, useState } from "react";
 import StatusRepository from "../../repositories/statusRepository";
+import { timeFormmater } from "../../lib/formatTime";
 
 
 function Status() {
@@ -63,7 +64,7 @@ function Status() {
                       {status.roomName}
                     </Td>
                     <Td border={"1px solid gray"}>
-                      00:00:02:25
+                    {timeFormmater(new Date(Date.now()), new Date(status.createdAt!))}
                     </Td>
                   </Tr>
                   )
