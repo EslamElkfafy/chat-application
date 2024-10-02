@@ -366,6 +366,14 @@ app.delete("/api/emojis/:key", async (req, res) => {
   });
   res.status(200).json({ message: "Abbreviation deleted successfully" });
 });
+
+//Color Pallete
+app.get("/api/colorpalette", async (req, res) => {
+  const dataColorPallete = await readJsonFile(
+    path.resolve("./colorPalette.json")
+  );
+  res.status(200).json(dataColorPallete);
+});
 server.listen(env.PORT, "0.0.0.0", () => {
   connect();
   console.log("Connected to Server " + env.PORT);

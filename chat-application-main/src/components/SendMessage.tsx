@@ -6,6 +6,7 @@ import { useUserContext } from "../context/UserContextProvider.tsx";
 import { useSocketContext } from "../context/SocketContextProvider.tsx";
 import { useListOfMessageContext } from "../context/ListOfMessageContext.tsx";
 import { useOptionContext } from "../context/OptionContextProvider.tsx";
+import { getColor } from "../lib/getColor.ts";
 
 
 
@@ -47,20 +48,21 @@ function SendMessage() {
       setOption.setRoom(null, user)
     }
   return (
-    <div className="flex gap-x-2 w-full items-center justify-between px-1">
-      <div className="w-8 h-8 bg-blue-900 text-white p-1 flex justify-center items-center rounded-md cursor-pointer" onClick={handleClickLogout}>
+    <div className="flex gap-x-2 w-full items-center justify-between p-1" style={{backgroundColor: getColor("backgroundItems")}}>
+      <div className="w-8 h-8 text-white p-1 flex justify-center items-center cursor-pointer" style={{backgroundColor: getColor('mainButton')}} onClick={handleClickLogout}>
         <LogOut size={"20px"} />
       </div>
       <EmojiModule text={message} setText={setMessage} />
       <Input
         size={"sm"}
-        borderRadius={"5px"}
         value={message}
         onChange={(e) => setMessage(e.currentTarget.value)}
         onKeyDown={handleKeyDown}
+        className="!bg-white"
+        placeholder="أكتب رسالتك..."
       />
-      <div onClick={handleClick} className="h-8 px-1 py-2 flex justify-center items-center bg-blue-900 rounded-md text-white  cursor-pointer">
-        <Send size={"30px"} />
+      <div onClick={handleClick} className="h-8 px-1 py-2 flex justify-center items-cente text-white  cursor-pointer" style={{backgroundColor:getColor("mainButton")}}>
+        <Send size={"20px"} />
         إرسال
       </div>
     </div>

@@ -9,12 +9,13 @@ import UserContextProvider from "./context/UserContextProvider.tsx";
 import SocketContextProvider from "./context/SocketContextProvider.tsx";
 import OptionContextProvider from "./context/OptionContextProvider.tsx";
 import ListOfMessageContextProvider from "./context/ListOfMessageContext.tsx";
+import ColorPaletteContextProvider from "./context/ColorContextProvider.tsx";
 import { ToastContainer } from "react-toastify";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <ListOfMessageContextProvider>
-
+        <ColorPaletteContextProvider>
         <UserContextProvider>
           <OptionContextProvider>
             <SocketContextProvider>
@@ -36,6 +37,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </SocketContextProvider>
           </OptionContextProvider>
         </UserContextProvider>
+        </ColorPaletteContextProvider>
       </ListOfMessageContextProvider>
     </BrowserRouter>
 );

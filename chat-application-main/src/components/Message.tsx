@@ -8,6 +8,7 @@ import { useUserContext } from "../context/UserContextProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { formatText } from "../lib/formatText";
+import { getColor } from "../lib/getColor";
 
 function SigninMessage({ item }: { item: any }) {
   const { setOption } = useOptionContext();
@@ -16,19 +17,19 @@ function SigninMessage({ item }: { item: any }) {
   return (
     <>
       <div
-        className="flex justify-between items-center w-full px-1"
+        className="flex justify-between items-center w-full"
         style={{
-          borderBottom: "1px solid #bbaeae",
-          backgroundColor: "rgba(250,238,236,255)",
+          borderBottom: "1px solid lavender",
+          backgroundColor: getColor("roomMessagesBackground"),
         }}
       >
         <div className="flex items-center gap-x-2">
           <img
             src={import.meta.env.VITE_API_BASE_URL + item.img}
-            className="w-11 h-11"
+            className="w-14 h-14 object-cover"
             onClick={onOpen}
           />
-          <div className="flex flex-col  py-2">
+          <div className="flex flex-col ">
             <p
               className={"font-bold"}
               style={{
@@ -41,7 +42,8 @@ function SigninMessage({ item }: { item: any }) {
             </p>
             <p>
               <Button
-                color="blue"
+                style={{color: getColor("textOfMainButton"), backgroundColor: getColor("mainButton")}}
+                className="!rounded-none"
                 size="sm"
                 onClick={() => setOption.setRoom(item.room, user)}
               >
@@ -63,19 +65,19 @@ function RejoinMessage({ item }: { item: any }) {
   return (
     <>
       <div
-        className="flex justify-between items-center w-full px-1"
+        className="flex justify-between items-center w-full"
         style={{
-          borderBottom: "1px solid #bbaeae",
-          backgroundColor: "rgba(250,238,236,255)",
+          borderBottom: "1px solid lavender",
+          backgroundColor: getColor("roomMessagesBackground"),
         }}
       >
         <div className="flex items-center gap-x-2">
           <img
             src={import.meta.env.VITE_API_BASE_URL + item.img}
-            className="w-11 h-11"
+            className="w-14 h-14 object-cover"
             onClick={onOpen}
           />
-          <div className="flex flex-col  py-2">
+          <div className="flex flex-col ">
             <p
               className={"font-bold"}
               style={{
@@ -107,18 +109,18 @@ function RejoinMessage({ item }: { item: any }) {
 function SignoutMessage({ item }: { item: any }) {
   return (
     <div
-      className="flex justify-between items-center w-full px-1"
+      className="flex justify-between items-center w-full"
       style={{
-        borderBottom: "1px solid #bbaeae",
-        backgroundColor: "rgba(250,238,236,255)",
+        borderBottom: "1px solid lavender",
+        backgroundColor: getColor("roomMessagesBackground"),
       }}
     >
       <div className="flex items-center gap-x-2">
         <img
           src={import.meta.env.VITE_API_BASE_URL + item.img}
-          className="w-11 h-11"
+          className="w-14 h-14 object-cover"
         />
-        <div className="flex flex-col  py-2">
+        <div className="flex flex-col ">
           <p
             className={"font-bold"}
             style={{
@@ -140,18 +142,18 @@ function SignoutMessage({ item }: { item: any }) {
 function LogoutMessage({ item }: { item: any }) {
   return (
     <div
-      className="flex justify-between items-center w-full px-1"
+      className="flex justify-between items-center w-full"
       style={{
-        borderBottom: "1px solid #bbaeae",
-        backgroundColor: "rgba(250,238,236,255)",
+        borderBottom: "1px solid lavender",
+        backgroundColor: getColor("roomMessagesBackground"),
       }}
     >
       <div className="flex items-center gap-x-2">
         <img
           src={import.meta.env.VITE_API_BASE_URL + item.img}
-          className="w-11 h-11"
+          className="w-14 h-14 object-cover"
         />
-        <div className="flex flex-col  py-2">
+        <div className="flex flex-col ">
           <p
             className={"font-bold"}
             style={{
@@ -174,18 +176,18 @@ function HelloMessage({ item }: { item: any }) {
   if (item.description)
     return (
       <div
-        className="flex justify-between items-center w-full px-1"
+        className="flex justify-between items-center w-full"
         style={{
-          borderBottom: "1px solid #bbaeae",
-          backgroundColor: "rgba(250,238,236,255)",
+          borderBottom: "1px solid lavender",
+          backgroundColor: getColor("roomMessagesBackground"),
         }}
       >
         <div className="flex items-center gap-x-2">
           <img
             src={import.meta.env.VITE_API_BASE_URL + item.img}
-            className="w-11 h-11"
+            className="w-14 h-14 object-cover"
           />
-          <div className="flex flex-col  py-2">
+          <div className="flex flex-col ">
             <p
               className={"font-bold"}
               style={{
@@ -210,18 +212,18 @@ function HelloMessage({ item }: { item: any }) {
 function AdMessage({ item }: { item: any }) {
   return (
     <div
-      className="flex justify-between items-center w-full px-1"
+      className="flex justify-between items-center w-full"
       style={{
-        borderBottom: "1px solid #bbaeae",
-        backgroundColor: "rgba(230,230,250 ,255)",
+        borderBottom: "1px solid lavender",
+        backgroundColor: getColor("ADMessagesBackground"),
       }}
     >
       <div className="flex items-center gap-x-2">
         <img
           src={import.meta.env.VITE_API_BASE_URL + "uploads/adv.jpg"}
-          className="w-11 h-11"
+          className="w-14 h-14 object-cover"
         />
-        <div className="flex flex-col  py-2">
+        <div className="flex flex-col ">
           <p
             className={"font-bold"}
             style={{
@@ -249,16 +251,16 @@ function Default({ item }: { item: any }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <div
-      className="flex justify-between items-center w-full px-1"
-      style={{ borderBottom: "1px solid #bbaeae" }}
+      className="flex justify-between items-center w-full"
+      style={{ borderBottom: "1px solid lavender" }}
     >
       <div className="flex items-center gap-x-2">
         <img
           src={import.meta.env.VITE_API_BASE_URL + item.img}
-          className="w-11 h-11"
+          className="w-14 h-14 object-cover"
           onClick={onOpen}
         />
-        <div className="flex flex-col  py-2">
+        <div className="flex flex-col ">
           <p
             className={"font-bold"}
             style={{
@@ -281,15 +283,15 @@ function Default({ item }: { item: any }) {
 function WelcomaDailyMessage({ item }: { item: any }) {
   return (
     <div
-      className="flex justify-between items-center w-full px-1"
-      style={{ borderBottom: "1px solid #bbaeae", backgroundColor: "#e6ecfa" }}
+      className="flex justify-between items-center w-full"
+      style={{ borderBottom: "1px solid lavender", backgroundColor: getColor("ADMessagesBackground") }}
     >
       <div className="flex items-center gap-x-2">
         <img
           src={import.meta.env.VITE_API_BASE_URL + "uploads/1600w-qJptouniZ0A.webp"}
-          className="w-11 h-11"
+          className="w-14 h-14 object-cover"
         />
-        <div className="flex flex-col  py-2">
+        <div className="flex flex-col ">
           <p
             className={"font-bold"}
             style={{

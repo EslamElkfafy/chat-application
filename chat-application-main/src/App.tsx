@@ -24,8 +24,6 @@ import Abbreviations from "./pages/admin/Abbreviations";
 import Subscriptions from "./pages/admin/Subscriptions";
 
 function App() {
-  const {user} = useUserContext()
-
   return (
     <Routes>
       <Route path="/"  >

@@ -5,8 +5,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { EMOJIS } from "../lib/utils";
-import { Smile } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 type TProps = {
@@ -15,22 +14,52 @@ type TProps = {
 };
 
 function EmojiModule({ setText, text }: TProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [emojisIsOpen, setEmojisIsOpen] = useState(false);
   const [emojis, setEmojis] = useState<any[]>([]);
+  const iconEmojisRef = useRef<HTMLImageElement | null>(null);
   useEffect(() => {
     (async () => {
       const response = await axios.get("readjsonfile/emojis");
       setEmojis(Object.entries(response.data));
     })();
+    document.addEventListener("click",  handleOutSideClick);
+    return () => {
+      document.removeEventListener("click", handleOutSideClick);
+    }
   }, []);
+  const handleOutSideClick = (event: MouseEvent) => {
+    if (iconEmojisRef.current?.contains(event.target as SVGElement)) {
+      setEmojisIsOpen(true);
+    } else {
+      setEmojisIsOpen(false);
+    }
+  }
+
   return (
-    <>
-      <Smile
-        size={"30px"}
-        className="text-yellow-500 cursor-pointer"
-        onClick={onOpen}
+    <div className="relative">
+      <img
+        ref={iconEmojisRef}
+        className="text-yellow-500 cursor-pointer w-[30px]"
+        src="1725456911111.gif"
       />
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <div  className={`absolute left-0 -top-[300px] border border-black z-10 w-[300px] h-[300px] flex flex-wrap gap-x-1 p-2 content-start overflow-auto bg-white ${!emojisIsOpen ? "hidden" : ""}`}>
+      {emojis.map(([abbreviation, urlEmoji]) => (
+              <div
+                className="cursor-pointer"
+                key={abbreviation}
+                onClick={() => {
+                  setText(text + " " + abbreviation + " ");
+                }}
+              >
+                <img
+                  src={import.meta.env.VITE_API_BASE_URL + urlEmoji}
+                  alt=""
+                  className="h-5 inline-block"
+                />
+              </div>
+            ))}
+      </div>
+      {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent width={"300px"}>
           <div className="w-full h-[300px] flex flex-wrap gap-x-1 p-2 content-start overflow-auto">
@@ -52,8 +81,8 @@ function EmojiModule({ setText, text }: TProps) {
             ))}
           </div>
         </ModalContent>
-      </Modal>
-    </>
+      </Modal> */}
+    </div>
   );
 }
 
