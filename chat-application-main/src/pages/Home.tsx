@@ -38,7 +38,7 @@ function Home() {
   }, [option.room])
   if (user)
     return (
-      <main className="w-full h-screen bg-gray-50">
+      <main className="w-full h-screen bg-gray-50 relative">
         {voice === true && <HeaderOfVoices listOfVoices={listOfVoices} setListOfVoices={setListOfVoices}/>}
         <MessageContainer voice={voice}/>
         <SendMessage/>

@@ -12,7 +12,7 @@ import {
   IconButton,
   InputRightAddon,
 } from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import { Plus, X, MessagesSquare } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -22,19 +22,19 @@ import { useOptionContext } from "../../context/OptionContextProvider";
 import { useUserContext } from "../../context/UserContextProvider";
 import { useSocketContext } from "../../context/SocketContextProvider";
 function CreateRoomModule() {
-  const [ name, setName] = useState("");
-  const [ description, setDescription ] = useState("")
-  const [helloMessage, setHelloMessage] = useState("")
-  const [password, setPaswword] = useState("")
-  const [likes, setlikes] = useState(0)
-  const [visitors, setVisitors] = useState(0)
-  const [mics, setMics] = useState(0)
-  const [voiceActive, setVoiceActive] = useState(true)
-  const [withoutNotification, setWithoutNotification] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const {user} = useUserContext()
-  const {socket} = useSocketContext()
-  const {option} = useOptionContext()
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [helloMessage, setHelloMessage] = useState("");
+  const [password, setPaswword] = useState("");
+  const [likes, setlikes] = useState(0);
+  const [visitors, setVisitors] = useState(0);
+  const [mics, setMics] = useState(0);
+  const [voiceActive, setVoiceActive] = useState(true);
+  const [withoutNotification, setWithoutNotification] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { user } = useUserContext();
+  const { socket } = useSocketContext();
+  const { option } = useOptionContext();
   const onCreateRoom = async () => {
     const room = {
       name,
@@ -46,21 +46,24 @@ function CreateRoomModule() {
       mics,
       voiceActive,
       withoutNotification,
-      userId: user._id
+      userId: user._id,
+    };
+    try {
+      await axios.post("/rooms", room);
+      toast.success("تم انشاء الغرفة بنجاح", option.toastOptions);
+      socket.emit("roomsDeleteChecker");
+      onClose();
+    } catch (e: any) {
+      toast.error(
+        <ul>
+          {e.response.data.payload.map((error: string) => (
+            <li key={error}>{error}</li>
+          ))}
+        </ul>,
+        option.toastOptions
+      );
     }
-    try
-    {
-      await axios.post("/rooms", room)
-      toast.success("تم انشاء الغرفة بنجاح", option.toastOptions)
-      socket.emit("roomsDeleteChecker")
-      onClose()
-    } catch(e: any) {
-
-      toast.error(<ul>
-        {e.response.data.payload.map((error: string) => <li key={error}>{error}</li>)}
-      </ul>, option.toastOptions)
-    }
-  }
+  };
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -91,41 +94,48 @@ function CreateRoomModule() {
           </div>
           <div className="flex flex-col py-1 px-2 gap-y-1" dir="rtl">
             <Stack>
-
               <InputGroup size={"sm"}>
-                <InputRightAddon >عنوان الغرفة</InputRightAddon>
+                <InputRightAddon>عنوان الغرفة</InputRightAddon>
                 <Input
                   value={name}
-                  onChange={(e) => {setName(e.target.value)}}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
                 />
               </InputGroup>
               <InputGroup size={"sm"}>
                 <InputRightAddon>الوصف</InputRightAddon>
                 <Input
                   value={description}
-                  onChange={(e) => {setDescription(e.target.value)}}
-                  />
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
               </InputGroup>
               <InputGroup size={"sm"}>
                 <InputRightAddon>رسالة الترحيب</InputRightAddon>
                 <Input
                   value={helloMessage}
-                  onChange={(e) => {setHelloMessage(e.target.value)}}
+                  onChange={(e) => {
+                    setHelloMessage(e.target.value);
+                  }}
                 />
               </InputGroup>
               <InputGroup size={"sm"}>
                 <InputRightAddon>كلمة المرور</InputRightAddon>
                 <Input
                   value={password}
-                  onChange={(e) => {setPaswword(e.target.value)}}
-                  type={showPassword? "text" : "password"}
+                  onChange={(e) => {
+                    setPaswword(e.target.value);
+                  }}
+                  type={showPassword ? "text" : "password"}
                 />
                 <InputLeftAddon>
-                  <IconButton 
+                  <IconButton
                     aria-label="Show Password"
-                    size='sm'
+                    size="sm"
                     onClick={() => setShowPassword(!showPassword)}
-                    icon={showPassword? <ViewOffIcon /> : <ViewIcon/>} 
+                    icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
                   />
                 </InputLeftAddon>
               </InputGroup>
@@ -135,7 +145,9 @@ function CreateRoomModule() {
                   dir="rtl"
                   type="number"
                   value={likes}
-                  onChange={(e) => {setlikes(Number(e.target.value))}}
+                  onChange={(e) => {
+                    setlikes(Number(e.target.value));
+                  }}
                 />
               </InputGroup>
               <InputGroup size={"sm"}>
@@ -143,7 +155,9 @@ function CreateRoomModule() {
                 <Input
                   type="number"
                   value={visitors}
-                  onChange={(e) => {setVisitors(Number(e.target.value))}}
+                  onChange={(e) => {
+                    setVisitors(Number(e.target.value));
+                  }}
                 />
               </InputGroup>
               {/* <InputGroup size={"sm"}>
@@ -158,15 +172,24 @@ function CreateRoomModule() {
             <div className="flex mt-5 flex-col gap-y-2 ">
               <Checkbox
                 isChecked={voiceActive}
-                onChange={(e)=>{setVoiceActive(e.target.checked)}}
-              > {"تفعيل الصوتية "}</Checkbox>
+                onChange={(e) => {
+                  setVoiceActive(e.target.checked);
+                }}
+              >
+                {" "}
+                {"تفعيل الصوتية "}
+              </Checkbox>
               <Checkbox
                 isChecked={withoutNotification}
-                onChange={(e)=>{setWithoutNotification(e.target.checked)}}
-              >{"بدون إشعارات الدخول"}</Checkbox>
+                onChange={(e) => {
+                  setWithoutNotification(e.target.checked);
+                }}
+              >
+                {"بدون إشعارات الدخول"}
+              </Checkbox>
             </div>
             <Button
-                mt={"10px"}
+              mt={"10px"}
               leftIcon={<Plus className="text-blue-700" />}
               _hover={{}}
               color={"rgb(29 78 216)"}

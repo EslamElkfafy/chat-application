@@ -11,16 +11,16 @@ function UserOnlineContainer({ onClick, user }: { onClick?: () => void, user: an
   return (
     
     <div
-      className="flex justify-between items-center px-2 border cursor-pointer "
+      className="flex justify-between items-center border cursor-pointer bg-[#fafafa]"
       onClick={() => {
         if (onClick) onClick();
       }}
     >
       <div className="flex items-center gap-x-1">
-        <img src={import.meta.env.VITE_API_BASE_URL + user.img} className="w-9 h-9" style={imgStyle}/>
-        <div className="flex flex-col justify-between py-2">
+        <img src={import.meta.env.VITE_API_BASE_URL + user.img} className="w-14 min-h-12 max-h-16 object-cover" style={imgStyle}/>
+        <div className="flex flex-col justify-between">
           <p style={{color: user.nameColor, backgroundColor: user.backgroundColor}}>{user.name}</p>
-          <p style={{color: user.fontColor}}>{user.state}</p>
+          <p style={{color: "#888888"}}>{user.state}</p>
         </div>
       </div>
       <Flags countryCode={user.country} svg />

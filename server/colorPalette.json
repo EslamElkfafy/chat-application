@@ -1,0 +1,72 @@
+{
+    "backgroundItems" : {
+        "color": "#cccccc",
+        "arabic": "خلفية العناصر"
+    },
+    "mainColor": {
+        "color": "#39536E",
+        "arabic": "اللون الاساسي للموقع"
+    },
+    "textOfMainColor": {
+        "color": "#ffffff",
+        "arabic": "اللون النصي للموقع"
+    },
+    "authorizationActive": {
+        "color": "#555555",
+        "arabic": "لون خط التسجيل النشط"
+    },
+    "authorizationUnactive": {
+        "color": "#337ab7",
+        "arabic": "لون خط التسجيل الغير نشط"
+    }, 
+    "mainButton": {
+        "color": "#2B3E52",
+        "arabic": "الزر الرئيسي"
+    },
+    "textOfMainButton": {
+        "color": "#ffffff",
+        "arabic": "النص للزر الرئيسي"
+    }, 
+    "onlineColor": {
+        "color": "#5CB85C",
+        "arabic": "لون الاون لاين"
+    },
+    "textOfOnlineColor": {
+        "color": "#ffffff",
+        "arabic": "النص للاون لاين"
+    },
+    "authorizationBackground": {
+        "color": "#40404f",
+        "arabic": "لون خلفية صفحه التسجيل"
+    }, 
+    "ADMessagesBackground": {
+        "color": "#e6ecfa",
+        "arabic": "لون خلفية الرسائل الاتوماتيكيه"
+    },
+    "roomMessagesBackground": {
+        "color": "#faf0e6",
+        "arabic": "لون خلفية الرسائل المرتبطه بالغرف"
+    },
+    "defaultMessagesBackground": {
+        "color": "#2b3e52",
+        "arabic": "لون خلفية الرسائل الافتراضيه"
+    },
+    "closeButton": {
+        "color": "#D9534F",
+        "arabic": "الزر الاغلاق"
+    },
+    "textOfCloseButton": {
+        "color": "#ffffff",
+        "arabic": "النص للزر الاغلاق"
+    }, 
+    "settingsBackground": {
+        "color": "#ffffff",
+        "arabic": "لون خلفية صفحه الضبط"
+    }, 
+    "textOfSettingsBackground": {
+        "color": "#333333",
+        "arabic": "لون خط خلفيه صفحه الضبط"
+    }
+
+
+}

@@ -17,3 +17,12 @@ position: absolute;
 top: 50%;
 right: 50%;
 } */
+body * {
+    font-family: serif;
+    font-weight: bold;
+    text-shadow: none !important;
+    font-size: 15.2px !important;
+    line-height: 1.4 !important;
+    font-weight: 700 !important;
+    text-shadow: none !important;
+}
