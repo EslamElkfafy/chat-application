@@ -6,8 +6,8 @@ import { LogOut } from "lucide-react";
 import { Megaphone } from "lucide-react";
 import { useUserContext } from "../context/UserContextProvider";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { formatText } from "../lib/formatText";
+import { ReactElement, useEffect, useState } from "react";
+import FormatText from "../lib/formatText";
 import { getColor } from "../lib/getColor";
 
 function SigninMessage({ item }: { item: any }) {
@@ -310,14 +310,19 @@ function WelcomaDailyMessage({ item }: { item: any }) {
   );
 }
 
-function Message({ item }: { item: any }) {
+function Message({ item }: { item: {
+  description: string | ReactElement,
+  type: string
+} }) {
   const [render, setRender] = useState(false)
   useEffect(() => {
     const formatDescription = async () => {
       console.log("Starting text formatting");
       if (item.description) {
         try {
-          const formattedText = await formatText(item.description);
+          let formattedText: string | ReactElement = '';
+          if (typeof item.description === 'string')
+            formattedText = <FormatText text={item.description} />;
           console.log("ofjeowjfioejwofje")
           item.description = formattedText; // Assuming the API returns the formatted text directly
           setRender(prev => !prev); // Update the state to indicate that the text formatting is done

@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import Post from "../Post";
 import Poster from "../_elements/Poster";
 import axios from "axios";
-import { formatText } from "../../lib/formatText";
+import FormatText from "../../lib/formatText";
 import { getColor } from "../../lib/getColor";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -25,14 +25,13 @@ export default function Blogs({controlBarRef,blogsIsOpen , setBlogsIsOpen, reset
     const controller = new AbortController(); // Create an AbortController instance
     const { signal } = controller; // Get the signal from the controller
     const fetchData = async () => {
-      const response = await axios.get("posts/allposts", { signal });
-      await Promise.all(
-        response.data.map(async (post: any) => {
-          post.text = await formatText(post.text);
-        })
-      );
-      setListOfPosts(response.data);
-    };
+      const response = await axios.get("posts/allposts", {signal});
+      response.data.map( (post: any) => {
+        
+        post.text = <FormatText text={post.text} />
+      })
+      setListOfPosts(response.data)
+    }
 
     const interval = setInterval(() => {
       fetchData();
