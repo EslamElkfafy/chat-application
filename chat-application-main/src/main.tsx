@@ -8,6 +8,7 @@ import AdminContextProvider from "./context/AdminContextProvider.tsx";
 import UserContextProvider from "./context/UserContextProvider.tsx";
 import SocketContextProvider from "./context/SocketContextProvider.tsx";
 import OptionContextProvider from "./context/OptionContextProvider.tsx";
+import FormatContextProvider from "./context/FormatContextProvider.tsx";
 import ListOfMessageContextProvider from "./context/ListOfMessageContext.tsx";
 import { ToastContainer } from "react-toastify";
 
@@ -20,17 +21,19 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <SocketContextProvider>
               <AdminContextProvider>
                 <SizeContextProvider>
-                  <ChakraProvider>
-                    <ToastContainer autoClose={false} closeOnClick={true}/>
-                    <ToastContainer 
-                      stacked 
-                      containerId="stacked" 
-                      autoClose={false} 
-                      closeOnClick={true}
-                      position="bottom-left"
-                    />
-                    <App />
-                  </ChakraProvider>
+                  <FormatContextProvider>
+                    <ChakraProvider>
+                      <ToastContainer autoClose={false} closeOnClick={true}/>
+                      <ToastContainer 
+                        stacked 
+                        containerId="stacked" 
+                        autoClose={false} 
+                        closeOnClick={true}
+                        position="bottom-left"
+                      />
+                      <App />
+                    </ChakraProvider>
+                  </FormatContextProvider>
                 </SizeContextProvider>
               </AdminContextProvider>
             </SocketContextProvider>

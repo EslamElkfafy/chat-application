@@ -1,19 +1,16 @@
-import axios from "axios";
 import React, { ReactElement } from "react";
+import { useFormatContext } from "../context/FormatContextProvider";
 
-export const formatText = async (text: string) => {
+
+export default function FormatText({text}: {text: string})  {
   const wordsList = text.split(" ");
-  const formattedText: React.ReactNode[] = await Promise.all(
-    wordsList.map(async (word) => {
+  const {abbreviations, filters, emojis} = useFormatContext()
+  const formattedText: React.ReactNode[] =
+    wordsList.map((word) => {
       let formattedWord: ReactElement | string = word;
-      const dataAbbreviations: Record<string, string> = (
-        await axios.get("readjsonfile/abbreviations")
-      ).data;
-      const dataFilter: string[] = (await axios.get("readjsonfile/filter"))
-        .data;
-      const dataEmoji: Record<string, string> = (
-        await axios.get("readjsonfile/emojis")
-      ).data;
+      const dataAbbreviations: Record<string, string> = abbreviations;
+      const dataFilter: string[] = filters;
+      const dataEmoji: Record<string, string> = emojis;
       if (dataFilter.includes(word)) {
         formattedWord = "*".repeat(formattedWord.length);
       }
@@ -31,7 +28,7 @@ export const formatText = async (text: string) => {
       }
       return formattedWord;
     })
-  );
+  ;
   return (
     <React.Fragment>
       {formattedText.reduce((prev, curr, index) => [

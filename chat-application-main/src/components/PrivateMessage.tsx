@@ -1,8 +1,8 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { ReactElement, useEffect, useState } from "react"
 import VideoPlayer from "./VideoPlayer"
 import AudioPlayer from "./AudioPlayer"
-import { formatText } from "../lib/formatText"
+import FormatText from "../lib/formatText"
 
 
 function PrivateMessage({message} : {message: any}) {
@@ -21,8 +21,9 @@ function PrivateMessage({message} : {message: any}) {
         console.log("Starting text formatting");
         if (message.description) {
           try {
-
-            const formattedText = await formatText(message.description);
+            let formattedText: string | ReactElement = '';
+            if (typeof message.description === 'string')
+              formattedText = <FormatText text={message.description} />;
             console.log("ofjeowjfioejwofje")
             message.description = formattedText; // Assuming the API returns the formatted text directly
             setRender(prev => !prev); // Update the state to indicate that the text formatting is done
