@@ -25,12 +25,17 @@ export default function Blogs({controlBarRef,blogsIsOpen , setBlogsIsOpen, reset
     const controller = new AbortController(); // Create an AbortController instance
     const { signal } = controller; // Get the signal from the controller
     const fetchData = async () => {
-      const response = await axios.get("posts/allposts", {signal});
-      response.data.map( (post: any) => {
-        
-        post.text = <FormatText text={post.text} />
-      })
-      setListOfPosts(response.data)
+      try {
+        const response = await axios.get("posts/allposts", {signal});
+        console.log(response.data)
+        response.data.forEach( (post: any, index: number) => {
+          if (post.text)
+            post.text = <FormatText text={post.text} key={index}/>
+        })
+        setListOfPosts(response.data)
+      } catch(e: any) {
+        console.error(e.message)
+      }
     }
 
     const interval = setInterval(() => {
@@ -83,8 +88,8 @@ export default function Blogs({controlBarRef,blogsIsOpen , setBlogsIsOpen, reset
               className="flex flex-col h-[450px]  md:h-[500px] overflow-auto"
               ref={scrollRef}
             >
-              {listOfPosts.map((item, index) => (
-                <Post key={index} item={item} />
+              {listOfPosts.map((item: any) => (
+                <Post key={item._id} item={item} />
               ))}
             </div>
             <hr />

@@ -7,7 +7,7 @@ function ShareButton({ handleChange, reference}: any) {
 
   return (
     <label
-      htmlFor="uploadFile1"
+      htmlFor="shareButton"
       className="p-1 cursor-pointer"
       style={{backgroundColor: getColor("mainButton"), color: getColor("textOfMainButton")}}
     >
@@ -17,7 +17,7 @@ function ShareButton({ handleChange, reference}: any) {
         ref={reference}
         type="file" 
         accept={option.supportedFiles.join(", ")}
-        id="uploadFile1" 
+        id="shareButton" 
         className="hidden"  
         onChange={handleChange}
       />

@@ -24,6 +24,8 @@ import Abbreviations from "./pages/admin/Abbreviations";
 import Subscriptions from "./pages/admin/Subscriptions";
 
 function App() {
+  const {user} = useUserContext()
+  
   return (
     <Routes>
       <Route path="/"  >
@@ -47,7 +49,7 @@ function App() {
           </Route>
         }
         <Route path=":roomId" element={<Home />} />
-        <Route path="*" element={<Navigate to="/" replace/>}/>
+        <Route path="*" exact={true} element={<Navigate to="/" replace/>}/>
       </Route>
     </Routes>
     

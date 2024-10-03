@@ -13,4 +13,11 @@ export default class UserRepository {
     static async deleteById(userId: string) : Promise<void> {
         await axios.delete("users/" + userId)
     }
+    static async deleteImg(userId: string) : Promise<string> {
+        const imgBase = "uploads/avatar.jpg"
+        await axios.put("users/" + userId, {
+            img: imgBase
+        })
+        return imgBase
+    }
 }

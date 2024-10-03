@@ -27,7 +27,7 @@ function Post({item} : {item :any}) {
             {item.text && <p>{item.text}</p>}
           <div className="flex items-center justify-between px-2  ">
             {item.type.startsWith("image") ? 
-            <img src={url} className="w-[150px]" /> :
+            <img src={url} className="w-[150px]"/> :
             ( item.type.startsWith("video") ? 
               <VideoPlayer src={url} type={item.type}/> :
               item.type.startsWith("audio") && <AudioPlayer src={url}/>

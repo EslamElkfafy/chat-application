@@ -97,6 +97,7 @@ function Poster() {
       "image/gif",
       "image/png",
     ];
+    console.log("hello")
     const input = event.target;
     if (input.files && input.files[0]) {
       if (!supportedFiles.includes(input.files[0].type)) {
@@ -128,7 +129,7 @@ function Poster() {
   return (
     <>
       <div className="flex items-center gap-x-1 px-1 mt-2 " style={{backgroundColor: getColor("backgroundItems")}}>
-        <ShareButton handleChange={handleChange} reference={inputRef} />
+        <ShareButton handleChange={(handleChange)} reference={inputRef} />
         <EmojiModule text={title} setText={setTitle} />
         <Input
           height={"28px"}

@@ -40,7 +40,7 @@ export default function CommentModule({item} : {item: any}) {
             <div className="flex flex-col h-[400px] justify-between " style={{backgroundColor: getColor("listsBackground")}}>
                 <div className="flex flex-col h-full overflow-auto">
                 {
-                  item.messages.map((message : any, index: any) => <div ref={input}><CommentItem key={index} message={message}/></div>)
+                  item.messages.map((message : any, index: number) => <div ref={input}><CommentItem key={index} message={message}/></div>)
                 }
                 </div>
                 <CreateComment postId= {item._id}/>

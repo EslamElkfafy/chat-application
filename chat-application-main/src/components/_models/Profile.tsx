@@ -23,6 +23,9 @@ import { useListOfMessageContext } from "../../context/ListOfMessageContext";
 import { getColor } from "../../lib/getColor";
 import CloseIcon from "@mui/icons-material/Close";
 import { ListOfcolorsPalette } from "../../lib/utils";
+import { toast } from "react-toastify";
+import { useOptionContext } from "../../context/OptionContextProvider";
+import UserRepository from "../../repositories/userRepository";
 
 export default function Profile({
   controlBarRef,
@@ -39,6 +42,7 @@ export default function Profile({
   const { size, setSize } = useSizeContext();
   const { socket } = useSocketContext();
   const { user, setUser } = useUserContext();
+  const {option} = useOptionContext();
   const router = useNavigate();
   const listRef = useRef<HTMLDivElement | null>(null);
   const nameColorRef = useRef<HTMLDivElement | null>(null);
@@ -71,8 +75,9 @@ export default function Profile({
   const [chatCheck, setChatCheck] = useState(false);
   const [infoCheck, setInfoheck] = useState(false);
   const changeSize = (value: number) => {
-    const body = document.querySelector("body");
-    body.style.fontSize = `${16 * value}px`;
+    console.log(value)
+    const root = document.querySelector("html");
+    root!.style.fontSize = `${16 * value}px`;
     setSize(value);
   };
   const handleAdv = () => {
@@ -97,13 +102,24 @@ export default function Profile({
     setInputs({ ...inputs, [key]: value});
   };
   const handleClick = async () => {
-    const updatedData = { ...user, ...inputs };
-
-    if (user._id !== -1) {
-      const response = await axios.put(`users/${user._id}`, updatedData);
-      setUser(response.data);
-    } else {
-      setUser(updatedData);
+    const newUser = { ...user, ...inputs };
+    const toastId = toast.loading("يتم حفظ البيانات", option.toastOptions)
+    try {
+      await UserRepository.update(newUser)
+      setUser(newUser);
+      toast.update(toastId, {
+        ...option.toastOptions,
+        render: "تم حفظ البيانات",
+        isLoading: false,
+        type: "success"
+      })
+    } catch(e) {
+      toast.update(toastId, {
+        ...option.toastOptions,
+        render: "حدث خطأ في السيرفر",
+        isLoading: false,
+        type: "error"
+      })
     }
   };
   const handelChatBlockClick = async () => {
@@ -153,6 +169,30 @@ export default function Profile({
       !!backgroundColorRef.current?.contains(event.target)
     );
   };
+
+  const deleteImgHandler = async () => {
+    const toastId = toast.loading("يتم حذف الصورة الشخصية", option.toastOptions)
+    try {
+      const img = await UserRepository.deleteImg(user._id)
+      setUser((user: any) => ({
+        ...user,
+        img
+      }))
+      toast.update(toastId, {
+        ...option.toastOptions,
+        render: "تم حذف الصورة الشخصية",
+        isLoading: false,
+        type: "success"
+      })
+    } catch(e) {
+      toast.update(toastId, {
+        ...option.toastOptions,
+        render: "حدث خطأ في السيرفر",
+        isLoading: false,
+        type: "error"
+      })
+    }
+  }
   return (
     <>
       <div
@@ -387,6 +427,7 @@ export default function Profile({
             textAlign={"center"}
             border={"1px solid black"}
             color={getColor("textOfNigativeButtons")}
+            onClick={deleteImgHandler}
           >
             حذف الصورة
           </Button>
@@ -449,7 +490,7 @@ export default function Profile({
               borderRadius={"0px"}
               border={"1px solid gray"}
               onClick={() => {
-                router("/admin-view/record");
+                router("/admin-view");
               }}
             >
               لوحة تحكم
