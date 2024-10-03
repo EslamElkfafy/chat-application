@@ -1,72 +1,87 @@
 import { useEffect, useState } from "react";
-import {  Mic, Lock, User } from "lucide-react";
+import { Mic, Lock, User } from "lucide-react";
 import axios from "axios";
 import { useOptionContext } from "../context/OptionContextProvider";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContextProvider";
+import { getColor } from "../lib/getColor";
 
-function RoomContainer({room} : {room: any}) {
-  const [inRoom, setInRoom] = useState(localStorage.getItem(room._id) || room.visitors)
-  const {option, setOption} = useOptionContext()
-  const {user} = useUserContext()
+function RoomContainer({ room }: { room: any }) {
+  const [inRoom, setInRoom] = useState(
+    localStorage.getItem(room._id) || room.visitors
+  );
+  const { option, setOption } = useOptionContext();
+  const { user } = useUserContext();
   const joinRoom = () => {
-    if (window.stream)
-    {
+    if (window.stream) {
       window.stream.getTracks().forEach((track: any) => {
-        track.stop()
+        track.stop();
       });
-      setOption.setMic(false)
+      setOption.setMic(false);
     }
-    setOption.setRoom(room, user)
-  }
+    setOption.setRoom(room, user);
+  };
   const handleOpen = (roomId: string) => {
-    if (inRoom < room.visitors)
-    {
-      if (room.password)
-      {
-        const password = prompt("هذه الغرفة لها كلمة مرور ارجو كتابتها")
-        if (password != room.password)
-        {
-          toast.error("كلمة مرور خاطئه", option.toastOptions)
-          return
+    if (inRoom < room.visitors) {
+      if (room.password) {
+        const password = prompt("هذه الغرفة لها كلمة مرور ارجو كتابتها");
+        if (password != room.password) {
+          toast.error("كلمة مرور خاطئه", option.toastOptions);
+          return;
         }
       }
-      joinRoom(roomId)
+      joinRoom(roomId);
       // ابعت رساله انه دخل الغرفة
-      
     } else {
-      toast.error("هذه الغرفة مكتملة", option.toastOptions)
+      toast.error("هذه الغرفة مكتملة", option.toastOptions);
     }
-  }
+  };
 
   useEffect(() => {
     const getRoomNum = async () => {
       try {
-        const res = await axios.get("/socket/" + room._id)
-        localStorage.setItem(room._id, res.data)
-        setInRoom(res.data)
-      } catch(e) {
-        console.error(e)
+        const res = await axios.get("/socket/" + room._id);
+        localStorage.setItem(room._id, res.data);
+        setInRoom(res.data);
+      } catch (e) {
+        console.error(e);
       }
-    }
-    const interval = setInterval(getRoomNum, 1000)
-    return () => clearInterval(interval)
-  }, [])
+    };
+    const interval = setInterval(getRoomNum, 1000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <>
-      <div className="flex justify-between items-center px-1 py-2" onClick={() => handleOpen(room._id)}>
+      <div
+        className="flex justify-between items-center px-1 py-2"
+        onClick={() => handleOpen(room._id)}
+      >
         <div className="flex items-center gap-x-1">
-          <img src={import.meta.env.VITE_API_BASE_URL + room.img} alt="logo" className="w-10 h-10" />
+          <img
+            src={import.meta.env.VITE_API_BASE_URL + room.img}
+            alt="logo"
+            className="w-10 h-10"
+          />
           <p className="text-lg font-semibold">{room.name}</p>
         </div>
-        {room.password && 
+        {room.password && (
           <div className="ms-auto">
             <Lock />
           </div>
-        }
-        <div className={"px-2 py-1 text-white text-sm flex items-center justify-center " + (room.voiceActive? "bg-red-500" : "bg-blue-500")}>
-              {room.voiceActive?<Mic size={"18px"}/> : <User size={"18px"} />}
-              {inRoom}/{room.visitors}
+        )}
+        <div
+          className="px-2 py-1 rounded-sm text-sm flex items-center justify-center "
+          style={{
+            backgroundColor: room.voiceActive
+              ? getColor("roomWithMic")
+              : getColor("roomWithoutMic"),
+            color: room.voiceActive
+              ? getColor("textOfRoomWithMic")
+              : getColor("textOfRoomWithoutMic"),
+          }}
+        >
+          {room.voiceActive ? <Mic size={"18px"} /> : <User size={"18px"} />}
+          {inRoom}/{room.visitors}
         </div>
       </div>
     </>

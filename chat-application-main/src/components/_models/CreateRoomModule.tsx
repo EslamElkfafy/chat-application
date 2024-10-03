@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { useOptionContext } from "../../context/OptionContextProvider";
 import { useUserContext } from "../../context/UserContextProvider";
 import { useSocketContext } from "../../context/SocketContextProvider";
+import { getColor } from "../../lib/getColor";
 function CreateRoomModule() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -70,8 +71,9 @@ function CreateRoomModule() {
       <Button
         size={"sm"}
         leftIcon={<Plus />}
-        bg={"rgb(34 197 94)"}
-        color={"white"}
+        bg={getColor("createRoomButton")}
+        borderRadius={"0px"}
+        color={getColor("textOfCreateRoomButton")}
         onClick={onOpen}
       >
         غرفه جديدة

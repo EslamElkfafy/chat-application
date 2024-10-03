@@ -108,11 +108,11 @@ export default function Profile({
   };
   const handelChatBlockClick = async () => {
     await axios.put(`users/chatblock/${user._id}`, { check: !chatCheck });
-    setChatCheck(!chatCheck);
+    setChatCheck(prev => !prev);
   };
   const handelInfoBlockClick = async () => {
     await axios.put(`users/infoblock/${user._id}`, { check: !infoCheck });
-    setInfoheck(!infoCheck);
+    setInfoheck(prev => !prev);
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -169,10 +169,10 @@ export default function Profile({
         className={`w-[260px] h-52 fixed ${positionOfPaletteColor} right-[230px] ${hiddenOfPalette} z-30 flex flex-wrap overflow-y-auto`}
         style={{ backgroundColor: getColor("backgroundItems") }}
       >
-        {ListOfcolorsPalette.map((item: string) => {
+        {ListOfcolorsPalette.map((item: string, index: number) => {
           return (
             <div
-              key={item}
+              key={item + index}
               className={`w-10 h-10`}
               style={{ backgroundColor: item }}
               onClick={() => handleChange(stateOfPalette, item)}
@@ -227,7 +227,7 @@ export default function Profile({
               name="name"
               width={"100%"}
               value={inputs.name}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => handleChange("name", e.target.value)}
             />
           </div>
           <div className="flex flex-col w-full mt-1">
@@ -245,7 +245,7 @@ export default function Profile({
               name="state"
               width={"100%"}
               value={inputs.state}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => handleChange("state", e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-y-1 mt-2">
@@ -336,11 +336,12 @@ export default function Profile({
 
         <Button
           marginTop={"5px"}
-          color={"white"}
+          color={getColor("textOfPositiveButtons")}
           borderRadius={"0px"}
           _hover={{ backgroundColor: "rgb(74 222 128 )" }}
-          backgroundColor={"rgb(34 197 94  )"}
+          backgroundColor={getColor("positiveButtons")}
           size={"sm"}
+          border={"1px solid black"}
           onClick={handleClick}
         >
           حفظ
@@ -349,11 +350,12 @@ export default function Profile({
         <div className="flex flex-col gap-y-2 mt-2">
           <Select
             borderRadius={"0px"}
-            bg={"blue"}
-            textColor={"white"}
+            bg={getColor("mainButton")}
+            textColor={getColor("textOfMainButton")}
             size={"sm"}
             iconColor="white"
             value={size}
+            textAlign={"center"}
             onChange={(e) => changeSize(parseFloat(e.currentTarget.value))}
           >
             <option className="text-black" value="1">
@@ -376,65 +378,67 @@ export default function Profile({
             </option>
           </Select>
           <UploadButton />
+          <Button
+            bg={getColor("nigativeButtons")}
+            _hover={{ bg: "rgb(239 68 68)" }}
+            size={"sm"}
+            borderRadius={"2px"}
+            leftIcon={<UserRoundX style={{color: getColor('textOfNigativeButtons')}} />}
+            textAlign={"center"}
+            border={"1px solid black"}
+            color={getColor("textOfNigativeButtons")}
+          >
+            حذف الصورة
+          </Button>
           <label
-            className="bg-gray-50  border border-gray-700 rounded-md text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
+            className=" border border-black rounded-sm text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
+            style={{backgroundColor: getColor("neutralButtons"), color: getColor("textOfNeutralButtons")}}
             onClick={handelChatBlockClick}
           >
             <div className="px-1 flex items-center  w-full">
               {chatCheck && <CheckIcon />}
-              <p className="text-center w-full font-bold text-gray-500">
+              <p className="text-center w-full font-bold">
                 {" "}
                 تعطيل المحاثات الخاصه{" "}
               </p>
             </div>
           </label>
           <label
-            className="bg-gray-50  border border-gray-700 rounded-md text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
+            className=" border border-black rounded-sm text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
+            style={{backgroundColor: getColor("neutralButtons"), color: getColor("textOfNeutralButtons")}}
             onClick={handelInfoBlockClick}
           >
             <div className="px-1 flex items-center  w-full">
               {infoCheck && <CheckIcon />}
-              <p className="text-center w-full font-bold text-gray-500">
+              <p className="text-center w-full font-bold">
                 {" "}
                 تعطيل التنبيهات{" "}
               </p>
             </div>
           </label>
           <Button
-            bg={"blue"}
-            _hover={{ bg: "rgb(0, 0, 200)" }}
+            bg={getColor("neutralButtons")}
             size={"sm"}
-            borderRadius={"0px"}
-            leftIcon={<Megaphone className="text-white" />}
+            borderRadius={"2px"}
+            leftIcon={<Megaphone style={{color: getColor("textOfNeutralButtons")}} />}
             textAlign={"center"}
-            border={"1px solid gray"}
-            color={"white"}
+            border={"1px solid black"}
+            color={getColor("textOfNeutralButtons")}
             onClick={handleAdv}
           >
             الإعلان للأدعية والمسابقات
           </Button>
-          <Button
-            bg={"rgb(239 68 68)"}
-            _hover={{ bg: "rgb(239 68 68)" }}
-            size={"sm"}
-            borderRadius={"0px"}
-            leftIcon={<UserRoundX className="text-white" />}
-            textAlign={"center"}
-            border={"1px solid gray"}
-            color={"white"}
-          >
-            حذف الصورة
-          </Button>
+        
 
           <Button
-            bg={"rgb(239 68 68)"}
+            bg={getColor("nigativeButtons")}
             _hover={{ bg: "rgb(239 68 68)" }}
             size={"sm"}
-            borderRadius={"0px"}
-            leftIcon={<LogOut className="text-white" />}
+            borderRadius={"2px"}
+            leftIcon={<LogOut style={{color: getColor('textOfNigativeButtons')}}/>}
             textAlign={"center"}
-            border={"1px solid gray"}
-            color={"white"}
+            border={"1px solid black"}
+            color={getColor('textOfNigativeButtons')}
             onClick={logout}
           >
             تسجيل خروج

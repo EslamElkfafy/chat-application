@@ -1,5 +1,6 @@
 import { Share2 } from "lucide-react";
 import { useOptionContext } from "../../context/OptionContextProvider";
+import { getColor } from "../../lib/getColor";
 
 function ShareButton({ handleChange, reference}: any) {
   const {option} = useOptionContext()
@@ -7,7 +8,8 @@ function ShareButton({ handleChange, reference}: any) {
   return (
     <label
       htmlFor="uploadFile1"
-      className="p-1 text-white bg-blue-700 cursor-pointer rounded"
+      className="p-1 cursor-pointer"
+      style={{backgroundColor: getColor("mainButton"), color: getColor("textOfMainButton")}}
     >
       <Share2
       />

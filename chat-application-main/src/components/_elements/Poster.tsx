@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import AudioPlayer from "../AudioPlayer";
 import VideoPlayer from "../VideoPlayer";
+import { getColor } from "../../lib/getColor";
 
 function Poster() {
   const { user } = useUserContext();
@@ -126,7 +127,7 @@ function Poster() {
   };
   return (
     <>
-      <div className="flex items-center gap-x-1 px-1 mt-2 ">
+      <div className="flex items-center gap-x-1 px-1 mt-2 " style={{backgroundColor: getColor("backgroundItems")}}>
         <ShareButton handleChange={handleChange} reference={inputRef} />
         <EmojiModule text={title} setText={setTitle} />
         <Input
@@ -136,7 +137,8 @@ function Poster() {
           onKeyDown={handleKeyDown}
         />
         <div
-          className="cursor-pointer p-1 bg-blue-700  text-white flex text-xs items-center rounded"
+          className="cursor-pointer p-1 flex text-xs items-center "
+          style={{backgroundColor: getColor("mainButton"), color: getColor("textOfMainButton")}}
           onClick={handleSend}
         >
           <Send size={"18px"} />

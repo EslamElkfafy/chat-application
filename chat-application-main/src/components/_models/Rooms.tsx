@@ -64,9 +64,9 @@ export default function Rooms({controlBarRef,roomsIsOpen , setRoomsIsOpen, reset
       >
         <Video  className=" size-4 md:size-5" /> {"الغرف"}
       </div>
-      <div ref={listRef} className={`flex flex-col w-[340px] absolute right-0 top-0 bottom-[31px] overflow-auto border border-black ${!roomsIsOpen ? "hidden" : ""}`} style={{backgroundColor: getColor("backgroundItems")}}>
+      <div ref={listRef} className={`flex flex-col w-[340px] absolute right-0 top-0 bottom-[31px] overflow-auto border border-black ${!roomsIsOpen ? "hidden" : ""}`} style={{backgroundColor: getColor("listsBackground")}}>
       <div className="flex flex-col w-full">
-            <div className="w-full flex items-center justify-between px-2  bg-blue-800 text-white relative h-[50px]">
+            <div className="w-full flex items-center justify-between px-2 relative h-[40px]" style={{backgroundColor: getColor("mainColor"), color: getColor("textOfMainColor")}}>
               <p className="font-bold">غرف الدردشه: {rooms.length}</p>
               <button
             onClick={() => setRoomsIsOpen(false)}
@@ -79,14 +79,14 @@ export default function Rooms({controlBarRef,roomsIsOpen , setRoomsIsOpen, reset
             <CloseIcon sx={{ fontSize: 20, fontWeight: "bold" }} />
           </button>
             </div>
-            <div className="w-full bg-blue-950 py-1 px-2">
+            <div className="w-full  py-1 px-2" style={{backgroundColor: getColor("mainButton")}}>
               <CreateRoomModule key={2}/>
               
             </div>
             <div className="flex flex-col overflow-auto h-[550px]">
               {
                 rooms.map((room: any)=>(
-                  <span key={room._id} className="btn cursor-pointer">
+                  <span key={room._id} className="btn cursor-pointer bg-[#fafafa]">
                     <RoomContainer room={room}/>
                     <hr/>
                   </span>
