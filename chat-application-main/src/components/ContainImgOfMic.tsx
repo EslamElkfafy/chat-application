@@ -3,13 +3,14 @@ import styled from "styled-components"
 import { useUserContext } from '../context/UserContextProvider';
 import { useOptionContext } from '../context/OptionContextProvider';
 import axios from 'axios';
+import { getColor } from '../lib/getColor';
 
 const ContainImg = styled.div`
     max-width: 60px;
     /* height: ; */
     padding: 5px;
-    background-color: #01ffef33;
     border-radius: .5rem;
+    border: 1px solid black;
 `;
 const Img = styled.img`
     width: 100%;
@@ -49,7 +50,7 @@ export const ContainImgOfMic = ({index, item, setListOfVoices,listOfVoices} : {i
            
     }, [listOfVoices])
   return (
-        <ContainImg key={index} onClick={() => handelClick(index)}>
+        <ContainImg key={index} onClick={() => handelClick(index)} style={{backgroundColor: getColor("micBackground")}}>
             <Img src={import.meta.env.VITE_API_BASE_URL + (item === "" ? "uploads/mic.png" : data.img)} />
         </ContainImg>
   )

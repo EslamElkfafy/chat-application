@@ -52,8 +52,8 @@ export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivat
       >
         <MessageCircle className=" size-4 md:size-5" /> {"الخاص"}
       </div>
-      <div ref={listRef} className={`flex flex-col w-[340px] absolute right-0 top-0 bottom-[31px] overflow-auto border border-black ${!privateChatIsOpen ? "hidden" : ""}`} style={{backgroundColor: getColor("backgroundItems")}}>
-      <div className="w-full flex items-center justify-between px-2 bg-blue-800 text-white relative h-[50px]">
+      <div ref={listRef} className={`flex flex-col w-[340px] absolute right-0 top-0 bottom-[31px] overflow-auto border border-black ${!privateChatIsOpen ? "hidden" : ""}`} style={{backgroundColor: getColor("listsBackground")}}>
+      <div className="w-full flex items-center justify-between px-2  relative h-[40px]" style={{backgroundColor: getColor("mainColor"), color: getColor("textOfMainColor")}}>
             <p className="font-bold">المحادثات الخاصه</p>
             <button
             onClick={() => setPrivateChatIsOpen(false)}

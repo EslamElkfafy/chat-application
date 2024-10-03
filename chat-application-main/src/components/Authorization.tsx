@@ -57,6 +57,7 @@ function Authorization({
         ip: ip.ip,
         device,
       };
+      console.log("fjoweijfoiwejfiojweiofiowejfiojo")
       const response = await axios.post("auth/signin", user);
       console.log(response.data);
       const { name, country, role } = response.data;
@@ -191,16 +192,7 @@ function Authorization({
           {choise == "sign-in" && (
             <div className="flex  flex-col gap-x-2 px-1 gap-y-1 w-full">
               {" "}
-              <div className="flex w-full">
-                <Input
-                  size={"xs"}
-                  backgroundColor={"white"}
-                  className="text-center"
-                  placeholder="اكتب كلمه المرور"
-                  required
-                  type="password"
-                  onChange={(e) => setPasswordSignIn(e.target.value)}
-                />
+              <div dir="rtl" className="flex w-full">
                 <Input
                   size={"xs"}
                   backgroundColor={"white"}
@@ -209,6 +201,15 @@ function Authorization({
                   required
                   type="text"
                   onChange={(e) => setNameSignIn(e.target.value)}
+                />
+                <Input
+                  size={"xs"}
+                  backgroundColor={"white"}
+                  className="text-center"
+                  placeholder="اكتب كلمه المرور"
+                  required
+                  type="password"
+                  onChange={(e) => setPasswordSignIn(e.target.value)}
                 />
               </div>
               <div className="flex w-full">
@@ -238,16 +239,8 @@ function Authorization({
             <div className="flex  flex-col gap-x-2 w-full px-1 gap-y-1">
               {/* {(messageNameSignUp && <div className="text-red-500">هذا الاسم مستخدم بالفعل</div>) || (messageFeildsSignUp && <div className="text-red-500">قم بملئ الحقول</div>)} */}
 
-              <div className="flex w-full">
-                <Input
-                  size={"xs"}
-                  backgroundColor={"white"}
-                  className="text-center"
-                  placeholder="اكتب كلمه المرور"
-                  required
-                  type="password"
-                  onChange={(e) => setPasswordSignUp(e.target.value)}
-                />{" "}
+              <div dir="rtl" className="flex w-full">
+               
                 <Input
                   size={"xs"}
                   backgroundColor={"white"}
@@ -256,6 +249,15 @@ function Authorization({
                   required
                   type="text"
                   onChange={(e) => setNameSignUp(e.target.value)}
+                />
+                 <Input
+                  size={"xs"}
+                  backgroundColor={"white"}
+                  className="text-center"
+                  placeholder="اكتب كلمه المرور"
+                  required
+                  type="password"
+                  onChange={(e) => setPasswordSignUp(e.target.value)}
                 />
               </div>
               <Button

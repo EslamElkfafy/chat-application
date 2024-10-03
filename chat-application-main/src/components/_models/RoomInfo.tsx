@@ -76,7 +76,7 @@ export default function RoomInfo({controlBarRef,roomInfoIsOpen , setRoomInfoIsOp
         <User className=" size-4 md:size-5" /> {onlineList.length}
       </div>
 
-      <div ref={listRef} className={`flex flex-col w-[340px] absolute right-0 top-0 bottom-[31px] overflow-auto border border-black ${!roomInfoIsOpen ? "hidden" : ""}`} style={{backgroundColor: getColor("backgroundItems")}}>
+      <div ref={listRef} className={`flex flex-col w-[340px] absolute right-0 top-0 bottom-[31px] overflow-auto border border-black ${!roomInfoIsOpen ? "hidden" : ""}`} style={{backgroundColor: getColor("listsBackground")}}>
         <div
           className="flex items-center justify-between px-2 text-white h-[40px] fixed left-[calc(100vw-340px)] right-0 top-0 z-10"
           style={{ backgroundColor: getColor("mainColor") }}

@@ -66,6 +66,66 @@
     "textOfSettingsBackground": {
         "color": "#333333",
         "arabic": "لون خط خلفيه صفحه الضبط"
+    }, 
+    "positiveButtons": {
+        "color": "#5cb85c",
+        "arabic": "الزرات الاجابيه"
+    }, 
+    "textOfPositiveButtons": {
+        "color": "#ffffff",
+        "arabic": "النص للزرات الاجابيه"
+    },
+    "neutralButtons": {
+        "color": "#f8f8ff",
+        "arabic": "الزرات المحايده"
+    },
+    "textOfNeutralButtons": {
+        "color": "#000000",
+        "arabic": "النص للزرات المحايده"
+    },
+    "nigativeButtons": {
+        "color": "#d9534f",
+        "arabic": "الزرات السلبيه"
+    },
+    "textOfNigativeButtons": {
+        "color": "#ffffff",
+        "arabic": "النص للزرات السلبيه"
+    },
+    "createRoomButton": {
+        "color": "#5cb85c",
+        "arabic": "الزر انشاء غرفه"
+    },
+    "textOfCreateRoomButton": {
+        "color": "#ffffff",
+        "arabic": "النص للزر انشاء غرفه"
+    },
+    "roomWithoutMic": {
+        "color": "#2B3E52",
+        "arabic": "غرفه بدون ميكروفون"
+    },
+    "textOfRoomWithoutMic": {
+        "color": "#ffffff",
+        "arabic": "النص لغرفه بدون ميكروفون"
+    },
+    "roomWithMic": {
+        "color": "#d9534f",
+        "arabic": "غرفه مع ميكروفون"
+    },
+    "textOfRoomWithMic": {
+        "color": "#ffffff",
+        "arabic": "النص لغرفه مع ميكروفون"
+    },
+    "listsBackground": {
+        "color": "#efefef",
+        "arabic": "لون خلفية القوائم"
+    },
+    "micBackground": {
+        "color": "#2B3E52",
+        "arabic": "لون خلفية ميكروفون"
+    },
+    "voiceBackground": {
+        "color": "#3cb371",
+        "arabic": "لون خلفيه السماعه"
     }
 
 

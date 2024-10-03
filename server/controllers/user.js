@@ -32,6 +32,7 @@ export const addAdmin = async (req, res, next) => {
 }
 export const update = async (req, res, next) => {
     try {
+      console.log("smwksmjkemjxmekdmxkedmxk")
       const user = await User.findById(req.params.id)
       if (!user) throw new Error("invalid user id")
       for (const key in req.body) {
@@ -117,7 +118,7 @@ export const getAllUsers = async (req, res, next) => {
 export const updateChatBlock = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.params.id, {
-      chatBlock: !req.body.check
+      chatBlock: req.body.check
     })
     res.status(200).send("the chatBlock is updated")
   } catch (error) {
@@ -127,7 +128,7 @@ export const updateChatBlock = async (req, res, next) => {
 export const updateInfoBlock = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.params.id, {
-      infoBlock: !req.body.check
+      infoBlock: req.body.check
     })
     res.status(200).send("the infoBlock is updated")
   } catch (error) {

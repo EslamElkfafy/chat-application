@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useUserContext } from '../context/UserContextProvider';
 import { useOptionContext } from '../context/OptionContextProvider';
 import { ContainImgOfMic } from './ContainImgOfMic';
+import { getColor } from '../lib/getColor';
 
 const Container = styled.div`
     padding: 5px;
-    background-color: #1e3a8a;
     width: 100%;
     display: flex;
     column-gap: 10px;
@@ -26,8 +26,8 @@ const ContainImgOfVolume = styled.div`
     max-width: 60px;
     /* height: 60px; */
     padding: 5px;
-    background-color: ${props => props.toggle ? "#2ac816" : "#01ffef33"};
     border-radius: .5rem;
+    border: 1px solid black;
 `;
 const Img = styled.img`
     width: 100%;
@@ -60,8 +60,8 @@ export const HeaderOfVoices = ({listOfVoices,setListOfVoices}: {listOfVoices: an
         setToggleVolume(!toggleVolume)
     }
   return (
-    <Container>
-        <ContainImgOfVolume onClick={handleClick} toggle={toggleVolume}>
+    <Container style={{backgroundColor: getColor("mainColor")}}>
+        <ContainImgOfVolume onClick={handleClick} style={{backgroundColor: toggleVolume ?  getColor("voiceBackground") : getColor("micBackground")}}>
             <Img src={import.meta.env.VITE_API_BASE_URL + "uploads/voice.png"}/>
         </ContainImgOfVolume>
 

@@ -17,7 +17,7 @@ function Post({item} : {item :any}) {
   
   return (
       userData && 
-      <div className="flex  gap-x-2 border px-1 py-1 h-auto ">
+      <div className="flex  gap-x-2 border px-1 py-1 h-auto bg-[#fafafa]">
         <img src={import.meta.env.VITE_API_BASE_URL + userData.img} className="w-10 h-10 border border-gray-800" />
         <div className="flex flex-col w-full">
           <div className="flex px-2 items-center justify-between font-bold">
