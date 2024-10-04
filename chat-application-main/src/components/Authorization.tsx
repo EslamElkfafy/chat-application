@@ -30,10 +30,11 @@ function Authorization({
   const handlClickSignIn = async (userName: string, password: string) => {
     try {
       const ip = await (
-        await fetch("https://api.ipify.org/?format=json")
+        await fetch("https://db.saqrchat.com")
       ).json();
-      // const location = {
-      //   countryCode: "EG"
+      // const ip = {
+      //   ip: "0.0.0.0"
+      //   country: "EG"
       // }
       let room: any = null;
       const rooms = (await axios.get("general/")).data.payload;
@@ -54,10 +55,9 @@ function Authorization({
       const user = {
         userName,
         password,
-        ip: ip.ip,
+        ...ip,
         device,
       };
-      console.log("fjoweijfoiwejfiojweiofiowejfiojo")
       const response = await axios.post("auth/signin", user);
       console.log(response.data);
       const { name, country, role } = response.data;
