@@ -12,7 +12,7 @@ import { getColor } from "../lib/getColor";
 
 function Authorization({
   setErrorMessage,
-}: {
+}: {  
   setErrorMessage: (input: string) => void;
 }) {
   const [choise, setChoise] = useState("nike-name");
@@ -60,7 +60,7 @@ function Authorization({
       };
       const response = await axios.post("auth/signin", user);
       console.log(response.data);
-      const { name, country, role } = response.data;
+      const { name, role } = response.data;
       setUser({ ...response.data });
       setOption.setRoom(room, response.data);
 
@@ -70,7 +70,6 @@ function Authorization({
         userName,
         name,
         ...ip,
-        country,
         role,
         device,
       });
@@ -113,6 +112,18 @@ function Authorization({
       }
     }
   };
+
+  const handler = async (e: any, callback: any) => {
+    const target = e.currentTarget
+    target.disabled = true
+    try {
+      await callback()
+
+    } finally {
+      console.log("disabled >>>>>>", target.disabled)
+      target.disabled = false
+    }
+  }
   return (
     <div
       className="flex flex-col justify-between bg-gray-50"
@@ -181,11 +192,7 @@ function Authorization({
                   color: getColor("textOfMainButton"),
                 }}
                 size={"xs"}
-                onClick={async (e) => {
-                    e.currentTarget.disabled = true
-                    await handleClickNikeName();
-                    e.currentTarget.disabled = false
-                }}
+                onClick={(e) => handler(e, handleClickNikeName)}
               >
                 الدخول
               </Button>
@@ -217,12 +224,7 @@ function Authorization({
               <div className="flex w-full">
                 <Button
                   size={"xs"}
-                  onClick={async (e) => {
-                    e.currentTarget.disabled = true
-                    console.log("disabled >>>>>>", e.currentTarget.disabled)
-                    await handlClickSignIn(nameSignIn, passwordSignIn)
-                    e.currentTarget.disabled = false
-                  }}
+                  onClick={(e) => handler(e, async() => await handlClickSignIn(nameSignIn, passwordSignIn))}
                   className="flex-grow !rounded-none"
                   style={{
                     backgroundColor: getColor("mainButton"),
@@ -269,11 +271,7 @@ function Authorization({
               </div>
               <Button
                 size={"xs"}
-                onClick={async (e) => {
-                  e.currentTarget.disabled = true
-                  await handlClickSignUp()
-                  e.currentTarget.disabled = false
-                }}
+                onClick={(e) => handler(e, handlClickSignUp)}
                 className="w-full !rounded-none"
                 style={{
                   backgroundColor: getColor("mainButton"),
