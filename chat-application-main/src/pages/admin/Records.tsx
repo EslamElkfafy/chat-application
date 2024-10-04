@@ -51,7 +51,7 @@ function Records() {
           <Tbody>
             {
               data.filter((item: any) => item.name.includes(inputSearch)).map((item : any, index: any) => (
-                <Tr key={index}>
+                <Tr key={item._id}>
                   <Td>{item.role}</Td>
                   <Td>{item.userName}</Td>
                   <Td>{item.name}</Td>

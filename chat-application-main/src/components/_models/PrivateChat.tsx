@@ -67,8 +67,8 @@ export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivat
           </button>
           </div>
           <div className="flex flex-col h-[550px] overflow-auto">
-            {listOfPrivate.map((item, index) => (
-              <UserModule key={index} userId={item} />
+            {listOfPrivate.map((item) => (
+              <UserModule key={item} userId={item} />
             ))}
           </div>
       </div>

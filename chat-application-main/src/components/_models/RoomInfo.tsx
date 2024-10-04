@@ -109,7 +109,7 @@ export default function RoomInfo({controlBarRef,roomInfoIsOpen , setRoomInfoIsOp
           {!text && (
             <div className="flex flex-col w-full">
               {inRoomUsers?.map((item: any, index: any) => {
-                return <UserOnlineModule key={index} user_Data={item} />;
+                return <UserOnlineModule key={item._id} user_Data={item} />;
               })}
             </div>
           )}
@@ -129,7 +129,7 @@ export default function RoomInfo({controlBarRef,roomInfoIsOpen , setRoomInfoIsOp
             {onlineList
               .filter((item: any) => item.name.includes(text))
               .map((item: any, index: any) => {
-                return <UserOnlineModule key={index} user_Data={item} />;
+                return <UserOnlineModule key={item._id} user_Data={item} />;
               })}
           </div>
         </div>

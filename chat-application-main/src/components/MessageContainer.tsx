@@ -23,8 +23,8 @@ function MessageContainer({voice} : {voice: Boolean}) {
   }, [])
   return (
     <div className={`flex flex-col ${voice? 'h-[calc(100vh-151px)]': 'h-[calc(100vh-71px)]'} overflow-auto`} ref={messageRef}>
-      {listOfMessage.map ((item :  any, index : any) => {
-        return <Message key={index} item={item}/>
+      {listOfMessage.map ((item :  any) => {
+        return <Message key={item.arrivalTime} item={item}/>
       })}
 
     </div>

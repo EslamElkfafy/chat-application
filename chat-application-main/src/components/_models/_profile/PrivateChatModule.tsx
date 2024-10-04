@@ -83,11 +83,11 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
         <ModalContent pb={"10px"}>
           <HeaderChatModule onClose_Module={onClose} toUserId={toUserId}/>
           <div className="flex flex-col h-[300px] overflow-auto" ref={input}>
-            {dataListOfPrivateMessages.map((message, index) => (
-                <PrivateMessage key={index} message= {message} />
+            {dataListOfPrivateMessages.map((message) => (
+                <PrivateMessage key={message.arrivalTime} message= {message} />
             ))}
-            {listOfPrivateMessages.map((message, index) => (
-                <PrivateMessage key={index} message= {message} />
+            {listOfPrivateMessages.map((message) => (
+                <PrivateMessage key={message.arrivalTime} message= {message} />
             ))}
           </div>
           <SendPrivateMessage chatId={chatId} listOfPrivateMessages= {listOfPrivateMessages} setListOfPrivateMessages = {setListOfPrivateMessages}/>

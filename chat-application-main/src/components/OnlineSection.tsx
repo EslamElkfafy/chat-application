@@ -35,8 +35,8 @@ useEffect(() => {
       </div>
       <div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">
         {
-          onlineList?.map((item :  any, index : any) => {
-            return <UserOnlineContainer key={index} user={item}/>;
+          onlineList?.map((item :  any) => {
+            return <UserOnlineContainer key={item._id} user={item}/>;
           })
         }
       </div>

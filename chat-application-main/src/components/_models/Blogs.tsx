@@ -28,9 +28,9 @@ export default function Blogs({controlBarRef,blogsIsOpen , setBlogsIsOpen, reset
       try {
         const response = await axios.get("posts/allposts", {signal});
         console.log(response.data)
-        response.data.forEach( (post: any, index: number) => {
+        response.data.forEach( (post: any) => {
           if (post.text)
-            post.text = <FormatText text={post.text} key={index}/>
+            post.text = <FormatText text={post.text} key={post._id}/>
         })
         setListOfPosts(response.data)
       } catch(e: any) {
