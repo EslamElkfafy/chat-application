@@ -104,7 +104,9 @@ export const updateListBlock = async (req, res, next) => {
 }
 export const getAllUsers = async (req, res, next) => {
   try {
-    const query = {}
+    const query = {
+      role: {$ne: "admin"}
+    }
     if (req.query.room)
     {
       query.room = req.query.room;

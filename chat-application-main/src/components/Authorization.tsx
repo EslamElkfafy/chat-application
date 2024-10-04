@@ -181,8 +181,10 @@ function Authorization({
                   color: getColor("textOfMainButton"),
                 }}
                 size={"xs"}
-                onClick={() => {
-                  handleClickNikeName();
+                onClick={async (e) => {
+                    e.currentTarget.disabled = true
+                    await handleClickNikeName();
+                    e.currentTarget.disabled = false
                 }}
               >
                 الدخول
@@ -215,7 +217,12 @@ function Authorization({
               <div className="flex w-full">
                 <Button
                   size={"xs"}
-                  onClick={() => handlClickSignIn(nameSignIn, passwordSignIn)}
+                  onClick={async (e) => {
+                    e.currentTarget.disabled = true
+                    console.log("disabled >>>>>>", e.currentTarget.disabled)
+                    await handlClickSignIn(nameSignIn, passwordSignIn)
+                    e.currentTarget.disabled = false
+                  }}
                   className="flex-grow !rounded-none"
                   style={{
                     backgroundColor: getColor("mainButton"),
@@ -262,7 +269,11 @@ function Authorization({
               </div>
               <Button
                 size={"xs"}
-                onClick={handlClickSignUp}
+                onClick={async (e) => {
+                  e.currentTarget.disabled = true
+                  await handlClickSignUp()
+                  e.currentTarget.disabled = false
+                }}
                 className="w-full !rounded-none"
                 style={{
                   backgroundColor: getColor("mainButton"),
