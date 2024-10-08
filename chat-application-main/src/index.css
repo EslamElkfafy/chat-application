@@ -18,14 +18,27 @@ top: 50%;
 right: 50%;
 } */
 body * {
-    font-family: serif;
-    font-weight: bold;
-    text-shadow: none !important;
-    font-size: 1rem !important;
-    line-height: 1.4 !important;
+  font-family: serif;
+  font-weight: bold;
+  text-shadow: none !important;
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
 }
+html, body, #root {
+  height: calc(var(--vh, 1vh) * 100) !important;
+}
+/* html {
+  height: 100% !important;
+}
+body {
+  height: 100% !important;
+}
+#root {
+  height: 100% !important;
+} */
+
 @media (max-width: 554px) {
-    :root {
-        font-size: 14px;
-    }
+  :root {
+    font-size: 14px;
+  }
 }

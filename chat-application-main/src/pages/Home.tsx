@@ -17,8 +17,10 @@ function Home() {
   const { setAdmin } = useAdminContext();
   const { socket } = useSocketContext()
   const [voice, setVoice] = useState(false)
+  // const [height, setHeight] = useState(window.innerHeight);
   const [listOfVoices, setListOfVoices] = useState<String[]>([])
   const [listOfVoicesChecker, setListOfVoicesChecker] = useState<boolean>(false)
+  
   useEffect(()=>{
     if (!user) router('/')
     if(roomId == "admin-view" ) setAdmin(true);
@@ -50,7 +52,7 @@ function Home() {
   },[option.room])
   if (user)
     return (
-      <main className="w-full h-screen bg-gray-50 relative">
+      <main className="w-full h-full bg-gray-50 relative flex flex-col" >
         {voice === true && <HeaderOfVoices listOfVoices={listOfVoices} setListOfVoices={setListOfVoices}/>}
         <MessageContainer voice={voice}/>
         <SendMessage/>

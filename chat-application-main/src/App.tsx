@@ -14,19 +14,20 @@ import Block from "./pages/admin/Block";
 import Filter from "./pages/admin/Filter";
 import axios from 'axios';
 axios.defaults.withCredentials = true
-let hostname = import.meta.env.VITE_API_BASE_URL + "api/"
+// let hostname = import.meta.env.VITE_API_BASE_URL + "api/"
 // let hostname = "http://localhost:3000/api/"
-// let hostname = "http://" + document.location.hostname + ":3002/api/"
+let hostname = "http://" + document.location.hostname + ":3002/api/"
 console.log(hostname)
 axios.defaults.baseURL = hostname
 import 'react-toastify/dist/ReactToastify.css';
 import Messages from "./pages/admin/Messages";
 import Abbreviations from "./pages/admin/Abbreviations";
 import Subscriptions from "./pages/admin/Subscriptions";
+import useViewportHeight from "./lib/useViewportHeight";
 
 function App() {
   const {user} = useUserContext()
-  
+  useViewportHeight();
   return (
     <Routes>
       <Route path="/"  >
