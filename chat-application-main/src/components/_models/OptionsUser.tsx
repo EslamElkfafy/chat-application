@@ -65,7 +65,6 @@ function OptionsUser({userId}: {userId: string}) {
       <Settings onClick={onOpen} className="cursor-pointer text-blue-600" />
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
         <ModalContent>
           <div className="flex bg-blue-950 items-center justify-between p-1">
             <div className=""></div>

@@ -22,7 +22,7 @@ function MessageContainer({voice} : {voice: Boolean}) {
     return () => socket.off("receive-event", receiveEvent)    
   }, [])
   return (
-    <div className={`flex flex-col ${voice? 'h-[calc(100vh-151px)]': 'h-[calc(100vh-71px)]'} overflow-auto`} ref={messageRef}>
+    <div className={`flex flex-col ${voice? 'h-[calc(100vh-9.5rem)]': 'h-[calc(100vh-4.5rem)]'} overflow-auto`} ref={messageRef}>
       {listOfMessage.map ((item :  any) => {
         return <Message key={item.arrivalTime} item={item}/>
       })}

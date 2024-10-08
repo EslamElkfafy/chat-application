@@ -21,7 +21,6 @@ function GiftModule() {
         {gift.text}
       </div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
         <ModalContent width={"300px"}>
           <div className="w-full h-[300px] flex flex-wrap gap-x-1 py-2  overflow-auto">
             {EMOJIS.map((ele) => (

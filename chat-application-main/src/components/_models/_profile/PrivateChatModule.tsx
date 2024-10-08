@@ -14,6 +14,7 @@ import { useSocketContext } from "../../../context/SocketContextProvider";
 import axios from "axios";
 import PrivateMessage from "../../PrivateMessage";
 import { toast } from "react-toastify";
+import { getColor } from "../../../lib/getColor";
 
 function PrivateChatModule({toUserId} : {toUserId: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -79,10 +80,9 @@ function PrivateChatModule({toUserId} : {toUserId: any}) {
       </div>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent pb={"10px"}>
+        <ModalContent >
           <HeaderChatModule onClose_Module={onClose} toUserId={toUserId}/>
-          <div className="flex flex-col h-[300px] overflow-auto" ref={input}>
+          <div className="flex flex-col h-[300px] overflow-auto" ref={input} style={{backgroundColor: getColor("listsBackground")}}>
             {dataListOfPrivateMessages.map((message) => (
                 <PrivateMessage key={message.arrivalTime} message= {message} />
             ))}

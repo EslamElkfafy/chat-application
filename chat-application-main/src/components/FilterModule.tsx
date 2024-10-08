@@ -14,7 +14,6 @@ function FilterModule() {
     <>
       <Plus className="p-1 text-white bg-blue-700 cursor-pointer rounded" onClick={onOpen} />
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
         <ModalContent>
           <form className="flex flex-col gap-y-3 px-3 py-4">
             <div className="flex flex-col">

@@ -24,10 +24,12 @@ function EmojiModule({ setText, text }: TProps) {
     })();
     document.addEventListener("click",  handleOutSideClick);
     return () => {
+      console.log("ewwefwefwefwefwe")
       document.removeEventListener("click", handleOutSideClick);
     }
   }, []);
   const handleOutSideClick = (event: MouseEvent) => {
+    console.log("fowejiofjeowfjfojewofjowejofjoewj")
     if (iconEmojisRef.current?.contains(event.target as SVGElement)) {
       setEmojisIsOpen(true);
     } else {
@@ -42,7 +44,7 @@ function EmojiModule({ setText, text }: TProps) {
         className="text-yellow-500 cursor-pointer w-[30px]"
         src="1725456911111.gif"
       />
-      <div  className={`absolute left-0 -top-[300px] border border-black z-10 w-[300px] h-[300px] flex flex-wrap gap-x-1 p-2 content-start overflow-auto bg-white ${!emojisIsOpen ? "hidden" : ""}`}>
+      <div  className={`absolute left-0 -top-[300px] border border-black z-20 w-[300px] h-[300px] flex flex-wrap gap-x-1 p-2 content-start overflow-auto bg-white ${!emojisIsOpen ? "hidden" : ""}`}>
       {emojis.map(([abbreviation, urlEmoji]) => (
               <div
                 className="cursor-pointer"

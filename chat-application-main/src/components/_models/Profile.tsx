@@ -55,14 +55,19 @@ export default function Profile({
   const [paletteOfBackgroundColorIsOpen, setPaletteOfBackgroundColorIsOpen] =
     useState<boolean>(false);
     const paletteOptions = [
-      { condition: paletteOfNameIsOpen, position: "top-[160px]", state: "nameColor" },
-      { condition: paletteOfFontIsOpen, position: "top-[192px]", state: "fontColor" },
-      { condition: paletteOfBackgroundColorIsOpen, position: "top-[228px]", state: "backgroundColor" },
+      { condition: paletteOfNameIsOpen, position: "top-[10rem]", state: "nameColor" },
+      { condition: paletteOfFontIsOpen, position: "top-[12rem]", state: "fontColor" },
+      { condition: paletteOfBackgroundColorIsOpen, position: "top-[14.25rem]", state: "backgroundColor" },
     ];
     
     const activePalette = paletteOptions.find(option => option.condition) || { position: "", state: "" };
     
-    const positionOfPaletteColor = activePalette.position;
+    const isMoble = window.innerWidth <= 554;
+    const positionYOfPaletteColor = activePalette.position;
+    const positionXOfPaletteColor = isMoble ? "right-[38%]" : "right-[230px]";
+    const widthOfPaletteColor = isMoble ? "w-[160px]" : "w-[257px]";
+    const widthOfItemOfPaletteColor = isMoble ? "w-[26.666px]" : "w-[40px]";
+    const heightOfItemOfPaletteColor = isMoble ? "h-[26.666px]" : "h-[40px]";
     const hiddenOfPalette = activePalette.position ? "" : "hidden";
     const stateOfPalette = activePalette.state;
   const [inputs, setInputs] = useState({
@@ -77,7 +82,8 @@ export default function Profile({
   const changeSize = (value: number) => {
     console.log(value)
     const root = document.querySelector("html");
-    root!.style.fontSize = `${16 * value}px`;
+    const fontSize = window.innerWidth <= 554 ? 14 : 16;
+    root!.style.fontSize = `${fontSize * value}px`;
     setSize(value);
   };
   const handleAdv = () => {
@@ -206,14 +212,14 @@ export default function Profile({
         <Settings className=" size-4 md:size-5" /> {"الضبط"}
       </div>
       <div
-        className={`w-[260px] h-52 fixed ${positionOfPaletteColor} right-[230px] ${hiddenOfPalette} z-30 flex flex-wrap overflow-y-auto`}
+        className={`${widthOfPaletteColor} h-52 fixed ${positionYOfPaletteColor} ${positionXOfPaletteColor} ${hiddenOfPalette} z-30 flex flex-wrap overflow-y-auto`}
         style={{ backgroundColor: getColor("backgroundItems") }}
       >
         {ListOfcolorsPalette.map((item: string, index: number) => {
           return (
             <div
               key={item + index}
-              className={`w-10 h-10`}
+              className={`${widthOfItemOfPaletteColor} ${heightOfItemOfPaletteColor}`}
               style={{ backgroundColor: item }}
               onClick={() => handleChange(stateOfPalette, item)}
             ></div>
@@ -222,7 +228,7 @@ export default function Profile({
       </div>
       <div
         ref={listRef}
-        className={`flex flex-col w-[340px] absolute right-0 top-0 bottom-[31px] overflow-auto border border-black ${
+        className={`flex flex-col w-[21.25rem] w-max-554:w-[70%] absolute right-0 top-0 bottom-[1.9375rem] overflow-auto border border-black ${
           !profileIsOpen ? "hidden" : ""
         }`}
         style={{ backgroundColor: getColor("backgroundItems") }}
@@ -234,7 +240,7 @@ export default function Profile({
           }}
         >
           <div
-            className="w-full flex items-center justify-between px-2 relative h-[40px]"
+            className="w-full flex items-center justify-between px-2 relative h-[2.5rem]"
             style={{
               backgroundColor: getColor("mainColor"),
               color: getColor("textOfMainColor"),

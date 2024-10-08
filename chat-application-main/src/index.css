@@ -21,8 +21,11 @@ body * {
     font-family: serif;
     font-weight: bold;
     text-shadow: none !important;
-    font-size: 16px !important;
+    font-size: 1rem !important;
     line-height: 1.4 !important;
-    font-weight: 700 !important;
-    text-shadow: none !important;
+}
+@media (max-width: 554px) {
+    :root {
+        font-size: 14px;
+    }
 }

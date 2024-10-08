@@ -237,7 +237,8 @@ async function updateJsonFile(filePath, updateFunction) {
 app.post("/upload", upload.single("file"), (req, res) => {
   // 'image' is the name attribute of the file input field in the form
   const path = req.file.path;
-  res.status(200).json({ path, type: req.file.mimetype });
+  console.log(req.file);
+  res.status(200).json({ path, type: req.file.mimetype});
 });
 app.get("/api/socket/:roomId", (req, res) => {
   const roomId = req.params.roomId;

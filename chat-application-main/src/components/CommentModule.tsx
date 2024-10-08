@@ -28,7 +28,6 @@ export default function CommentModule({item} : {item: any}) {
       </div>
 
       <Modal isOpen={isOpen} onClose={onClose} >
-        <ModalOverlay />
         <ModalContent width={"350px"}>
             <div className="flex items-center justify-between px-2 py-3" style={{backgroundColor: getColor("mainColor"), color: getColor("textOfMainColor")}}>
               <div className="flex items-center gap-x-1">

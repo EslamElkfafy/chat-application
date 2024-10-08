@@ -10,6 +10,7 @@ import { Profile_Items } from "../../../lib/utils";
 import Flags from "react-country-flag";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { getColor } from "../../../lib/getColor";
 
 function HeaderChatModule({ onClose_Module, toUserId }: { onClose_Module: () => void , toUserId: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -29,15 +30,17 @@ function HeaderChatModule({ onClose_Module, toUserId }: { onClose_Module: () => 
   return (
     <>
       <div
-        className="flex items-center justify-between px-2 bg-blue-950 text-white py-1"
-        onClick={onOpen}
+        className="flex items-center justify-between px-2 py-1"
+        style={{backgroundColor: getColor("mainColor"), color: getColor("textOfMainColor")}}
+        // onClick={onOpen}
       >
         <div className="flex items-center gap-x-1">
           <img src={import.meta.env.VITE_API_BASE_URL + dataUser.img} className="w-6 h-6" />
           {dataUser.name}
         </div>
         <div
-          className="text-white bg-red-500 p-1 rounded-sm cursor-pointer"
+          className=" p-1 rounded-sm cursor-pointer"
+          style={{backgroundColor: getColor("closeButton"), color: getColor("textOfCloseButton")}}
           onClick={onClose_Module}
         >
           <X />
@@ -45,7 +48,6 @@ function HeaderChatModule({ onClose_Module, toUserId }: { onClose_Module: () => 
       </div>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
         <ModalContent width={"350px"}>
           <div className="flex items-center justify-between px-2 py-3 bg-blue-950 text-white">
             <img src="/avatar.jpg" className="w-6 h-6" />

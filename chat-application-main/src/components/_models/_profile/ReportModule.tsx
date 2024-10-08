@@ -12,6 +12,7 @@ import { useSocketContext } from "../../../context/SocketContextProvider";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../context/UserContextProvider";
 import axios from "axios";
+import { getColor } from "../../../lib/getColor";
 
 function ReportModule({toUserId} : {toUserId: any}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,24 +55,24 @@ function ReportModule({toUserId} : {toUserId: any}) {
       </div>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
         <ModalContent>
-          <div className="flex py-1 px-2 items-center justify-between bg-blue-950 text-white ">
+          <div className="flex py-1 px-2 items-center justify-between" style={{backgroundColor: getColor("mainButton"), color: getColor("textOfMainButton")}}>
             <div className="flex   cursor-pointer  text-sm items-center justify-center">
               <report.icon className="size-5" />
               {report.text}
             </div>
             <div
-              className="text-white bg-red-500 p-1 rounded-sm cursor-pointer"
+              className=" p-1 rounded-sm cursor-pointer"
+              style={{backgroundColor: getColor("closeButton"), color: getColor("textOfCloseButton")}}
               onClick={onClose}
             >
               <X />
             </div>
           </div>
-          <div className="flex flex-col  py-2 px-2 gap-y-1  bg-gray-200">
+          <div className="flex flex-col  py-2 px-2 gap-y-1  " style={{backgroundColor: getColor("listsBackground")}}>
             <Input bg={"white"} border={"1px solid gray"} borderRadius={"0px"} placeholder="أكتب رسالتك هنا ..." value={text} onChange={(e) => setText(e.currentTarget.value)} onKeyDown={handleKeyDown}/>
             <div className="w-full flex justify-end">
-              <div className="p-1 bg-blue-950  text-white flex text-xs items-center " onClick={handleClick}>
+              <div className="p-1  flex text-xs items-center " onClick={handleClick} style={{backgroundColor: getColor("mainButton"), color: getColor("textOfMainButton")}}>
                 <Send size={"25px"} className="cursor-pointer" />
                 إرسال
               </div>

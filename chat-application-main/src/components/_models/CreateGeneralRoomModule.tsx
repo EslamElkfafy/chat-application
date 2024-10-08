@@ -69,7 +69,6 @@ function CreateRoomModule() {
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
         <ModalContent width={"350px"}>
           <div className="flex py-1 px-2 items-center justify-between bg-blue-950 text-white ">
             <div className="flex   cursor-pointer  text-sm items-center justify-center">

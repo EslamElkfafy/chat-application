@@ -23,6 +23,7 @@ import {
 import Status from "../lib/Status";
 import StatusRepository from "../repositories/statusRepository";
 import { useOptionContext } from "../context/OptionContextProvider";
+import { getColor } from "../lib/getColor";
 export default function UserModal({isOpen, onClose, userId}: {isOpen: boolean, onClose: () => void, userId: string}) {
     const { admin } = useAdminContext();
     const exit_ignore = "إلغاء تجاهل";
@@ -88,16 +89,15 @@ export default function UserModal({isOpen, onClose, userId}: {isOpen: boolean, o
     }
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent width={"350px"}>
-            <div className="flex items-center justify-between px-2 py-3 bg-blue-950 text-white">
+          <ModalContent width={"350px"} style={{backgroundColor: getColor("backgroundItems")}}>
+            <div className="flex items-center justify-between px-2 py-3" style={{backgroundColor: getColor("mainButton") ,  color: getColor("textOfMainButton")}}>
                 <div className="flex">
                     <img src={import.meta.env.VITE_API_BASE_URL + userData.img} className="w-6 h-6" />
                     <p className="ps-2">
                         {userData.name}
                     </p>
                 </div>
-                <ModalCloseButton bg={"red"} color={"white"} />
+                <ModalCloseButton bg={getColor("closeButton")} color={getColor("textOfCloseButton")} />
             </div>
             <img src={import.meta.env.VITE_API_BASE_URL + userData.img} className="h-[200px] bg-cover" />
             <div className="flex flex-wrap  p-1 gap-1 justify-center">

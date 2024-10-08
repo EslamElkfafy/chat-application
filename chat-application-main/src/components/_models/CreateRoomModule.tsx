@@ -80,15 +80,15 @@ function CreateRoomModule() {
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent width={"350px"}>
-          <div className="flex py-1 px-2 items-center justify-between bg-blue-950 text-white ">
+        <ModalContent width={"350px"} style={{backgroundColor: getColor("listsBackground")}}>
+          <div className="flex py-1 px-2 items-center justify-between" style={{backgroundColor: getColor("mainButton"), color: getColor('textOfMainButton')}}>
             <div className="flex   cursor-pointer  text-sm items-center justify-center">
               <MessagesSquare />
               إنشاء الغرفة
             </div>
             <div
-              className="text-white bg-red-500 p-1 rounded-sm cursor-pointer"
+              className="p-1 rounded-sm cursor-pointer"
+              style={{backgroundColor: getColor("closeButton"), color: getColor("textOfCloseButton")}}
               onClick={onClose}
             >
               <X />
@@ -192,9 +192,11 @@ function CreateRoomModule() {
             </div>
             <Button
               mt={"10px"}
-              leftIcon={<Plus className="text-blue-700" />}
+              leftIcon={<Plus  />}
               _hover={{}}
-              color={"rgb(29 78 216)"}
+              borderRadius={0}
+              bg={getColor("mainButton")}
+              color={getColor("textOfMainButton")}
               onClick={onCreateRoom}
             >
               إنشاء الغرفة
