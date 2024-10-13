@@ -23,7 +23,7 @@ function UserContainer({ onClick, userId }: { onClick?: () => void, userId: any 
         <img src={import.meta.env.VITE_API_BASE_URL + data?.img} className="w-9 h-9" />
         <div className="flex flex-col justify-between py-2">
           <p style={{color: data?.nameColor, backgroundColor: data?.backgroundColor}}>{data?.name}</p>
-          <p style={{color: data?.fontColor}}>{data?.state}</p>
+          <p style={{color: "#888888"}}>{data.state}</p>
         </div>
       </div>
       <Flags countryCode="sa" svg />

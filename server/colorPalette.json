@@ -126,6 +126,14 @@
     "voiceBackground": {
         "color": "#3cb371",
         "arabic": "لون خلفيه السماعه"
+    },
+    "extendButton": {
+        "color": "#31b0d5",
+        "arabic": "الزر التمديد"
+    },
+    "textOfExtendButton": {
+        "color": "#ffffff",
+        "arabic": "النص للزر التمديد"
     }
 
 

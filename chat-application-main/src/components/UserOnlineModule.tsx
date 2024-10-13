@@ -13,7 +13,6 @@ import UserModal from "./UserModal";
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [userData, setUserData] = useState<Record<string, any>>({})
 
-  
     useEffect(() => {
       const fetchData = async () => {
         const response2 = await axios.get(`users/find/${user_Data._id}`);

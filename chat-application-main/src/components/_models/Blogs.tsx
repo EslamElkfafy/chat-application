@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { Images } from "lucide-react";
 
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import Post from "../Post";
 import Poster from "../_elements/Poster";
 import axios from "axios";

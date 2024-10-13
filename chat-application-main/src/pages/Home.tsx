@@ -9,6 +9,7 @@ import { useSocketContext } from "../context/SocketContextProvider";
 import { useOptionContext } from "../context/OptionContextProvider";
 import { HeaderOfVoices } from "../components/HeaderOfVoices";
 import axios from "axios";
+import PrivataChatModal from "../components/_models/_profile/PrivataChatModal";
 function Home() {
   const {user} = useUserContext();
   const {option} = useOptionContext();
@@ -20,7 +21,7 @@ function Home() {
   // const [height, setHeight] = useState(window.innerHeight);
   const [listOfVoices, setListOfVoices] = useState<String[]>([])
   const [listOfVoicesChecker, setListOfVoicesChecker] = useState<boolean>(false)
-  
+
   useEffect(()=>{
     if (!user) router('/')
     if(roomId == "admin-view" ) setAdmin(true);
@@ -53,10 +54,11 @@ function Home() {
   if (user)
     return (
       <main className="w-full h-full bg-gray-50 relative flex flex-col" >
+        <PrivataChatModal />
         {voice === true && <HeaderOfVoices listOfVoices={listOfVoices} setListOfVoices={setListOfVoices}/>}
         <MessageContainer voice={voice}/>
         <SendMessage/>
-        {<ControlBar/>}
+        <ControlBar/>
       </main>
     );
 }

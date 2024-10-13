@@ -1,5 +1,5 @@
 import express from "express";
-import { getPrivate, addChat, getMessages, updateMessages } from "../controllers/chat.js";
+import { getPrivate, addChat, getMessages, updateMessages, lastMassage } from "../controllers/chat.js";
 
 const router = express.Router()
 
@@ -9,6 +9,8 @@ router.post("/addchat", addChat);
 router.put("/messages/:id", updateMessages)
 // get messages
 router.get("/messages/:id", getMessages)
+//get last message
+router.post("/lastmessage", lastMassage);
 
 router.get("/getprivate/:id", getPrivate)
 export default router;

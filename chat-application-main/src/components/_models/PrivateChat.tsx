@@ -13,6 +13,7 @@ import UserModule from "../UserModule";
 import axios from "axios";
 import { getColor } from "../../lib/getColor";
 import CloseIcon from "@mui/icons-material/Close";
+import UserPrivateModule from "../UserPrivateModule";
 
 export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivateChatIsOpen, resetLists}: {controlBarRef: RefObject<HTMLDivElement | null>, privateChatIsOpen: boolean, setPrivateChatIsOpen: React.Dispatch<React.SetStateAction<boolean>>, resetLists: () => void}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,7 +24,7 @@ export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivat
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`users/getprivate/${user._id}`);
-      setListOfPrivate(response.data.private)
+      setListOfPrivate(response.data);
     }
     const interval = setInterval(() => {
       fetchData()
@@ -68,7 +69,7 @@ export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivat
           </div>
           <div className="flex flex-col h-[550px] overflow-auto">
             {listOfPrivate.map((item) => (
-              <UserModule key={item} userId={item} />
+              <UserPrivateModule key={item} userId={item} />
             ))}
           </div>
       </div>

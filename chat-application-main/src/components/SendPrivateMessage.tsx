@@ -18,10 +18,12 @@ function SendPrivateMessage({
   chatId,
   setListOfPrivateMessages,
   listOfPrivateMessages,
+  toUserId
 }: {
   chatId: any;
   setListOfPrivateMessages: any;
   listOfPrivateMessages: any;
+  toUserId: any;
 }) {
   const [message, setMessage] = useState("");
   const { user } = useUserContext();
@@ -69,7 +71,8 @@ function SendPrivateMessage({
       let new_list = [...listOfPrivateMessages, tempMessage];
       socket.emit("send-private", tempMessage, chatId);
       try {
-        await axios.put(`chats/messages/${chatId}`, { message: tempMessage });
+        if(chatId) await axios.put(`chats/messages/${chatId}`, { message: tempMessage });
+        if(toUserId) await axios.put(`users/updateprivate/${toUserId}`, { userId: user._id});
         setMessage("");
         setProgress(0);
         setDataFile(null);

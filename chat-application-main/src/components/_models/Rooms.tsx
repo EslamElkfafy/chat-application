@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import {  Video } from "lucide-react";
 import axios from "axios";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, RefObject } from "react";
 import RoomContainer from "../RoomContainer";
 import CreateRoomModule from "./CreateRoomModule";
 import { useSocketContext } from "../../context/SocketContextProvider";

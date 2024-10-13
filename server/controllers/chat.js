@@ -46,9 +46,21 @@ export const getPrivate = async (req, res, next) => {
 
 export const getMessages = async (req, res, next) => {
     try {
+      
         const chat = await Chat.findById(req.params.id);
         res.status(200).json(chat)
     } catch (error) {
         next(error)
     }
+}
+export const lastMassage = async (req, res) => {
+    try {
+        const foundedChat = await Chat.findOne({$or: [
+            {user1 : req.body.user1, user2: req.body.user2},
+            {user2 : req.body.user1, user1: req.body.user2}
+        ]})
+        res.status(200).json(foundedChat.messages[foundedChat.messages.length - 1])
+    } catch (error) {
+        next(error)
+    }   
 }

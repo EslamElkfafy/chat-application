@@ -59,7 +59,7 @@ export const getPrivate = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id)
 
-    res.status(200).json(user)
+    res.status(200).json(user.private)
   } catch (error) {
     next(error)
   }

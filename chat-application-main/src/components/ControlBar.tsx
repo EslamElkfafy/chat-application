@@ -6,22 +6,23 @@ import PrivateChat from "./_models/PrivateChat";
 import Blogs from "./_models/Blogs";
 import { getColor } from "../lib/getColor";
 import { useRef, useState } from "react";
+import { useSystemOfLists } from "../context/SystemOfLists";
 
 function ControlBar() {
   const controlBarRef = useRef<HTMLDivElement | null>(null);
-  const [roomInfoIsOpen, setRoomInfoIsOpen] = useState(true);
-  const [roomsIsOpen, setRoomsIsOpen] = useState(false);
-  const [profileIsOpen, setProfileIsOpen] = useState(false);
-  const [privateChatIsOpen, setPrivateChatIsOpen] = useState(false);
-  const [blogsIsOpen, setBlogsIsOpen] = useState(false);
-
-  const resetLists = () => {
-    setRoomInfoIsOpen(false);
-    setRoomsIsOpen(false);
-    setProfileIsOpen(false);
-    setPrivateChatIsOpen(false);
-    setBlogsIsOpen(false);
-  };
+  const {
+    roomInfoIsOpen,
+    setRoomInfoIsOpen,
+    roomsIsOpen,
+    setRoomsIsOpen,
+    profileIsOpen,
+    setProfileIsOpen,
+    privateChatIsOpen,
+    setPrivateChatIsOpen,
+    blogsIsOpen,
+    setBlogsIsOpen,
+    resetLists,
+  } = useSystemOfLists();
   return (
     <div ref={controlBarRef} className="flex  items-center gap-x-1" style={{backgroundColor: getColor("mainColor")}}>
       <RoomInfo roomInfoIsOpen={roomInfoIsOpen} setRoomInfoIsOpen={setRoomInfoIsOpen} resetLists={resetLists} controlBarRef={controlBarRef}/>

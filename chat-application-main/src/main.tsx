@@ -12,35 +12,38 @@ import FormatContextProvider from "./context/FormatContextProvider.tsx";
 import ListOfMessageContextProvider from "./context/ListOfMessageContext.tsx";
 import ColorPaletteContextProvider from "./context/ColorContextProvider.tsx";
 import { ToastContainer } from "react-toastify";
+import { SystemOfListsProvider } from "./context/SystemOfLists.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <BrowserRouter>
-      <ListOfMessageContextProvider>
-        <ColorPaletteContextProvider>
+  <BrowserRouter>
+    <ListOfMessageContextProvider>
+      <ColorPaletteContextProvider>
         <UserContextProvider>
           <OptionContextProvider>
             <SocketContextProvider>
               <AdminContextProvider>
                 <SizeContextProvider>
                   <FormatContextProvider>
-                    <ChakraProvider>
-                      <ToastContainer autoClose={false} closeOnClick={true}/>
-                      <ToastContainer 
-                        stacked 
-                        containerId="stacked" 
-                        autoClose={false} 
-                        closeOnClick={true}
-                        position="bottom-left"
-                      />
-                      <App />
-                    </ChakraProvider>
+                    <SystemOfListsProvider>
+                      <ChakraProvider>
+                        <ToastContainer autoClose={false} closeOnClick={true} />
+                        <ToastContainer
+                          stacked
+                          containerId="stacked"
+                          autoClose={false}
+                          closeOnClick={true}
+                          position="bottom-left"
+                        />
+                        <App />
+                      </ChakraProvider>
+                    </SystemOfListsProvider>
                   </FormatContextProvider>
                 </SizeContextProvider>
               </AdminContextProvider>
             </SocketContextProvider>
           </OptionContextProvider>
         </UserContextProvider>
-        </ColorPaletteContextProvider>
-      </ListOfMessageContextProvider>
-    </BrowserRouter>
+      </ColorPaletteContextProvider>
+    </ListOfMessageContextProvider>
+  </BrowserRouter>
 );
