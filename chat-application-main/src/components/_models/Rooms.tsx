@@ -1,13 +1,6 @@
-import {
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-} from "@chakra-ui/react";
 import {  Video } from "lucide-react";
 import axios from "axios";
-import { useRef, useState, useEffect } from "react";
+import { useRef, RefObject, useState, useEffect } from "react";
 import RoomContainer from "../RoomContainer";
 import CreateRoomModule from "./CreateRoomModule";
 import { useSocketContext } from "../../context/SocketContextProvider";
@@ -16,11 +9,9 @@ import CloseIcon from "@mui/icons-material/Close";
 
 
 export default function Rooms({controlBarRef,roomsIsOpen , setRoomsIsOpen, resetLists}: {controlBarRef: RefObject<HTMLDivElement | null>, roomsIsOpen: boolean, setRoomsIsOpen: React.Dispatch<React.SetStateAction<boolean>>, resetLists: () => void}) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [ rooms, setRooms ]: [ rooms: any, setRooms: any] = useState([])
   const [deleteChecker, setDeleteChecker] = useState<boolean>(false)
   const {socket} = useSocketContext()
-  const btnRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

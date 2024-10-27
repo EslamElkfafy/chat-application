@@ -175,7 +175,7 @@ function Authorization({
       <div className="h-[74px]">
         <div className="p-[4px] border-b-2 mb-[2px] border-t-2 mt-[2px] border-[#bababa] rounded-2xl h-[69px] flex justify-center items-center flex-col">
           {choise == "nike-name" && (
-            <div className="flex flex-col justify-center items-center gap-x-2 px-1 w-full gap-[2px]">
+            <form className="flex flex-col justify-center items-center gap-x-2 px-1 w-full gap-[2px]">
               {" "}
               <Input
                 className="w-full text-center"
@@ -193,13 +193,14 @@ function Authorization({
                 }}
                 size={"xs"}
                 onClick={(e) => handler(e, handleClickNikeName)}
+                type="submit"
               >
                 الدخول
               </Button>
-            </div>
+            </form>
           )}
           {choise == "sign-in" && (
-            <div className="flex  flex-col gap-x-2 px-1 gap-y-1 w-full">
+            <form className="flex  flex-col gap-x-2 px-1 gap-y-1 w-full">
               {" "}
               <div dir="rtl" className="flex w-full">
                 <Input
@@ -230,6 +231,7 @@ function Authorization({
                     backgroundColor: getColor("mainButton"),
                     color: getColor("textOfMainButton"),
                   }}
+                  type="submit"
                 >
                   الدخول
                 </Button>
@@ -242,10 +244,10 @@ function Authorization({
                   <VisibilityIcon sx={{ fontSize: 40 }} />
                 </span>
               </div>
-            </div>
+            </form>
           )}
           {choise == "sign-up" && (
-            <div className="flex  flex-col gap-x-2 w-full px-1 gap-y-1">
+            <form className="flex  flex-col gap-x-2 w-full px-1 gap-y-1">
               {/* {(messageNameSignUp && <div className="text-red-500">هذا الاسم مستخدم بالفعل</div>) || (messageFeildsSignUp && <div className="text-red-500">قم بملئ الحقول</div>)} */}
 
               <div dir="rtl" className="flex w-full">
@@ -277,10 +279,11 @@ function Authorization({
                   backgroundColor: getColor("mainButton"),
                   color: getColor("textOfMainButton"),
                 }}
+                type="submit"
               >
                 الدخول
               </Button>
-            </div>
+            </form>
           )}
         </div>
       </div>

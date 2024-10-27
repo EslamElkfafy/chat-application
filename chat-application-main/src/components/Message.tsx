@@ -314,25 +314,18 @@ function Message({ item }: { item: {
   description: string | ReactElement,
   type: string
 } }) {
-  const [render, setRender] = useState(false)
+  const [_, setRender] = useState(false)
   useEffect(() => {
-    const formatDescription = async () => {
-      console.log("Starting text formatting");
-      if (item.description) {
-        try {
-          let formattedText: string | ReactElement = '';
-          if (typeof item.description === 'string')
-            formattedText = <FormatText text={item.description} />;
-          console.log("ofjeowjfioejwofje")
-          item.description = formattedText; // Assuming the API returns the formatted text directly
-          setRender(prev => !prev); // Update the state to indicate that the text formatting is done
-        } catch (error) {
-          console.error("Error formatting text:", error);
-        }
+    console.log(item)
+    if (item.description) {
+      try {
+        if (typeof item.description === 'string')
+          item.description = <FormatText text={item.description} />;
+        setRender((prev) => !prev)
+      } catch (error) {
+        console.error("Error formatting text:", error);
       }
-    };
-  
-    formatDescription();
+    }
   }, []);
   return (
     <>

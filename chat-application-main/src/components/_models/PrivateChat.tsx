@@ -1,10 +1,3 @@
-import {
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-} from "@chakra-ui/react";
 import { MessageCircle } from "lucide-react";
 
 import { RefObject, useEffect, useRef, useState } from "react";
@@ -15,7 +8,6 @@ import { getColor } from "../../lib/getColor";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivateChatIsOpen, resetLists}: {controlBarRef: RefObject<HTMLDivElement | null>, privateChatIsOpen: boolean, setPrivateChatIsOpen: React.Dispatch<React.SetStateAction<boolean>>, resetLists: () => void}) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [listOfPrivate, setListOfPrivate] = useState([]);
   const listRef = useRef<HTMLDivElement | null>(null);
   const { user } = useUserContext()
@@ -25,11 +17,19 @@ export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivat
       const response = await axios.get(`users/getprivate/${user._id}`);
       setListOfPrivate(response.data.private)
     }
-    const interval = setInterval(() => {
-      fetchData()
-    }, 1000)
-    return () =>  clearInterval(interval)
-  }, [])
+    let interval = null
+    console.log("hello from private Chat")
+    if (privateChatIsOpen)
+    {
+      interval = setInterval(() => {
+        fetchData()
+      }, 1000)
+    }
+    return () =>  {
+      if (interval)
+        clearInterval(interval)
+    }
+  }, [privateChatIsOpen])
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
     return () => {
