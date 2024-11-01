@@ -262,3 +262,15 @@ export const updateLike = async (req, res, next) => {
     next(error)
   }
 }
+
+export const deletePrivate = async (req, res) => {
+  const userIdDeleted = req.body.userId;
+  try {
+    await User.findByIdAndUpdate(req.params.id, {
+      $pull: {private:  userIdDeleted}
+    })
+    res.status(200).send("Private status is deleted")
+  } catch (error) {
+    next(error)
+  }
+}

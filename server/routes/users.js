@@ -14,7 +14,8 @@ import {
   updateChatBlock,
   updateInfoBlock,
   updateLike,
-  checkLike
+  checkLike,
+  deletePrivate
 } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js";
 
@@ -31,6 +32,8 @@ router.get("/socket/:socketId", getUser);
 router.put("/updateprivate/:id", updatePrivate);
 // get praivate
 router.get("/getprivate/:id", getPrivate);
+//delete praivate
+router.delete("/deleteprivate/:id", deletePrivate);
 // get like list
 router.get("/like/:id", getLike);
 // get block list
