@@ -1,10 +1,3 @@
-import {
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-} from "@chakra-ui/react";
 import { MessageCircle } from "lucide-react";
 
 import { RefObject, useEffect, useRef, useState } from "react";

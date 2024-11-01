@@ -34,14 +34,22 @@ export default function RoomInfo({controlBarRef,roomInfoIsOpen , setRoomInfoIsOp
       // .filter((item : any) => {
       //   return item.status === "connect"
       // })
+      console.log("hello from users")
       setOnlineList(listOfOnline);
       setInRoomUsers(inusers);
     };
-    const interval = setInterval(() => {
-      fetchData();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [option.room]);
+    let interval = null
+    if (roomInfoIsOpen) {
+      interval = setInterval(() => {
+        fetchData();
+      }, 1000);
+
+    }
+    return () => {
+      if (interval)
+        return clearInterval(interval);
+    }
+  }, [option.room, roomInfoIsOpen]);
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
     return () => {
