@@ -54,9 +54,17 @@ const PrivataChatModal = () => {
   useEffect(() => {
     input.current && (input.current.scrollTop = input.current?.scrollHeight);
   }, [listOfPrivateMessages, dataListOfPrivateMessages]);
+  const resetStatesOfComponent = () => {
+    setChatId(null);
+    setToUserId(null);
+    setIsOpen(false);
+    setIsExpand(false);
+    setListOfPrivateMessages([]);
+    setDataListOfPrivateMessages([]);
+  }
   return (
     <div className={`absolute top-0 left-0 ${expandClass} ${hiddenClass} z-10 max-w-[31.25rem] min-w-[11.875rem] w-[99.8%] flex flex-col` }>
-      <HeaderPrivateChatModal  toUserId={toUserId} setIsOpen={setIsOpen} setIsExpand={setIsExpand} isExpand={isExpand} />
+      <HeaderPrivateChatModal  toUserId={toUserId} setIsOpen={setIsOpen} setIsExpand={setIsExpand} isExpand={isExpand} resetStatesOfComponent={resetStatesOfComponent} />
       <div
         className="flex flex-col flex-grow  overflow-auto"
         ref={input}

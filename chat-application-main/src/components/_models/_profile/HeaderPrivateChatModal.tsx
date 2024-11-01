@@ -14,23 +14,26 @@ import { getColor } from "../../../lib/getColor";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import RemoveIcon from '@mui/icons-material/Remove';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import UserModal from "../../UserModal";
 
 const HeaderPrivateChatModal = ({
   toUserId,
   setIsOpen,
   setIsExpand,
-  isExpand
+  isExpand,
+  resetStatesOfComponent
 }: {
   toUserId: any;
   setIsOpen: any;
   setIsExpand: any;
   isExpand:any;
+  resetStatesOfComponent: any;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const chat = Profile_Items[0];
-  const report = Profile_Items[1];
-  const like = Profile_Items[2];
-  const igonre = Profile_Items[3];
+  // const chat = Profile_Items[0];
+  // const report = Profile_Items[1];
+  // const like = Profile_Items[2];
+  // const igonre = Profile_Items[3];
   const [dataUser, setDataUser] = useState<Record<string, any>>({});
 
   useEffect(() => {
@@ -51,7 +54,7 @@ const HeaderPrivateChatModal = ({
         }}
         // onClick={onOpen}
       >
-        <div className="flex items-center gap-x-1">
+        <div className="flex items-center gap-x-1 cursor-pointer" onClick={onOpen}>
           <img
             src={import.meta.env.VITE_API_BASE_URL + dataUser.img}
             className="w-6 h-6"
@@ -75,51 +78,14 @@ const HeaderPrivateChatModal = ({
               backgroundColor: getColor("closeButton"),
               color: getColor("textOfCloseButton"),
             }}
-            onClick={() => setIsOpen(false)}
+            onClick={resetStatesOfComponent}
           >
             <RemoveIcon />
           </div>
         </div>
       </div>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalContent width={"350px"}>
-          <div className="flex items-center justify-between px-2 py-3 bg-blue-950 text-white">
-            <img src="/avatar.jpg" className="w-6 h-6" />
-            <ModalCloseButton bg={"red"} color={"white"} />
-          </div>
-          <img src="/avatar.jpg" className="h-[200px] bg-cover" />
-          <div className="flex flex-wrap  p-1 gap-1 justify-center">
-            <div className="border p-1 flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center">
-              <chat.icon className="size-5" />
-              {chat.text}
-            </div>
-            <div className="border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center">
-              <report.icon className="size-5" />
-              {report.text}
-            </div>
-            <div className="border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center text-red-700">
-              <like.icon className="size-5" />
-              {like.text}
-            </div>
-            <div className="border p-1  flex  rounded-md cursor-pointer w-[150px] text-sm items-center justify-center text-red-700">
-              <igonre.icon className="size-5" />
-              {igonre.text}
-            </div>
-          </div>
-          <p className="text-center mt-1 text-black font-semibold">عضو جديد</p>
-          <div className="flex items-center justify-between py-2">
-            <div className="flex items-center gap-x-2 px-2 ">
-              <Flags countryCode="sa" svg />
-              مملكة السعودية
-            </div>
-            <div className="flex items-center gap-x-1 bg-blue-950 p-1 text-white font-normal border-[2px]">
-              <img src="/1600w-qJptouniZ0A.webp" className="w-7 h-7" />
-              غرفة
-            </div>
-          </div>
-        </ModalContent>
-      </Modal>
+      <UserModal isOpen={isOpen} onClose={onClose} userId={toUserId} />
     </>
   );
 };

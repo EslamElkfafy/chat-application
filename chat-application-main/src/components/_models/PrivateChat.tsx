@@ -17,14 +17,25 @@ import UserPrivateModule from "../UserPrivateModule";
 
 export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivateChatIsOpen, resetLists}: {controlBarRef: RefObject<HTMLDivElement | null>, privateChatIsOpen: boolean, setPrivateChatIsOpen: React.Dispatch<React.SetStateAction<boolean>>, resetLists: () => void}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [listOfPrivate, setListOfPrivate] = useState([]);
+  // const [listOfPrivate, setListOfPrivate] = useState([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const listRef = useRef<HTMLDivElement | null>(null);
   const { user } = useUserContext()
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`users/getprivate/${user._id}`);
-      setListOfPrivate(response.data);
+      const messagesData = await Promise.all(
+        response.data.map(async (userId: any) => {
+          const response1 = await axios.post(`chats/lastmessage`, {
+            user1: user._id,
+            user2: userId,
+          });
+          console.log(response1)
+          return { userId, lastMessage: response1.data };
+        })
+      );
+      setMessages(messagesData);
     }
     const interval = setInterval(() => {
       fetchData()
@@ -68,8 +79,8 @@ export default function PrivateChat({controlBarRef,privateChatIsOpen , setPrivat
           </button>
           </div>
           <div className="flex flex-col h-[550px] overflow-auto">
-            {listOfPrivate.map((item) => (
-              <UserPrivateModule key={item} userId={item} />
+            {messages.map((item) => (
+              <UserPrivateModule key={item.userId} userId={item.userId} message={item.lastMessage}/>
             ))}
           </div>
       </div>

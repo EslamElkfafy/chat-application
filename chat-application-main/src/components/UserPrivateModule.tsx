@@ -1,12 +1,11 @@
 import UserModal from "./UserModal";
 import UserPrivateContainer from "./UserPrivateContainer";
 
-function UserPrivateModule({ userId }: { userId: any }) {
+function UserPrivateModule({ userId, message }: { userId: any, message : any}) {
   return (
     <>
-      <UserPrivateContainer userId={userId} />
+      <UserPrivateContainer userId={userId} message={message}/>
 
-      {/* <UserPrivateModule userId={userId} /> */}
     </>
   );
 }

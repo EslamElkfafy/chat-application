@@ -198,7 +198,7 @@ export default function UserModal({
               {userData.country && country[userData.country].arabic}
             </div>
             {room && (
-              <div className="flex items-center gap-x-1 bg-blue-950 p-1 text-white font-normal border-[2px]">
+              <div className="flex items-center gap-x-1 p-1 font-normal border-[2px]" style={{backgroundColor: getColor("mainButton"), color: getColor("textOfMainButton")}}>
                 <img
                   src={import.meta.env.VITE_API_BASE_URL + room.img}
                   className="w-7 h-7"
