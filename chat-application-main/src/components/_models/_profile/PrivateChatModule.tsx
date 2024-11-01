@@ -20,13 +20,8 @@ import PortalPrivateModal from "../../../lib/PortalPrivateModal";
 import { useSystemOfLists } from "../../../context/SystemOfLists";
 import eventEmitter from "../../../lib/eventEmitter";
 
-function PrivateChatModule({ toUserId, onClose, setIsPrivateChatOpen }: { toUserId: any, onClose: () => void, setIsPrivateChatOpen: any}) {
+function PrivateChatModule({ toUserId, onClose }: { toUserId: any, onClose: () => void}) {
   const chat = Profile_Items[0];
-  const input = useRef<HTMLInputElement>(null);
-  const [listOfPrivateMessages, setListOfPrivateMessages] = useState<any[]>([]);
-  const [dataListOfPrivateMessages, setDataListOfPrivateMessages] = useState<
-    any[]
-  >([]);
   const { user } = useUserContext();
   const { socket } = useSocketContext();
   const { resetLists } = useSystemOfLists()

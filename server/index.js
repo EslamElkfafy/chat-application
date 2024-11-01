@@ -58,6 +58,7 @@ const connect = () => {
     });
 };
 let online = {};
+let onlineUsers = 0;
 setInterval(async () => {
   const jsonData = await readJsonFile(
     path.resolve("./welcomedailymessages.json")
@@ -87,6 +88,9 @@ setInterval(async () => {
 }, 1000);
 io.on("connection", (socket) => {
   console.log(socket.id);
+  onlineUsers++;
+  socket.broadcast.emit("increaseOnline");
+  console.log("fjeiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
   socket.on("sent-event", (message) => {
     socket.broadcast.emit("receive-event", message);
   });
@@ -149,6 +153,8 @@ io.on("connection", (socket) => {
   // s.clear()
   socket.on("disconnect", async () => {
     console.log("User disconnected");
+    onlineUsers--;
+    socket.broadcast.emit("decreaseOnline");
     const userId = Object.keys(online).find((key) => online[key] === socket.id);
     if (userId) {
       try {
@@ -169,6 +175,7 @@ io.on("connection", (socket) => {
     }
   });
 });
+
 
 //middlewares
 app.use(
@@ -378,4 +385,8 @@ app.get("/api/colorpalette", async (req, res) => {
 server.listen(env.PORT, "0.0.0.0", () => {
   connect();
   console.log("Connected to Server " + env.PORT);
+});
+
+app.get("/api/numberofonline", async (req, res) => {
+  return res.status(200).json(onlineUsers)
 });

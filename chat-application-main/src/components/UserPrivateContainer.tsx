@@ -4,13 +4,18 @@ import axios from "axios";
 import { useUserContext } from "../context/UserContextProvider";
 import CloseIcon from "@mui/icons-material/Close";
 import { getColor } from "../lib/getColor";
+import eventEmitter from "../lib/eventEmitter";
 
 function UserPrivateContainer({
   userId,
   message,
+  resetLists,
+  chatId,
 }: {
   userId: any;
   message: any;
+  resetLists: any;
+  chatId: any;
 }) {
   const { user } = useUserContext();
   const [data, setData]: any = useState(null);
@@ -34,7 +39,8 @@ function UserPrivateContainer({
     };
     fetchData();
   }, []);
-  const handleDelete = () => {
+  const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     axios
       .delete(`users/deleteprivate/${user._id}`, {
         data: { userId },
@@ -51,9 +57,14 @@ function UserPrivateContainer({
   return (
     <div
       className="flex justify-between items-center border cursor-pointer bg-[#fafafa]"
-      // onClick={() => {
-      //   if (onClick) onClick();
-      // }}
+      onClick={() => {
+        resetLists();
+        eventEmitter.emit("updateData", {
+          chatId,
+          toUserId: userId,
+          isOpen: true,
+        });
+      }}
     >
       <div className="flex gap-x-1">
         <img
@@ -71,7 +82,7 @@ function UserPrivateContainer({
             {data?.name}
           </p>
           <p style={{ color: "#888888" }}>
-            {message.description ? message.description : ".."}
+          {message?.description || ".."}
           </p>
         </div>
       </div>

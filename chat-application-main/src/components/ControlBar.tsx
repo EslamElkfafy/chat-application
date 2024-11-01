@@ -7,6 +7,8 @@ import Blogs from "./_models/Blogs";
 import { getColor } from "../lib/getColor";
 import { useRef, useState } from "react";
 import { useSystemOfLists } from "../context/SystemOfLists";
+import { ListOfControlBarButtons } from "../lib/utils";
+import { ControlBarButton } from "./ControlBarButton";
 
 function ControlBar() {
   const controlBarRef = useRef<HTMLDivElement | null>(null);
@@ -23,13 +25,43 @@ function ControlBar() {
     setBlogsIsOpen,
     resetLists,
   } = useSystemOfLists();
+  const handleButtonClick = (type: string) => {
+    resetLists();
+    console.log("dfjjejjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+    switch (type) {
+      case "RoomInfo":
+        setRoomInfoIsOpen(true);
+        break;
+      case "Rooms":
+        setRoomsIsOpen(true);
+        break;
+      case "Profile":
+        setProfileIsOpen(true);
+        break;
+      case "ProfileChat":
+        setPrivateChatIsOpen(true);
+        break;
+      case "Blogs":
+        setBlogsIsOpen(true);
+        break;
+      default:
+        break;
+    }
+  };
   return (
     <div ref={controlBarRef} className="flex  items-center gap-x-1" style={{backgroundColor: getColor("mainColor")}}>
-      <RoomInfo roomInfoIsOpen={roomInfoIsOpen} setRoomInfoIsOpen={setRoomInfoIsOpen} resetLists={resetLists} controlBarRef={controlBarRef}/>
-      <Rooms roomsIsOpen={roomsIsOpen} setRoomsIsOpen={setRoomsIsOpen} resetLists={resetLists} controlBarRef={controlBarRef}/>
-      <Profile profileIsOpen={profileIsOpen} setProfileIsOpen={setProfileIsOpen} resetLists={resetLists} controlBarRef={controlBarRef}/>
-      <PrivateChat privateChatIsOpen={privateChatIsOpen} resetLists={resetLists} setPrivateChatIsOpen={setPrivateChatIsOpen} controlBarRef={controlBarRef}/>
-      <Blogs blogsIsOpen={blogsIsOpen} setBlogsIsOpen= {setBlogsIsOpen} resetLists={resetLists} controlBarRef={controlBarRef}/>
+      {
+        ListOfControlBarButtons.map((button) => {
+          return (
+            <ControlBarButton key={button.type} Icon={button.icon} text={button.text} type={button.type} onClick={() => handleButtonClick(button.type)} />
+          )
+        })
+      }
+      {roomInfoIsOpen && <RoomInfo setRoomInfoIsOpen={setRoomInfoIsOpen} controlBarRef={controlBarRef}/>}
+      {roomsIsOpen && <Rooms setRoomsIsOpen={setRoomsIsOpen} controlBarRef={controlBarRef}/>}
+      {profileIsOpen && <Profile setProfileIsOpen={setProfileIsOpen} controlBarRef={controlBarRef}/>}
+      {privateChatIsOpen && <PrivateChat resetLists={resetLists} setPrivateChatIsOpen={setPrivateChatIsOpen} controlBarRef={controlBarRef}/>}
+      {blogsIsOpen && <Blogs setBlogsIsOpen= {setBlogsIsOpen} controlBarRef={controlBarRef}/>}
     </div>
   );
 }

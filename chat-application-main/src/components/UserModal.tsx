@@ -48,7 +48,6 @@ export default function UserModal({
   const [resultBlock, setResultBlock] = useState(false);
   const [likeActive, setLikeActive] = useState(false);
   const [userData, setUserData] = useState<Record<string, any>>({});
-  const [isPrivateChatOpen, setIsPrivateChatOpen] = useState(false);
   // const [chatId, setChatId] = useState("");
 
   useEffect(() => {
@@ -150,7 +149,6 @@ export default function UserModal({
             <PrivateChatModule
               toUserId={userId}
               onClose={onClose}
-              setIsPrivateChatOpen={setIsPrivateChatOpen}
             />
             <ReportModule toUserId={userId} />
             <div

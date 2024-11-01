@@ -29,20 +29,16 @@ import UserRepository from "../../repositories/userRepository";
 
 export default function Profile({
   controlBarRef,
-  profileIsOpen,
   setProfileIsOpen,
-  resetLists,
 }: {
   controlBarRef: RefObject<HTMLDivElement | null>;
-  profileIsOpen: boolean;
   setProfileIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  resetLists: () => void;
 }) {
   const { setListOfMessage } = useListOfMessageContext();
   const { size, setSize } = useSizeContext();
   const { socket } = useSocketContext();
   const { user, setUser } = useUserContext();
-  const {option} = useOptionContext();
+  const { option } = useOptionContext();
   const router = useNavigate();
   const listRef = useRef<HTMLDivElement | null>(null);
   const nameColorRef = useRef<HTMLDivElement | null>(null);
@@ -54,22 +50,37 @@ export default function Profile({
     useState<boolean>(false);
   const [paletteOfBackgroundColorIsOpen, setPaletteOfBackgroundColorIsOpen] =
     useState<boolean>(false);
-    const paletteOptions = [
-      { condition: paletteOfNameIsOpen, position: "top-[10rem]", state: "nameColor" },
-      { condition: paletteOfFontIsOpen, position: "top-[12rem]", state: "fontColor" },
-      { condition: paletteOfBackgroundColorIsOpen, position: "top-[14.25rem]", state: "backgroundColor" },
-    ];
-    
-    const activePalette = paletteOptions.find(option => option.condition) || { position: "", state: "" };
-    
-    const isMoble = window.innerWidth <= 554;
-    const positionYOfPaletteColor = activePalette.position;
-    const positionXOfPaletteColor = isMoble ? "right-[38%]" : "right-[230px]";
-    const widthOfPaletteColor = isMoble ? "w-[160px]" : "w-[257px]";
-    const widthOfItemOfPaletteColor = isMoble ? "w-[26.666px]" : "w-[40px]";
-    const heightOfItemOfPaletteColor = isMoble ? "h-[26.666px]" : "h-[40px]";
-    const hiddenOfPalette = activePalette.position ? "" : "hidden";
-    const stateOfPalette = activePalette.state;
+  const paletteOptions = [
+    {
+      condition: paletteOfNameIsOpen,
+      position: "top-[10rem]",
+      state: "nameColor",
+    },
+    {
+      condition: paletteOfFontIsOpen,
+      position: "top-[12rem]",
+      state: "fontColor",
+    },
+    {
+      condition: paletteOfBackgroundColorIsOpen,
+      position: "top-[14.25rem]",
+      state: "backgroundColor",
+    },
+  ];
+
+  const activePalette = paletteOptions.find((option) => option.condition) || {
+    position: "",
+    state: "",
+  };
+
+  const isMoble = window.innerWidth <= 554;
+  const positionYOfPaletteColor = activePalette.position;
+  const positionXOfPaletteColor = isMoble ? "right-[38%]" : "right-[230px]";
+  const widthOfPaletteColor = isMoble ? "w-[160px]" : "w-[257px]";
+  const widthOfItemOfPaletteColor = isMoble ? "w-[26.666px]" : "w-[40px]";
+  const heightOfItemOfPaletteColor = isMoble ? "h-[26.666px]" : "h-[40px]";
+  const hiddenOfPalette = activePalette.position ? "" : "hidden";
+  const stateOfPalette = activePalette.state;
   const [inputs, setInputs] = useState({
     name: user.name,
     state: user.state,
@@ -80,7 +91,7 @@ export default function Profile({
   const [chatCheck, setChatCheck] = useState(false);
   const [infoCheck, setInfoheck] = useState(false);
   const changeSize = (value: number) => {
-    console.log(value)
+    console.log(value);
     const root = document.querySelector("html");
     const fontSize = window.innerWidth <= 554 ? 14 : 16;
     root!.style.fontSize = `${fontSize * value}px`;
@@ -104,37 +115,37 @@ export default function Profile({
     ]);
     socket.emit("sent-event", tempMessage);
   };
-  const handleChange = (key : string, value: string) => {
-    setInputs({ ...inputs, [key]: value});
+  const handleChange = (key: string, value: string) => {
+    setInputs({ ...inputs, [key]: value });
   };
   const handleClick = async () => {
     const newUser = { ...user, ...inputs };
-    const toastId = toast.loading("يتم حفظ البيانات", option.toastOptions)
+    const toastId = toast.loading("يتم حفظ البيانات", option.toastOptions);
     try {
-      await UserRepository.update(newUser)
+      await UserRepository.update(newUser);
       setUser(newUser);
       toast.update(toastId, {
         ...option.toastOptions,
         render: "تم حفظ البيانات",
         isLoading: false,
-        type: "success"
-      })
-    } catch(e) {
+        type: "success",
+      });
+    } catch (e) {
       toast.update(toastId, {
         ...option.toastOptions,
         render: "حدث خطأ في السيرفر",
         isLoading: false,
-        type: "error"
-      })
+        type: "error",
+      });
     }
   };
   const handelChatBlockClick = async () => {
     await axios.put(`users/chatblock/${user._id}`, { check: !chatCheck });
-    setChatCheck(prev => !prev);
+    setChatCheck((prev) => !prev);
   };
   const handelInfoBlockClick = async () => {
     await axios.put(`users/infoblock/${user._id}`, { check: !infoCheck });
-    setInfoheck(prev => !prev);
+    setInfoheck((prev) => !prev);
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -177,140 +188,132 @@ export default function Profile({
   };
 
   const deleteImgHandler = async () => {
-    const toastId = toast.loading("يتم حذف الصورة الشخصية", option.toastOptions)
+    const toastId = toast.loading(
+      "يتم حذف الصورة الشخصية",
+      option.toastOptions
+    );
     try {
-      const img = await UserRepository.deleteImg(user._id)
+      const img = await UserRepository.deleteImg(user._id);
       setUser((user: any) => ({
         ...user,
-        img
-      }))
+        img,
+      }));
       toast.update(toastId, {
         ...option.toastOptions,
         render: "تم حذف الصورة الشخصية",
         isLoading: false,
-        type: "success"
-      })
-    } catch(e) {
+        type: "success",
+      });
+    } catch (e) {
       toast.update(toastId, {
         ...option.toastOptions,
         render: "حدث خطأ في السيرفر",
         isLoading: false,
-        type: "error"
-      })
+        type: "error",
+      });
     }
-  }
+  };
   return (
     <>
-      <div
-        className="flex justify-center  items-center border border-black text-sm md:text-md text-white w-[100px] py-1 cursor-pointer "
-        style={{ backgroundColor: getColor("mainButton") }}
-        onClick={() => {
-          resetLists();
-          setProfileIsOpen(true);
-        }}
-      >
-        <Settings className=" size-4 md:size-5" /> {"الضبط"}
-      </div>
-      <div
-        className={`${widthOfPaletteColor} h-52 fixed ${positionYOfPaletteColor} ${positionXOfPaletteColor} ${hiddenOfPalette} z-30 flex flex-wrap overflow-y-auto`}
-        style={{ backgroundColor: getColor("backgroundItems") }}
-      >
-        {ListOfcolorsPalette.map((item: string, index: number) => {
-          return (
-            <div
-              key={item + index}
-              className={`${widthOfItemOfPaletteColor} ${heightOfItemOfPaletteColor}`}
-              style={{ backgroundColor: item }}
-              onClick={() => handleChange(stateOfPalette, item)}
-            ></div>
-          );
-        })}
-      </div>
-      <div
-        ref={listRef}
-        className={`flex flex-col w-[21.25rem] w-max-554:w-[70%] absolute right-0 top-0 bottom-[1.9375rem] overflow-auto border border-black ${
-          !profileIsOpen ? "hidden" : ""
-        }`}
-        style={{ backgroundColor: getColor("backgroundItems") }}
-      >
-        <div
-          style={{
-            backgroundColor: getColor("settingsBackground"),
-            color: getColor("textOfSettingsBackground"),
-          }}
-        >
+      <div>
           <div
-            className="w-full flex items-center justify-between px-2 relative h-[2.5rem]"
-            style={{
-              backgroundColor: getColor("mainColor"),
-              color: getColor("textOfMainColor"),
-            }}
+            className={`${widthOfPaletteColor} h-52 fixed ${positionYOfPaletteColor} ${positionXOfPaletteColor} ${hiddenOfPalette} z-30 flex flex-wrap overflow-y-auto`}
+            style={{ backgroundColor: getColor("backgroundItems") }}
           >
-            <p className="font-bold">الإعدادات</p>
-            <button
-              onClick={() => setProfileIsOpen(false)}
-              className="p-2 border border-black rounded-lg"
+            {ListOfcolorsPalette.map((item: string, index: number) => {
+              return (
+                <div
+                  key={item + index}
+                  className={`${widthOfItemOfPaletteColor} ${heightOfItemOfPaletteColor}`}
+                  style={{ backgroundColor: item }}
+                  onClick={() => handleChange(stateOfPalette, item)}
+                ></div>
+              );
+            })}
+          </div>
+          <div
+            ref={listRef}
+            className={`flex flex-col w-[21.25rem] w-max-554:w-[70%] absolute right-0 top-0 bottom-[1.9375rem] overflow-auto border border-black`}
+            style={{ backgroundColor: getColor("backgroundItems") }}
+          >
+            <div
               style={{
-                backgroundColor: getColor("closeButton"),
-                color: getColor("textOfCloseButton"),
+                backgroundColor: getColor("settingsBackground"),
+                color: getColor("textOfSettingsBackground"),
               }}
             >
-              <CloseIcon sx={{ fontSize: 20, fontWeight: "bold" }} />
-            </button>
-          </div>
-          <div className="flex flex-col w-full">
-            <label
-              className="text-center w-[100px]"
-              style={{
-                backgroundColor: getColor("mainButton"),
-                color: getColor("textOfMainButton"),
-              }}
-            >
-              الزخرفه
-            </label>
-            <Input
-              size={"sm"}
-              name="name"
-              width={"100%"}
-              value={inputs.name}
-              onChange={(e) => handleChange("name", e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col w-full mt-1">
-            <label
-              className="text-center w-[100px]"
-              style={{
-                backgroundColor: getColor("mainButton"),
-                color: getColor("textOfMainButton"),
-              }}
-            >
-              الحاله
-            </label>
-            <Input
-              size={"sm"}
-              name="state"
-              width={"100%"}
-              value={inputs.state}
-              onChange={(e) => handleChange("state", e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-y-1 mt-2">
-            <div className="flex gap-x-1 items-center">
-              <label
-                className="text-center w-[100px]"
+              <div
+                className="w-full flex items-center justify-between px-2 relative h-[2.5rem]"
                 style={{
-                  backgroundColor: getColor("mainButton"),
-                  color: getColor("textOfMainButton"),
+                  backgroundColor: getColor("mainColor"),
+                  color: getColor("textOfMainColor"),
                 }}
               >
-                لون الإسم
-              </label>
-              <div
-                className="w-16 h-6 border border-black"
-                style={{ backgroundColor: inputs.nameColor }}
-                ref={nameColorRef}
-              ></div>
-              {/* <Input
+                <p className="font-bold">الإعدادات</p>
+                <button
+                  onClick={() => setProfileIsOpen(false)}
+                  className="p-2 border border-black rounded-lg"
+                  style={{
+                    backgroundColor: getColor("closeButton"),
+                    color: getColor("textOfCloseButton"),
+                  }}
+                >
+                  <CloseIcon sx={{ fontSize: 20, fontWeight: "bold" }} />
+                </button>
+              </div>
+              <div className="flex flex-col w-full">
+                <label
+                  className="text-center w-[100px]"
+                  style={{
+                    backgroundColor: getColor("mainButton"),
+                    color: getColor("textOfMainButton"),
+                  }}
+                >
+                  الزخرفه
+                </label>
+                <Input
+                  size={"sm"}
+                  name="name"
+                  width={"100%"}
+                  value={inputs.name}
+                  onChange={(e) => handleChange("name", e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col w-full mt-1">
+                <label
+                  className="text-center w-[100px]"
+                  style={{
+                    backgroundColor: getColor("mainButton"),
+                    color: getColor("textOfMainButton"),
+                  }}
+                >
+                  الحاله
+                </label>
+                <Input
+                  size={"sm"}
+                  name="state"
+                  width={"100%"}
+                  value={inputs.state}
+                  onChange={(e) => handleChange("state", e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-y-1 mt-2">
+                <div className="flex gap-x-1 items-center">
+                  <label
+                    className="text-center w-[100px]"
+                    style={{
+                      backgroundColor: getColor("mainButton"),
+                      color: getColor("textOfMainButton"),
+                    }}
+                  >
+                    لون الإسم
+                  </label>
+                  <div
+                    className="w-16 h-6 border border-black"
+                    style={{ backgroundColor: inputs.nameColor }}
+                    ref={nameColorRef}
+                  ></div>
+                  {/* <Input
               type="color"
               width={"100px"}
               size={"sm"}
@@ -318,23 +321,23 @@ export default function Profile({
               value={inputs.nameColor}
               onChange={(e) => handleChange(e)}
             /> */}
-            </div>
-            <div className="flex gap-x-1 items-center">
-              <label
-                className="text-center w-[100px]"
-                style={{
-                  backgroundColor: getColor("mainButton"),
-                  color: getColor("textOfMainButton"),
-                }}
-              >
-                لون الخط
-              </label>
-              <div
-                className="w-16 h-6 border border-black"
-                style={{ backgroundColor: inputs.fontColor }}
-                ref={fontColorRef}
-              ></div>
-              {/* <Input
+                </div>
+                <div className="flex gap-x-1 items-center">
+                  <label
+                    className="text-center w-[100px]"
+                    style={{
+                      backgroundColor: getColor("mainButton"),
+                      color: getColor("textOfMainButton"),
+                    }}
+                  >
+                    لون الخط
+                  </label>
+                  <div
+                    className="w-16 h-6 border border-black"
+                    style={{ backgroundColor: inputs.fontColor }}
+                    ref={fontColorRef}
+                  ></div>
+                  {/* <Input
                 type="color"
                 width={"100px"}
                 size={"sm"}
@@ -342,23 +345,23 @@ export default function Profile({
                 value={inputs.fontColor}
                 onChange={(e) => handleChange(e)}
               /> */}
-            </div>
-            <div className="flex gap-x-1 items-center">
-              <label
-                className="text-center w-[100px]"
-                style={{
-                  backgroundColor: getColor("mainButton"),
-                  color: getColor("textOfMainButton"),
-                }}
-              >
-                لون الخلفيه
-              </label>
-              <div
-                className="w-16 h-6 border border-black"
-                style={{ backgroundColor: inputs.backgroundColor }}
-                ref={backgroundColorRef}
-              ></div>
-              {/* {inputs.backgroundColor ? (
+                </div>
+                <div className="flex gap-x-1 items-center">
+                  <label
+                    className="text-center w-[100px]"
+                    style={{
+                      backgroundColor: getColor("mainButton"),
+                      color: getColor("textOfMainButton"),
+                    }}
+                  >
+                    لون الخلفيه
+                  </label>
+                  <div
+                    className="w-16 h-6 border border-black"
+                    style={{ backgroundColor: inputs.backgroundColor }}
+                    ref={backgroundColorRef}
+                  ></div>
+                  {/* {inputs.backgroundColor ? (
                 <Input
                   type="color"
                   width={"100px"}
@@ -376,134 +379,153 @@ export default function Profile({
                   onChange={(e) => handleChange(e)}
                 />
               )} */}
+                </div>
+              </div>
+            </div>
+
+            <Button
+              marginTop={"5px"}
+              color={getColor("textOfPositiveButtons")}
+              borderRadius={"0px"}
+              _hover={{ backgroundColor: "rgb(74 222 128 )" }}
+              backgroundColor={getColor("positiveButtons")}
+              size={"sm"}
+              border={"1px solid black"}
+              onClick={handleClick}
+            >
+              حفظ
+            </Button>
+
+            <div className="flex flex-col gap-y-2 mt-2">
+              <Select
+                borderRadius={"0px"}
+                bg={getColor("mainButton")}
+                textColor={getColor("textOfMainButton")}
+                size={"sm"}
+                iconColor="white"
+                value={size}
+                textAlign={"center"}
+                onChange={(e) => changeSize(parseFloat(e.currentTarget.value))}
+              >
+                <option className="text-black" value="1">
+                  %100 - حجم الخطوط
+                </option>
+                <option className="text-black" value="1.2">
+                  %120 - حجم الخطوط
+                </option>
+                <option className="text-black" value="1.1">
+                  %110 - حجم الخطوط
+                </option>
+                <option className="text-black" value="1.05">
+                  %105 - حجم الخطوط
+                </option>
+                <option className="text-black" value="0.95">
+                  %95 - حجم الخطوط
+                </option>
+                <option className="text-black" value="0.90">
+                  %90 - حجم الخطوط
+                </option>
+              </Select>
+              <UploadButton />
+              <Button
+                bg={getColor("nigativeButtons")}
+                _hover={{ bg: "rgb(239 68 68)" }}
+                size={"sm"}
+                borderRadius={"2px"}
+                leftIcon={
+                  <UserRoundX
+                    style={{ color: getColor("textOfNigativeButtons") }}
+                  />
+                }
+                textAlign={"center"}
+                border={"1px solid black"}
+                color={getColor("textOfNigativeButtons")}
+                onClick={deleteImgHandler}
+              >
+                حذف الصورة
+              </Button>
+              <label
+                className=" border border-black rounded-sm text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
+                style={{
+                  backgroundColor: getColor("neutralButtons"),
+                  color: getColor("textOfNeutralButtons"),
+                }}
+                onClick={handelChatBlockClick}
+              >
+                <div className="px-1 flex items-center  w-full">
+                  {chatCheck && <CheckIcon />}
+                  <p className="text-center w-full font-bold">
+                    {" "}
+                    تعطيل المحاثات الخاصه{" "}
+                  </p>
+                </div>
+              </label>
+              <label
+                className=" border border-black rounded-sm text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
+                style={{
+                  backgroundColor: getColor("neutralButtons"),
+                  color: getColor("textOfNeutralButtons"),
+                }}
+                onClick={handelInfoBlockClick}
+              >
+                <div className="px-1 flex items-center  w-full">
+                  {infoCheck && <CheckIcon />}
+                  <p className="text-center w-full font-bold">
+                    {" "}
+                    تعطيل التنبيهات{" "}
+                  </p>
+                </div>
+              </label>
+              <Button
+                bg={getColor("neutralButtons")}
+                size={"sm"}
+                borderRadius={"2px"}
+                leftIcon={
+                  <Megaphone
+                    style={{ color: getColor("textOfNeutralButtons") }}
+                  />
+                }
+                textAlign={"center"}
+                border={"1px solid black"}
+                color={getColor("textOfNeutralButtons")}
+                onClick={handleAdv}
+              >
+                الإعلان للأدعية والمسابقات
+              </Button>
+
+              <Button
+                bg={getColor("nigativeButtons")}
+                _hover={{ bg: "rgb(239 68 68)" }}
+                size={"sm"}
+                borderRadius={"2px"}
+                leftIcon={
+                  <LogOut
+                    style={{ color: getColor("textOfNigativeButtons") }}
+                  />
+                }
+                textAlign={"center"}
+                border={"1px solid black"}
+                color={getColor("textOfNigativeButtons")}
+                onClick={logout}
+              >
+                تسجيل خروج
+              </Button>
+              {user && user.role === "admin" && (
+                <Button
+                  size={"sm"}
+                  borderRadius={"0px"}
+                  border={"1px solid gray"}
+                  onClick={() => {
+                    router("/admin-view");
+                  }}
+                >
+                  لوحة تحكم
+                </Button>
+              )}
             </div>
           </div>
         </div>
 
-        <Button
-          marginTop={"5px"}
-          color={getColor("textOfPositiveButtons")}
-          borderRadius={"0px"}
-          _hover={{ backgroundColor: "rgb(74 222 128 )" }}
-          backgroundColor={getColor("positiveButtons")}
-          size={"sm"}
-          border={"1px solid black"}
-          onClick={handleClick}
-        >
-          حفظ
-        </Button>
-
-        <div className="flex flex-col gap-y-2 mt-2">
-          <Select
-            borderRadius={"0px"}
-            bg={getColor("mainButton")}
-            textColor={getColor("textOfMainButton")}
-            size={"sm"}
-            iconColor="white"
-            value={size}
-            textAlign={"center"}
-            onChange={(e) => changeSize(parseFloat(e.currentTarget.value))}
-          >
-            <option className="text-black" value="1">
-              %100 - حجم الخطوط
-            </option>
-            <option className="text-black" value="1.2">
-              %120 - حجم الخطوط
-            </option>
-            <option className="text-black" value="1.1">
-              %110 - حجم الخطوط
-            </option>
-            <option className="text-black" value="1.05">
-              %105 - حجم الخطوط
-            </option>
-            <option className="text-black" value="0.95">
-              %95 - حجم الخطوط
-            </option>
-            <option className="text-black" value="0.90">
-              %90 - حجم الخطوط
-            </option>
-          </Select>
-          <UploadButton />
-          <Button
-            bg={getColor("nigativeButtons")}
-            _hover={{ bg: "rgb(239 68 68)" }}
-            size={"sm"}
-            borderRadius={"2px"}
-            leftIcon={<UserRoundX style={{color: getColor('textOfNigativeButtons')}} />}
-            textAlign={"center"}
-            border={"1px solid black"}
-            color={getColor("textOfNigativeButtons")}
-            onClick={deleteImgHandler}
-          >
-            حذف الصورة
-          </Button>
-          <label
-            className=" border border-black rounded-sm text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
-            style={{backgroundColor: getColor("neutralButtons"), color: getColor("textOfNeutralButtons")}}
-            onClick={handelChatBlockClick}
-          >
-            <div className="px-1 flex items-center  w-full">
-              {chatCheck && <CheckIcon />}
-              <p className="text-center w-full font-bold">
-                {" "}
-                تعطيل المحاثات الخاصه{" "}
-              </p>
-            </div>
-          </label>
-          <label
-            className=" border border-black rounded-sm text-sm  py-1.5 outline-none w-full   cursor-pointer mx-auto block font-[sans-serif]"
-            style={{backgroundColor: getColor("neutralButtons"), color: getColor("textOfNeutralButtons")}}
-            onClick={handelInfoBlockClick}
-          >
-            <div className="px-1 flex items-center  w-full">
-              {infoCheck && <CheckIcon />}
-              <p className="text-center w-full font-bold">
-                {" "}
-                تعطيل التنبيهات{" "}
-              </p>
-            </div>
-          </label>
-          <Button
-            bg={getColor("neutralButtons")}
-            size={"sm"}
-            borderRadius={"2px"}
-            leftIcon={<Megaphone style={{color: getColor("textOfNeutralButtons")}} />}
-            textAlign={"center"}
-            border={"1px solid black"}
-            color={getColor("textOfNeutralButtons")}
-            onClick={handleAdv}
-          >
-            الإعلان للأدعية والمسابقات
-          </Button>
-        
-
-          <Button
-            bg={getColor("nigativeButtons")}
-            _hover={{ bg: "rgb(239 68 68)" }}
-            size={"sm"}
-            borderRadius={"2px"}
-            leftIcon={<LogOut style={{color: getColor('textOfNigativeButtons')}}/>}
-            textAlign={"center"}
-            border={"1px solid black"}
-            color={getColor('textOfNigativeButtons')}
-            onClick={logout}
-          >
-            تسجيل خروج
-          </Button>
-          {user && user.role === "admin" && (
-            <Button
-              size={"sm"}
-              borderRadius={"0px"}
-              border={"1px solid gray"}
-              onClick={() => {
-                router("/admin-view");
-              }}
-            >
-              لوحة تحكم
-            </Button>
-          )}
-        </div>
-      </div>
       {/* <Drawer
         isOpen={isOpen}
         placement="right"

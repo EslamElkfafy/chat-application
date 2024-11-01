@@ -1,10 +1,10 @@
 import UserModal from "./UserModal";
 import UserPrivateContainer from "./UserPrivateContainer";
 
-function UserPrivateModule({ userId, message }: { userId: any, message : any}) {
+function UserPrivateModule({ userId, message, resetLists, chatId }: { userId: any, message : any, resetLists: any, chatId: any}) {
   return (
     <>
-      <UserPrivateContainer userId={userId} message={message}/>
+      <UserPrivateContainer userId={userId} message={message} resetLists={resetLists} chatId={chatId}/>
 
     </>
   );
