@@ -25,6 +25,7 @@ export default function Blogs({
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [listOfPosts, setListOfPosts] = useState([]);
   const listRef = useRef<HTMLDivElement | null>(null);
+  
 
   useEffect(() => {
     const controller = new AbortController(); // Create an AbortController instance

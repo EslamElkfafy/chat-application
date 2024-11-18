@@ -25,28 +25,18 @@ function ControlBar() {
     setBlogsIsOpen,
     resetLists,
   } = useSystemOfLists();
+
+const openFunctions: {[key: string]: (item: boolean) => void} = {
+    RoomInfo: setRoomInfoIsOpen,
+    Rooms: setRoomsIsOpen,
+    Profile: setProfileIsOpen,
+    ProfileChat: setPrivateChatIsOpen,
+    Blogs: setBlogsIsOpen
+  }
   const handleButtonClick = (type: string) => {
     resetLists();
     console.log("dfjjejjjjjjjjjjjjjjjjjjjjjjjjjjjj")
-    switch (type) {
-      case "RoomInfo":
-        setRoomInfoIsOpen(true);
-        break;
-      case "Rooms":
-        setRoomsIsOpen(true);
-        break;
-      case "Profile":
-        setProfileIsOpen(true);
-        break;
-      case "ProfileChat":
-        setPrivateChatIsOpen(true);
-        break;
-      case "Blogs":
-        setBlogsIsOpen(true);
-        break;
-      default:
-        break;
-    }
+    openFunctions[type] && openFunctions[type](true);
   };
   return (
     <div ref={controlBarRef} className="flex  items-center gap-x-1" style={{backgroundColor: getColor("mainColor")}}>

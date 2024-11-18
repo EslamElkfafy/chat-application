@@ -15,7 +15,7 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
   try {
-    let user = await User.findOne({ userName: req.body.userName });
+    let user = await User.findOne({ userName: req.body.userName }).populate('group');
     if (!user) return next(createError(404, "هذا المستخدم غير موجود"));
     if (user.banned) return next(createError(400, "هذا المستخدم تم حذره"))
     const isCorrect = await bcrypt.compare(req.body.password, user.password);
@@ -33,6 +33,14 @@ export const signin = async (req, res, next) => {
     user.status = 'connect'
     await user.save()
     const { password, ...others } = user._doc;
+    if (!others.group) {
+      others.group = {
+        name: '',
+        permissions: [],
+        staticRooms: 0,
+        gifts: 0
+      }
+    }
     res
       .cookie("token", token, {
         httpOnly: true,

@@ -14,11 +14,15 @@ export default function Rooms({
   controlBarRef: RefObject<HTMLDivElement | null>;
   setRoomsIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [rooms, setRooms]: [rooms: any, setRooms: any] = useState([]);
+  const [rooms, setCustomRooms]: [rooms: any, setRooms: any] = useState((localStorage.getItem("all-rooms") && JSON.parse(localStorage.getItem("all-rooms"))) || []);
   const [deleteChecker, setDeleteChecker] = useState<boolean>(false);
   const { socket } = useSocketContext();
   const listRef = useRef<HTMLDivElement | null>(null);
 
+  const setRooms = (rooms: any) => {
+    localStorage.setItem("all-rooms", JSON.stringify(rooms))
+    setCustomRooms(rooms)
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {

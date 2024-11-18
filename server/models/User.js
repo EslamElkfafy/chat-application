@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Room from "./Room.js"
+import Group from "./Group.js";
 import bcrypt from "bcryptjs"
 const OptionSchema = new mongoose.Schema(
   {
@@ -121,6 +122,10 @@ const UserSchema = new mongoose.Schema(
     banned: {
       type: { bannedUntil: Number },
       default: null
+    },
+    group: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Group',
     }
   },
   { timestamps: true }
@@ -147,4 +152,15 @@ UserSchema.pre('findOneAndUpdate', function (next) {
     micConfig({...this.getUpdate().$set, ...this.getQuery()}, next)
   next()
 })
+
+// UserSchema.methods.toJSON = function(doc) {
+//   let group = {
+//     name: '',
+//     permissions: [],
+//     staticRooms: 0,
+//     gifts: 0
+//   }
+//   this._doc.group = group
+//   return this._doc
+// }
 export default mongoose.model("User", UserSchema);

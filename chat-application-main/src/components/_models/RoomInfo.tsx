@@ -30,10 +30,17 @@ export default function RoomInfo({
 }) {
   const { option } = useOptionContext();
   const listRef = useRef<HTMLDivElement | null>(null);
-  const [onlineList, setOnlineList] = useState<string[]>([]);
-  const [inRoomUsers, setInRoomUsers] = useState<[]>([]);
+  const [onlineList, setCustomOnlineList] = useState<string[]>((localStorage.getItem("online-users") && JSON.parse(localStorage.getItem("online-users"))) || []);
+  const [inRoomUsers, setCustomInRoomUsers] = useState<[]>((localStorage.getItem("inroom-users") && JSON.parse(localStorage.getItem("inroom-users"))) || []);
   const [text, setText] = useState("");
-
+  const setOnlineList = (users: string[]) => {
+    localStorage.setItem("online-users", JSON.stringify(users))
+    setCustomOnlineList(users)
+  }
+  const setInRoomUsers = (users: []) => {
+    localStorage.setItem("inroom-users", JSON.stringify(users))
+    setCustomInRoomUsers(users)
+  }
   // socket.on("online", (list : any[]) => {
   //   setOnlineList(list)
   // })
